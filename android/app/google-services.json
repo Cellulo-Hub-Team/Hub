@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "647250430928",
+    "project_id": "cellulo-hub-games",
+    "storage_bucket": "cellulo-hub-games.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:647250430928:android:b5b94a747334c192e887d5",
+        "android_client_info": {
+          "package_name": "com.ABComp.celluloHub"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "647250430928-6j5f4edfet6kjosnv1bcit8mnggtv7jq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB-rpiGCDAUXScHzmUXAhaIuSTJ5cP7SwE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "647250430928-6j5f4edfet6kjosnv1bcit8mnggtv7jq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:647250430928:android:cb2c127e5394e772e887d5",
+        "android_client_info": {
+          "package_name": "com.chili.cellulo_hub"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "647250430928-6j5f4edfet6kjosnv1bcit8mnggtv7jq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB-rpiGCDAUXScHzmUXAhaIuSTJ5cP7SwE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "647250430928-6j5f4edfet6kjosnv1bcit8mnggtv7jq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
