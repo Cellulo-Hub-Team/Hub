@@ -14,9 +14,9 @@ class Game {
   bool isInstalled = false;
   bool isInLibrary = false;
   bool isExpanded = false;
-  String? androidBuild = "";
-  String? linuxBuild = "";
-  String? webUrl = "";
+  String? androidBuild;
+  String? linuxBuild;
+  String? webUrl;
   double physicalPercentage = 0;
   double cognitivePercentage = 0;
   double socialPercentage = 0;
@@ -46,7 +46,7 @@ ExpansionPanel gameExpansionPanel(
           onPressedMain: onPressedMain, onPressedSecond: onPressedSecond),
       isExpanded: _game.isExpanded,
       canTapOnHeader: true,
-      /*hasIcon: false*/); //TODO fix hasIcon
+      hasIcon: false); //TODO fix hasIcon
 }
 
 Widget _gameHeaderBuilder(
@@ -149,59 +149,32 @@ Widget gameBody(Game _game, bool _myGames,
 
 //TODO generalize ElevatedButton.icon inside Common
 Widget _androidTag(Game _game, BuildContext _context) {
-  bool _available = _game.androidBuild != null;
+  return _elevatedButtonTag(_game.androidBuild != null, _context, "Android", Colors.greenAccent);
+}
+
+Widget _linuxTag(Game _game, BuildContext _context) {
+  return _elevatedButtonTag(_game.linuxBuild != null, _context, "Linux", Colors.amber);
+}
+
+Widget _webTag(Game _game, BuildContext _context) {
+  return _elevatedButtonTag(_game.webUrl != null, _context, "Web", Colors.lightBlueAccent);
+}
+
+ElevatedButton _elevatedButtonTag(bool _available, BuildContext _context, String _platform, Color _color){
   return ElevatedButton.icon(
     onPressed: () => _available
-        ? _showTagSnack(_context, "This game is available on Android")
-        : _showTagSnack(_context, "This game is not available on Android"),
+        ? _showTagSnack(_context, "This game is available on" + _platform)
+        : _showTagSnack(_context, "This game is not available on" + _platform),
     icon: Icon(
       FontAwesome.android,
       color: _available ? Colors.white : Colors.black,
     ),
-    label: Text('Android', style: Style.tagStyle(_available, false)),
+    label: Text(_platform, style: Style.tagStyle(_available, false)),
     style: ElevatedButton.styleFrom(
-        primary: _available ? Colors.greenAccent : Colors.grey.shade800,
+        primary: _available ? _color : Colors.grey.shade800,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30.0),
         ),
-        fixedSize: const Size(150, 30)),
-  );
-}
-
-Widget _linuxTag(Game _game, BuildContext _context) {
-  bool _available = _game.linuxBuild != null;
-  return ElevatedButton.icon(
-    onPressed: () => _available
-        ? _showTagSnack(_context, "This game is available on Linux")
-        : _showTagSnack(_context, "This game is not available on Linux"),
-    icon: Icon(
-      MaterialCommunityIcons.linux,
-      color: _available ? Colors.white : Colors.black,
-    ),
-    label: Text('Linux', style: Style.tagStyle(_available, false)),
-    style: ElevatedButton.styleFrom(
-        primary: _available ? Colors.amber : Colors.grey.shade800,
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
-        fixedSize: const Size(150, 30)),
-  );
-}
-
-Widget _webTag(Game _game, BuildContext _context) {
-  bool _available = _game.webUrl != "";
-  return ElevatedButton.icon(
-    onPressed: () => _available
-        ? _showTagSnack(_context, "This game is available on Web")
-        : _showTagSnack(_context, "This game is not available on Web"),
-    icon: Icon(
-      MaterialCommunityIcons.web,
-      color: _available ? Colors.white : Colors.black,
-    ),
-    label: Text('Web', style: Style.tagStyle(_available, false)),
-    style: ElevatedButton.styleFrom(
-        primary: _available ? Colors.lightBlueAccent : Colors.grey.shade800,
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
         fixedSize: const Size(150, 30)),
   );
 }

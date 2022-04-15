@@ -32,14 +32,16 @@ class FirebaseApi {
     QuerySnapshot querySnapshot = await games.get();
     final allData = querySnapshot.docs.map((doc) => doc).toList();
     for (var game in allData) {
-      String backgroundUrl = game.get("Background Image") == ""
-          ? ""
-          : await ref.child(game.get("Background Image")).getDownloadURL();
-      String androidUrl =
-      game.get("Android build") == "" ? "" : game.get("Android build");
-      String linuxUrl = game.get("Linux build") == ""
-          ? ""
+      String backgroundUrl = await ref.child(game.get("Background Image")).getDownloadURL();
+      String? androidUrl = game.get("Android build") == ""
+          ? null
+          : game.get("Android build");
+      String? linuxUrl = game.get("Linux build") == ""
+          ? null
           : await ref.child(game.get("Linux build")).getDownloadURL();
+      String? webUrl = game.get("Web Link") == ""
+          ? null
+          : game.get("Web Link");
       Random source = Random();
 
       Game _toAdd = Game(
@@ -48,7 +50,7 @@ class FirebaseApi {
           game.get("Game Description"),
           androidUrl,
           linuxUrl,
-          game.get("Web Link"),
+          webUrl,
           source.nextDouble(),
           source.nextDouble(),
           source.nextDouble(),

@@ -159,8 +159,6 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
                 AnimatedBuilder(
                     animation: _trendingController,
                     builder: (BuildContext context, Widget? child) {
-                      print(myChildSize.height);
-                      print(_trendingController.value);
                       return SliverAppBar(
                         backgroundColor: CustomColors.inversedDarkThemeColor,
                         automaticallyImplyLeading: false,
@@ -181,6 +179,7 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
                     }),
                 SliverPersistentHeader(
                   delegate: CustomDelegate(TabBar(
+
                     tabs: [
                       Tab(
                           icon: const Icon(FontAwesome.gamepad),
@@ -287,7 +286,7 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
           boxShadow: [
             BoxShadow(
               blurRadius: 2,
-              color: Colors.grey.shade300,
+              color: Common.darkTheme ? Colors.grey.shade900 : Colors.grey.shade300,
               offset: const Offset(0, 10), // changes position of shadow
             ),
           ]

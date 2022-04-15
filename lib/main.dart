@@ -14,6 +14,7 @@ import 'main/welcome_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  print(DefaultFirebaseOptions.currentPlatform);
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -38,7 +39,7 @@ class MyApp extends StatelessWidget {
                   accentColor: Colors.white),
               darkTheme: ThemeData(
                   textTheme: GoogleFonts.comfortaaTextTheme(),
-                  scaffoldBackgroundColor: CustomColors.greyColor.shade900,
+                  scaffoldBackgroundColor: CustomColors.blackColor.shade900,
                   brightness: Brightness.dark,
                   accentColor: Colors.white),
               themeMode: currentMode,
