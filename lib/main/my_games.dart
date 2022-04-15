@@ -44,15 +44,7 @@ class _MyGamesState extends State<MyGames> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        backgroundColor: CustomColors.currentColor,
-        title: const Text('My Games'),
-        leading: IconButton(
-          icon: Icon(Icons.home),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-      ),
+      appBar: Common.appBar(context, "Progress", const Icon(Icons.home)),
       body: gamesExpansionPanelList(
           Common.allGamesList.where((game) => game.isInLibrary).toList(), true),
     );
