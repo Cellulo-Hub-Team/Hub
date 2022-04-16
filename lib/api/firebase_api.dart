@@ -240,10 +240,10 @@ class FirebaseApi {
         .set({
       'Company Name': companyName,
       'Game Description': gameDescription,
-      'Web build': webZipPath,
+      'Web Build': webZipPath,
       'Web Link': webLink,
-      'Linux build': linuxZipPath,
-      'Android build': apkNamePath,
+      'Linux Build': linuxZipPath,
+      'Android Build': apkNamePath,
       'Background Image': backgroundImagePath
     })
         .then((value) => print("Game Added"))

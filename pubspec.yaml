@@ -45,6 +45,7 @@ dependencies:
   url_launcher: ^6.0.20
   open_file: ^3.2.1
   file_picker: ^4.5.1
+  percent_indicator: ^4.0.0
 
 dev_dependencies:
   flutter_test:

@@ -1,3 +1,4 @@
+import 'package:cellulo_hub/main/common.dart';
 import 'package:cellulo_hub/main/custom_colors.dart';
 import 'package:cellulo_hub/main/style.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +13,7 @@ class CustomSearch extends SearchDelegate<String> {
   ThemeData appBarTheme(BuildContext context) {
     return ThemeData(
       // Define the default brightness and colors.
-      brightness: Brightness.dark,
+      //brightness: Common.darkTheme ? Brightness.dark : Brightness.light,
       primaryColor: CustomColors.currentColor,
 
 
