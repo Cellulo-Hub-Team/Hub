@@ -11,6 +11,7 @@ import 'package:syncfusion_flutter_sliders/sliders.dart';
 import '../api/firebase_api.dart';
 import '../firebase_options.dart';
 import '../main/custom_colors.dart';
+import '../main/style.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -42,14 +43,25 @@ class MyCustomFormState extends State<MyCustomForm> {
   final webController = TextEditingController();
   final backgroundImageController = TextEditingController();
   final webLinkController = TextEditingController();
-  PrimitiveWrapper _physicalPercentage = PrimitiveWrapper(0);
-  PrimitiveWrapper _cognitivePercentage = PrimitiveWrapper(0);
-  PrimitiveWrapper _socialPercentage = PrimitiveWrapper(0);
-  PrimitiveWrapper _celluloCount = PrimitiveWrapper(0);
+  final PrimitiveWrapper _physicalPercentage = PrimitiveWrapper(0);
+  final PrimitiveWrapper _cognitivePercentage = PrimitiveWrapper(0);
+  final PrimitiveWrapper _socialPercentage = PrimitiveWrapper(0);
+  final PrimitiveWrapper _celluloCount = PrimitiveWrapper(0);
   Uint8List _file1 = Uint8List(0);
   Uint8List _file2 = Uint8List(0);
   Uint8List _file3 = Uint8List(0);
   Uint8List _file4 = Uint8List(0);
+  ImageProvider? _previewBackgroundImage;
+
+  @override
+  void initState() {
+    gameNameController.addListener(() {
+      setState(() {
+        gameNameController.text;
+      });
+    });
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -134,8 +146,10 @@ class MyCustomFormState extends State<MyCustomForm> {
         type: FileType.custom,
         allowedExtensions: ['png', 'jpeg', 'jpg'],
       );
+
     }
 
+    setState(() {
     if (result != null) {
       try {
         if (fileNumber == 1) {
@@ -150,8 +164,8 @@ class MyCustomFormState extends State<MyCustomForm> {
         if (fileNumber == 4) {
           _file4 = result.files.single.bytes!;
         }
-
-        controller.text = result.files.single.name;
+        _previewBackgroundImage = Image.memory(result.files.single.bytes!).image;
+        controller.text = "Selected file: " + result.files.single.name;
       } catch (e) {
         print(e);
       }
@@ -159,6 +173,7 @@ class MyCustomFormState extends State<MyCustomForm> {
       // User canceled the picker
       controller.text = 'No file selected !';
     }
+    });
   }
 
   @override
@@ -291,48 +306,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                         },
                         onTap: () => {_searchFiles(backgroundImageController)},
                       ),
-                      /*Row(children: [
-                        Text("How physical is your game ?"),
-                        Slider(
-                          value: _physicalPercentage,
-                          max: 100,
-                          divisions: 100,
-                          label: _physicalPercentage.round().toString(),
-                          onChanged: (double value) {
-                            setState(() {
-                              _physicalPercentage = value;
-                            });
-                          },
-                        )
-                      ]),
-                      Row(children: [
-                        Text("How cognitive is your game ?"),
-                        Slider(
-                          value: _cognitivePercentage,
-                          max: 100,
-                          divisions: 100,
-                          label: _cognitivePercentage.round().toString(),
-                          onChanged: (double value) {
-                            setState(() {
-                              _cognitivePercentage = value;
-                            });
-                          },
-                        )
-                      ]),
-                      Row(children: [
-                        Text("How social is your game ?"),
-                        Slider(
-                          value: _socialPercentage,
-                          max: 100,
-                          divisions: 100,
-                          label: _socialPercentage.round().toString(),
-                          onChanged: (double value) {
-                            setState(() {
-                              _socialPercentage = value;
-                            });
-                          },
-                        )
-                      ]),*/
+                      _previewImage(),
                       _sliderCustom("How physical is your game ?",
                           Colors.deepOrangeAccent,
                           Colors.deepOrangeAccent.shade100.withOpacity(.5),
@@ -357,7 +331,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                           _celluloCount,
                           Icons.hexagon,
                           4),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       ElevatedButton(
                         onPressed: () {
                           // Validate returns true if the form is valid, or false otherwise.
@@ -402,6 +376,27 @@ class MyCustomFormState extends State<MyCustomForm> {
             },
           ))
     ]);
+  }
+
+  Widget _previewImage(){
+    return Stack(
+      children: [
+        Container(
+          child: SizedBox(
+              height: 200,
+              child: Center(
+                  child: Text(
+                    gameNameController.value.text,
+                    style: Style.gameStyle(),
+                  ))),
+          decoration: BoxDecoration(
+            image: DecorationImage(
+                image: _previewBackgroundImage ?? Image.asset('graphics/logo_chili.png').image,
+                fit: BoxFit.fitWidth),
+          ),
+        )
+      ],
+    );
   }
 }
 

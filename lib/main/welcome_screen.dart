@@ -44,7 +44,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Center(
-            child: Image.asset('graphics/logo_chili.png', scale: 1)
+            child: Image.asset('graphics/logo_chili.png')
         )
     );
   }
