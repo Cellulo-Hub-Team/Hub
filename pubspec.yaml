@@ -46,6 +46,8 @@ dependencies:
   open_file: ^3.2.1
   file_picker: ^4.5.1
   percent_indicator: ^4.0.0
+  syncfusion_flutter_core: ^20.1.48
+  syncfusion_flutter_sliders: ^20.1.48
 
 dev_dependencies:
   flutter_test:
