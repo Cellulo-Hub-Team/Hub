@@ -45,6 +45,9 @@ dependencies:
   url_launcher: ^6.0.20
   open_file: ^3.2.1
   file_picker: ^4.5.1
+  percent_indicator: ^4.0.0
+  syncfusion_flutter_core: ^20.1.48
+  syncfusion_flutter_sliders: ^20.1.48
 
 dev_dependencies:
   flutter_test:
@@ -67,6 +70,8 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+  assets:
+    - graphics/
 
   # To add assets to your application, add an assets section, like this:
   # assets:

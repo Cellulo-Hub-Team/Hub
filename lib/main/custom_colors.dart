@@ -18,10 +18,10 @@ Map<int, Color> _yellowMap = {
 Map<int, Color> _purpleMap = {
   900: const Color.fromRGBO(172, 46, 208, 1),
 };
-Map<int, Color> _darkMap = {
+Map<int, Color> _greyMap = {
   900: const Color.fromRGBO(100, 100, 100, 1),
 };
-Map<int, Color> _darkestMap = {
+Map<int, Color> _blackMap = {
   900: const Color.fromRGBO(50, 50, 50, 1),
 };
 
@@ -31,12 +31,12 @@ class CustomColors{
   static MaterialColor blueColor = MaterialColor(0x000000, _blueMap);
   static MaterialColor yellowColor = MaterialColor(0x000000, _yellowMap);
   static MaterialColor purpleColor = MaterialColor(0x000000, _purpleMap);
-  static MaterialColor greyColor = MaterialColor(0x000000, _darkMap);
-  static MaterialColor blackColor = MaterialColor(0x000000, _darkestMap);
+  static MaterialColor greyColor = MaterialColor(0x000000, _greyMap);
+  static MaterialColor blackColor = MaterialColor(0x000000, _blackMap);
 
   static Color currentColor = redColor;
-  static Color darkThemeColor = Common.darkTheme ? Colors.white : greyColor;
-  static Color inversedDarkThemeColor = Common.darkTheme ? greyColor : Colors.white;
+  static Color darkThemeColor = Common.darkTheme ? Colors.white : blackColor.shade900;
+  static Color inversedDarkThemeColor = Common.darkTheme ? blackColor.shade900 : Colors.white;
 }
 
 

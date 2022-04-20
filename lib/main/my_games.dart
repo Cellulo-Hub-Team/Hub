@@ -1,3 +1,4 @@
+import 'package:cellulo_hub/main/shop.dart';
 import 'package:device_apps/device_apps.dart';
 import 'package:flutter/material.dart';
 
@@ -33,6 +34,15 @@ class _MyGamesState extends State<MyGames> with TickerProviderStateMixin {
     }
   }
 
+  _onPressedShop() {
+    Common.resetOpenGameExpansionPanels();
+    Navigator.pop(context);
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const Shop()),
+    );
+  }
+
   @override
   void initState() {
     CustomColors.currentColor = CustomColors.greenColor.shade900;
@@ -44,15 +54,12 @@ class _MyGamesState extends State<MyGames> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        backgroundColor: CustomColors.currentColor,
-        title: const Text('My Games'),
-        leading: IconButton(
-          icon: Icon(Icons.home),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
+      appBar: Common.appBar(context, "My Games", const Icon(Icons.home)),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _onPressedShop,
+        child: const Icon(Icons.add),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
       body: gamesExpansionPanelList(
           Common.allGamesList.where((game) => game.isInLibrary).toList(), true),
     );

@@ -10,6 +10,7 @@ import 'custom_colors.dart';
 import 'custom_delegate.dart';
 import 'custom_search.dart';
 import 'game.dart';
+import 'measure_size.dart';
 import 'my_games.dart';
 
 List<String> gamesNames = Common.allGamesList.map((game) => game.name).toList();
@@ -24,10 +25,23 @@ class Shop extends StatefulWidget {
 class _ShopState extends State<Shop> with TickerProviderStateMixin {
   bool _trendingDescriptionDisplayed = false;
   String _searchResult = "";
-  Widget _trendingDescription = Container();
+
   int _trendingDecriptionIndex = 0;
   final GlobalKey<ScrollSnapListState> _trendingKey = GlobalKey();
   late AnimationController _trendingController;
+
+  Widget _trendingDescription(){
+    return MeasureSize(
+        onChange: (size) {
+          setState(() {
+            myChildSize = size;
+          });
+        },
+        child: gameBody(Common.allGamesList[_trendingDecriptionIndex], false, onPressedMain: _onPressedMain)
+    );
+  }
+
+  var myChildSize = Size.zero;
 
   //Create sublists for each category
   final List<Game> _physicalGames = Common.allGamesList
@@ -91,23 +105,19 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
   //Function called when pressing a trending game thumbnail
   _onPressedTrending(int _index) {
     setState(() {
+      _trendingKey.currentState?.focusToItem(_index);
       if (_trendingDescriptionDisplayed && _index == _trendingDecriptionIndex) {
         _trendingController.reverse();
-        Future.delayed(
-          const Duration(milliseconds: 300),
-              () => _trendingDescription = Container(),
-        );
+        _trendingDescriptionDisplayed = !_trendingDescriptionDisplayed;
       }
-      _trendingKey.currentState?.focusToItem(_index);
-      if (!_trendingDescriptionDisplayed) {
+      else if (!_trendingDescriptionDisplayed) {
         Common.percentageController.reset();
         Common.percentageController.forward();
         _trendingController.reset();
         _trendingController.forward();
-        _trendingDescription = gameBody(Common.allGamesList[_index], false, onPressedMain: _onPressedMain);
+        _trendingDecriptionIndex = _index;
+        _trendingDescriptionDisplayed = !_trendingDescriptionDisplayed;
       }
-      _trendingDescriptionDisplayed = !_trendingDescriptionDisplayed;
-      _trendingDecriptionIndex = _index;
     });
   }
 
@@ -123,17 +133,16 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
   }
 
   @override
+  void dispose() {
+    Common.percentageController.dispose();
+    _trendingController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          backgroundColor: CustomColors.currentColor,
-          title: const Text('Shop'),
-          leading: IconButton(
-            icon: Icon(Icons.home),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
-        ),
+        appBar: Common.appBar(context, "Shop", Icon(Icons.home)),
         floatingActionButton: FloatingActionButton(
           onPressed: _onPressedSearch,
           child: const Icon(Icons.search),
@@ -155,7 +164,7 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
                         automaticallyImplyLeading: false,
                         leading: null,
                         collapsedHeight: 360,
-                        expandedHeight: (_trendingController.drive(CurveTween(curve: Curves.easeOut)).value * 280) + 360,
+                        expandedHeight: (_trendingController.drive(CurveTween(curve: Curves.ease)).value * myChildSize.height) + 360,
                         flexibleSpace: FlexibleSpaceBar(
                           background: SingleChildScrollView(
                               physics: NeverScrollableScrollPhysics(),
@@ -163,13 +172,14 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
                                 const SizedBox(height: 30),
                                 _trendingWidget(),
                                 const SizedBox(height: 20),
-                                _trendingDescription,
+                                _trendingDescription(),
                               ])),
                         ),
                       );
                     }),
                 SliverPersistentHeader(
                   delegate: CustomDelegate(TabBar(
+
                     tabs: [
                       Tab(
                           icon: const Icon(FontAwesome.gamepad),
@@ -244,8 +254,6 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
           onItemFocus: (int _index) => {
             setState(() {
               if (_trendingDescriptionDisplayed) {
-                _trendingDescription = gameBody(Common.allGamesList[_index], false,
-                    onPressedMain: _onPressedMain);
                 _trendingDecriptionIndex = _index;
                 Common.percentageController.reset();
                 Common.percentageController.forward();
@@ -265,7 +273,6 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
         onPressed: () => _onPressedTrending(index),
         child: Text(
           Common.allGamesList[index].name,
-          textScaleFactor: 5,
           textAlign: TextAlign.center,
           style: Style.gameStyle(),
         ),
@@ -279,7 +286,7 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
           boxShadow: [
             BoxShadow(
               blurRadius: 2,
-              color: Colors.grey.shade300,
+              color: Common.darkTheme ? Colors.grey.shade900 : Colors.grey.shade300,
               offset: const Offset(0, 10), // changes position of shadow
             ),
           ]

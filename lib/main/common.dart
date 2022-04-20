@@ -39,4 +39,16 @@ class Common{
   static ButtonStyle elevatedColorStyle(){
     return ElevatedButton.styleFrom(primary: CustomColors.currentColor);
   }
+
+  static AppBar appBar(BuildContext _context, String _text, Icon _icon){
+    return AppBar(
+      centerTitle: true,
+      backgroundColor: CustomColors.currentColor,
+      title: Text(_text),
+      leading: IconButton(
+        icon: _icon,
+        onPressed: () => Navigator.of(_context).pop(),
+      ),
+    );
+  }
 }

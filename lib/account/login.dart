@@ -3,6 +3,7 @@ import 'package:flutter_icons/flutter_icons.dart';
 
 import '../api/firebase_api.dart';
 import '../main.dart';
+import '../main/common.dart';
 import '../main/custom_colors.dart';
 
 import 'forgot_password.dart';
@@ -42,15 +43,7 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        backgroundColor: CustomColors.currentColor,
-        title: const Text('Login'),
-        leading: IconButton(
-          icon: Icon(Ionicons.md_person),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-      ),
+      appBar: Common.appBar(context, "Login", Icon(Ionicons.md_person)),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
