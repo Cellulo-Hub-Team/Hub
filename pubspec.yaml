@@ -48,6 +48,7 @@ dependencies:
   percent_indicator: ^4.0.0
   syncfusion_flutter_core: ^20.1.48
   syncfusion_flutter_sliders: ^20.1.48
+  flutter_facebook_auth: ^4.3.0
 
 dev_dependencies:
   flutter_test:
