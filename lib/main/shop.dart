@@ -94,7 +94,7 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
       _searchResult = finalResult!;
       List<Game> _selectedGames =
       Common.allGamesList.where((game) => game.name == _searchResult).toList();
-      Common.resetOpenGameExpansionPanels();
+      Common.resetOpenPanels();
       if (_searchResult.isNotEmpty) {
         Navigator.push(
           context,

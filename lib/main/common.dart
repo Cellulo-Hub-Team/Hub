@@ -1,6 +1,7 @@
 import 'package:cellulo_hub/main/style.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 
 import 'custom_colors.dart';
 import 'game.dart';
@@ -15,7 +16,7 @@ class Common{
   static bool get isAndroid => !kIsWeb && Platform.isAndroid;
   static bool get isWeb => kIsWeb;
 
-  static void resetOpenGameExpansionPanels() {
+  static void resetOpenPanels() {
     for (var localGame in allGamesList) {
       localGame.isExpanded = false;
     }
@@ -51,4 +52,7 @@ class Common{
       ),
     );
   }
+
+
+
 }

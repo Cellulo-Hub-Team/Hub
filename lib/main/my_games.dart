@@ -37,7 +37,7 @@ class _MyGamesState extends State<MyGames> with TickerProviderStateMixin {
   }
 
   _onPressedShop() {
-    Common.resetOpenGameExpansionPanels();
+    Common.resetOpenPanels();
     Navigator.pop(context);
     Navigator.push(
       context,
