@@ -9,9 +9,8 @@ import '../style.dart';
 class GameHeader extends StatefulWidget {
   final Game game;
   final bool inMyGames;
-  const GameHeader({Key? key,
-    required this.game,
-    required this.inMyGames}) : super(key: key);
+  const GameHeader({Key? key, required this.game, required this.inMyGames})
+      : super(key: key);
 
   @override
   State<GameHeader> createState() => _GameHeaderState();
@@ -29,61 +28,76 @@ class _GameHeaderState extends State<GameHeader> {
               height: _height,
               child: Center(
                   child: Text(
-                    widget.game.name,
-                    style: Style.gameStyle(),
-                  ))),
+                widget.game.name,
+                style: Style.gameStyle(),
+              ))),
           decoration: BoxDecoration(
             image: DecorationImage(
-                colorFilter:
-                widget.game.isInstalled || widget.game.webUrl != null || !widget.inMyGames
+                colorFilter: widget.game.isInstalled ||
+                        widget.game.webUrl != null ||
+                        !widget.inMyGames
                     ? null
                     : ColorFilter.mode(
-                    Colors.black.withOpacity(.8), BlendMode.darken),
+                        Colors.black.withOpacity(.8), BlendMode.darken),
                 image: Image.network(widget.game.backgroundImage).image,
                 fit: BoxFit.fitWidth),
           ),
         ),
         widget.game.isExpanded
             ? SizedBox(
-          height: _height,
-          child: Column(
-            children: [
-              CustomIconButton(
-                  label: "Android",
-                  icon: FontAwesome.android,
-                  color: Colors.greenAccent,
-                  onPressed: () => Common.showSnackBar(context,
-                      "This game is" + (widget.game.androidBuild != null ? " " : "") + "available on Android")),
-              CustomIconButton(
-                label: "Linux",
-                icon: FontAwesome.android,
-                color: Colors.amber,
-                  onPressed: () => Common.showSnackBar(context,
-                      "This game is" + (widget.game.linuxBuild != null ? " " : "") + "available on Linux")),
-              CustomIconButton(
-                  label: "Web",
-                  icon: FontAwesome.android,
-                  color: Colors.lightBlueAccent,
-                  onPressed: () => Common.showSnackBar(context,
-                      "This game is" + (widget.game.webUrl != null ? " " : "") + "available on Web")),
-            ],
-          ),
-        )
-            : ((widget.game.webUrl != "" || Common.canBeInstalledOnThisPlatform(widget.game))
-            ? Container()
-            : SizedBox(
-            height: 150,
-            child: Align(
-                alignment: Alignment.centerLeft,
-                child: _unavailableTag(context))))
+                height: _height,
+                child: Column(
+                  children: [
+                    CustomIconButton(
+                        label: "Android",
+                        icon: FontAwesome.android,
+                        color: widget.game.androidBuild != null ? Colors.greenAccent : Colors.grey.shade800,
+                        onPressed: () => Common.showSnackBar(
+                            context,
+                            "This game is" +
+                                (widget.game.androidBuild != null
+                                    ? " "
+                                    : " not ") +
+                                "available on Android")),
+                    CustomIconButton(
+                        label: "Linux",
+                        icon: MaterialCommunityIcons.linux,
+                        color: widget.game.linuxBuild != null ? Colors.amber : Colors.grey.shade800,
+                        onPressed: () => Common.showSnackBar(
+                            context,
+                            "This game is" +
+                                (widget.game.linuxBuild != null
+                                    ? " "
+                                    : " not ") +
+                                "available on Linux")),
+                    CustomIconButton(
+                        label: "Web",
+                        icon: MaterialCommunityIcons.web,
+                        color: widget.game.webUrl != null ? Colors.lightBlueAccent : Colors.grey.shade800,
+                        onPressed: () => Common.showSnackBar(
+                            context,
+                            "This game is" +
+                                (widget.game.webUrl != null ? " " : " not ") +
+                                "available on Web")),
+                  ],
+                ),
+              )
+            : ((widget.game.webUrl != "" ||
+                    Common.canBeInstalledOnThisPlatform(widget.game))
+                ? Container()
+                : SizedBox(
+                    height: 150,
+                    child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: _unavailableTag(context))))
       ],
     );
   }
 
   Widget _unavailableTag(BuildContext _context) {
     return ElevatedButton.icon(
-      onPressed: () =>
-          Common.showSnackBar(_context, "This game is not available on this platform"),
+      onPressed: () => Common.showSnackBar(
+          _context, "This game is not available on this platform"),
       icon: const Icon(
         FontAwesome.warning,
         color: Colors.white,

@@ -50,10 +50,10 @@ class _GameBodyState extends State<GameBody> {
                 children: [
                   ElevatedButton(
                       style: Common.elevatedColorStyle(),
-                      onPressed:
-                      widget.inMyGames && !Common.canBeInstalledOnThisPlatform(widget.game)
+                      onPressed: () {},
+                      /*widget.inMyGames && !Common.canBeInstalledOnThisPlatform(widget.game)
                           ? null
-                          : widget.onPressedPrimary!(widget.game),
+                          : widget.onPressedPrimary!(widget.game),*/
                       child: widget.inMyGames
                           ? Text(widget.game.isInstalled ? "Uninstall" : "Install")
                           : Text(widget.game.isInLibrary
@@ -63,9 +63,9 @@ class _GameBodyState extends State<GameBody> {
                   widget.inMyGames
                       ? ElevatedButton(
                       style: Common.elevatedColorStyle(),
-                      onPressed: (widget.game.isInstalled || widget.game.webUrl != "")
+                      onPressed: () {},/*(widget.game.isInstalled || widget.game.webUrl != "")
                           ? widget.onPressedSecondary!(widget.game)
-                          : null,
+                          : null,*/
                       child: const Text("Launch"))
                       : Container(),
                 ],
