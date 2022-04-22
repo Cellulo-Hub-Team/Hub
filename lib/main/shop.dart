@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:cellulo_hub/main/custom_widgets/game_body.dart';
+import 'package:cellulo_hub/main/custom_widgets/game_panel_list.dart';
 import 'package:cellulo_hub/main/search_result.dart';
 import 'package:cellulo_hub/main/style.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,7 @@ import 'common.dart';
 import 'custom_colors.dart';
 import 'custom_delegate.dart';
 import 'custom_search.dart';
+import 'custom_widgets/custom_scaffold.dart';
 import 'game.dart';
 import 'measure_size.dart';
 import 'my_games.dart';
@@ -40,7 +42,7 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
             myChildSize = size;
           });
         },
-        child: GameBody(game: Common.allGamesList[_trendingDecriptionIndex], inMyGames: false, onPressedPrimary: _onPressedMain,)
+        child: GameBody(game: Common.allGamesList[_trendingDecriptionIndex], inMyGames: false, onPressedPrimary: _onPressedPrimary,)
     );
   }
 
@@ -52,7 +54,7 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
   game.physicalPercentage >= game.socialPercentage &&
       game.physicalPercentage >= game.cognitivePercentage)
       .toList();
-  final List<Game> _cerebralGames = Common.allGamesList
+  final List<Game> _cognitiveGames = Common.allGamesList
       .where((game) =>
   game.cognitivePercentage >= game.socialPercentage &&
       game.cognitivePercentage >= game.physicalPercentage)
@@ -64,7 +66,7 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
       .toList();
 
   //Function called when pressing Add to My Games button
-  _onPressedMain(Game _game) {
+  _onPressedPrimary(Game _game) {
     setState(() async {
       if (_game.isInLibrary) {
         Navigator.pop(context);
@@ -141,14 +143,13 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Container(); /*Scaffold(
-        appBar: Common.appBar(context, "Shop", Icon(Icons.home)),
-        floatingActionButton: FloatingActionButton(
-          onPressed: _onPressedSearch,
-          child: const Icon(Icons.search),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
-        body: Center(child: SizedBox(width: min(1000, MediaQuery.of(context).size.width), child: DefaultTabController(
+    return CustomScaffold(
+    name: "Shop",
+    leading: Icons.home,
+    hasFloating: true,
+    floating: Icons.search,
+    onPressedFloating: () => _onPressedSearch,
+    child: Center(child: SizedBox(width: min(1000, MediaQuery.of(context).size.width), child: DefaultTabController(
           length: 4,
           child: NestedScrollView(
             physics: Common.isWeb
@@ -179,7 +180,6 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
                     }),
                 SliverPersistentHeader(
                   delegate: CustomDelegate(TabBar(
-
                     tabs: [
                       Tab(
                           icon: const Icon(FontAwesome.gamepad),
@@ -210,14 +210,14 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
             },
             body: TabBarView(
               children: [
-                _gamesExpansionPanelList(Common.allGamesList, false),
-                _gamesExpansionPanelList(_physicalGames, false),
-                _gamesExpansionPanelList(_cerebralGames, false),
-                _gamesExpansionPanelList(_socialGames, false)
+                GamePanelList(games: Common.allGamesList, inMyGames: false, onPressedPrimary: _onPressedPrimary),
+                GamePanelList(games: _physicalGames, inMyGames: false, onPressedPrimary: _onPressedPrimary),
+                GamePanelList(games: _cognitiveGames, inMyGames: false, onPressedPrimary: _onPressedPrimary),
+                GamePanelList(games: _socialGames, inMyGames: false, onPressedPrimary: _onPressedPrimary),
               ],
             ),
           ),
-        ))));*/
+        ))));
   }
 
   //Trending games list
