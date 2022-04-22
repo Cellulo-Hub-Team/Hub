@@ -1,7 +1,6 @@
-import 'package:cellulo_hub/main/common.dart';
+import 'package:flutter/material.dart';
 import 'package:cellulo_hub/main/custom_colors.dart';
 import 'package:cellulo_hub/main/style.dart';
-import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CustomSearch extends SearchDelegate<String> {

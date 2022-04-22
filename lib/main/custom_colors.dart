@@ -34,8 +34,13 @@ class CustomColors{
   static MaterialColor greyColor = MaterialColor(0x000000, _greyMap);
   static MaterialColor blackColor = MaterialColor(0x000000, _blackMap);
 
+  //The main color in the current part of the app
   static Color currentColor = redColor;
+
+  //The default color adapted to each theme
   static Color darkThemeColor = Common.darkTheme ? Colors.white : blackColor.shade900;
+
+  //The default color adapted to each theme inversed
   static Color inversedDarkThemeColor = Common.darkTheme ? blackColor.shade900 : Colors.white;
 }
 

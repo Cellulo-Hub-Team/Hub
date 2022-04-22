@@ -8,6 +8,7 @@ import '../common.dart';
 import '../game.dart';
 import '../style.dart';
 
+//The bottom expanded part of the game panel
 class GameBody extends StatefulWidget {
   final Game game;
   final bool inMyGames;

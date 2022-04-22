@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+//The custom rounded icon button
 class CustomIconButton extends StatefulWidget {
   final String label;
   final IconData icon;

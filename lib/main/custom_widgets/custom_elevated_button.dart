@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../common.dart';
-
+//The custom square button from the menu
 class CustomElevatedButton extends StatefulWidget {
   final Color color;
   final IconData icon;

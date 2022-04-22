@@ -7,8 +7,13 @@ import 'game.dart';
 import 'dart:io';
 
 class Common{
+  //The variable storing the current theme state
   static bool darkTheme = false;
+
+  //The controller for the percentages animation
   static late AnimationController percentageController;
+
+  //The list of all games on the shop
   static List<Game> allGamesList = [];
 
   //Safe version of platform detection methods

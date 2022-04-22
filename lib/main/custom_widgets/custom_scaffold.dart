@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../custom_colors.dart';
 
+//The base scaffold for each screen with custom app bar and floating app bar button
 class CustomScaffold extends StatefulWidget {
   final String name;
   final Widget child;
@@ -24,6 +25,7 @@ class CustomScaffold extends StatefulWidget {
 }
 
 class _CustomScaffoldState extends State<CustomScaffold> {
+  //The app bar with custom leading button and title
   AppBar _appBar() {
     return AppBar(
       centerTitle: true,

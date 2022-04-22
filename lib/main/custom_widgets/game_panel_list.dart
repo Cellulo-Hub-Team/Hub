@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import '../common.dart';
 import '../game.dart';
 
+
+//The list of expandable game panels
 class GamePanelList extends StatefulWidget {
   final List<Game> games;
   final Function? onPressedPrimary;
@@ -54,6 +56,7 @@ class _GamePanelListState extends State<GamePanelList> with TickerProviderStateM
             }))]);
   }
 
+  //The expandable panel for each game
   ExpansionPanel gameExpansionPanel(Game _game) {
     return ExpansionPanel(
         headerBuilder: (context, isOpen) => GameHeader(game: _game, inMyGames: widget.inMyGames),

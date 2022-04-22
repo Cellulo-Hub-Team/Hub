@@ -6,6 +6,8 @@ import 'package:flutter_icons/flutter_icons.dart';
 import '../game.dart';
 import '../style.dart';
 
+
+//The top constant part of the game panel
 class GameHeader extends StatefulWidget {
   final Game game;
   final bool inMyGames;
