@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../custom.dart';
+import '../common.dart';
 
 class CustomElevatedButton extends StatefulWidget {
   final Color color;

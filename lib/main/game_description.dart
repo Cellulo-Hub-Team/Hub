@@ -2,7 +2,7 @@ import 'package:cellulo_hub/main/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 
-import 'custom.dart';
+import 'common.dart';
 import 'game.dart';
 
 class GameDescription extends StatefulWidget {
@@ -16,10 +16,10 @@ class GameDescription extends StatefulWidget {
 class _GameDescriptionState extends State<GameDescription> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: Custom.appBar(context, widget.game.name, Icon(FontAwesome.gamepad)),
+    return Container(); /*Scaffold(
+        appBar: Common.appBar(context, widget.game.name, Icon(FontAwesome.gamepad)),
     body: Column(children: [
-      gameHeaderBuilder(Custom.allGamesList, 0, true, context),
+      gameHeaderBuilder(Common.allGamesList, 0, true, context),
       gameBody(widget.game, true),
       RichText(text: TextSpan(
         children: <TextSpan>[
@@ -33,6 +33,6 @@ class _GameDescriptionState extends State<GameDescription> {
               style: TextStyle(color: Colors.black)),
         ],
       ))
-    ]));
+    ]));*/
   }
 }

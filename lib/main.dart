@@ -8,7 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import 'account/profile.dart';
 import 'firebase_options.dart';
-import 'main/custom.dart';
+import 'main/common.dart';
 import 'main/custom_colors.dart';
 import 'main/my_games.dart';
 import 'main/progress.dart';
@@ -60,7 +60,7 @@ class MainMenu extends StatefulWidget {
 
 class _MainMenuState extends State<MainMenu> {
   _goToTarget(Widget _target) {
-    Custom.resetOpenPanels();
+    Common.resetOpenPanels();
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => _target),
@@ -69,15 +69,11 @@ class _MainMenuState extends State<MainMenu> {
 
   _switchTheme() {
     setState(() {
-      Custom.darkTheme = !Custom.darkTheme;
+      Common.darkTheme = !Common.darkTheme;
       MyApp.themeNotifier.value =
-          Custom.darkTheme ? ThemeMode.dark : ThemeMode.light;
+          Common.darkTheme ? ThemeMode.dark : ThemeMode.light;
       CustomColors.currentColor = CustomColors.greyColor.shade900;
-      final snackBar = Custom.checkSnackBar(
-          Custom.darkTheme ? "Switched to Night mode" : "Switched to Day mode");
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-      Future.delayed(const Duration(seconds: 3),
-          () => ScaffoldMessenger.of(context).hideCurrentSnackBar());
+      Common.showSnackBar(context, Common.darkTheme ? "Switched to Night mode" : "Switched to Day mode");
     });
   }
 
@@ -119,7 +115,7 @@ class _MainMenuState extends State<MainMenu> {
             child: CustomIconButton(
                 label: "Theme",
                 icon:
-                    Custom.darkTheme ? Icons.wb_sunny : Icons.wb_sunny_outlined,
+                    Common.darkTheme ? Icons.wb_sunny : Icons.wb_sunny_outlined,
                 color: CustomColors.yellowColor.shade900,
                 onPressed: _switchTheme)),
         Container(

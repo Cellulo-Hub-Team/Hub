@@ -24,7 +24,7 @@ class _CustomIconButtonState extends State<CustomIconButton> {
       style: ElevatedButton.styleFrom(
           primary: widget.color,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30.0),
+            borderRadius: BorderRadius.circular(20.0),
           ),
           fixedSize: const Size(150, 30)),
     );

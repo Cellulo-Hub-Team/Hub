@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:cellulo_hub/main/custom_widgets/game_body.dart';
 import 'package:cellulo_hub/main/search_result.dart';
 import 'package:cellulo_hub/main/style.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +8,7 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:scroll_snap_list/scroll_snap_list.dart';
 
 import '../api/firebase_api.dart';
-import 'custom.dart';
+import 'common.dart';
 import 'custom_colors.dart';
 import 'custom_delegate.dart';
 import 'custom_search.dart';
@@ -15,7 +16,7 @@ import 'game.dart';
 import 'measure_size.dart';
 import 'my_games.dart';
 
-List<String> gamesNames = Custom.allGamesList.map((game) => game.name).toList();
+List<String> gamesNames = Common.allGamesList.map((game) => game.name).toList();
 
 class Shop extends StatefulWidget {
   const Shop({Key? key}) : super(key: key);
@@ -39,24 +40,24 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
             myChildSize = size;
           });
         },
-        child: gameBody(Custom.allGamesList[_trendingDecriptionIndex], false, onPressedMain: _onPressedMain)
+        child: GameBody(game: Common.allGamesList[_trendingDecriptionIndex], inMyGames: false, onPressedPrimary: _onPressedMain,)
     );
   }
 
   var myChildSize = Size.zero;
 
   //Create sublists for each category
-  final List<Game> _physicalGames = Custom.allGamesList
+  final List<Game> _physicalGames = Common.allGamesList
       .where((game) =>
   game.physicalPercentage >= game.socialPercentage &&
       game.physicalPercentage >= game.cognitivePercentage)
       .toList();
-  final List<Game> _cerebralGames = Custom.allGamesList
+  final List<Game> _cerebralGames = Common.allGamesList
       .where((game) =>
   game.cognitivePercentage >= game.socialPercentage &&
       game.cognitivePercentage >= game.physicalPercentage)
       .toList();
-  final List<Game> _socialGames = Custom.allGamesList
+  final List<Game> _socialGames = Common.allGamesList
       .where((game) =>
   game.socialPercentage >= game.cognitivePercentage &&
       game.socialPercentage >= game.physicalPercentage)
@@ -76,10 +77,7 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
           _game.isInLibrary = true;
         });
         await FirebaseApi.addToUserLibrary(_game);
-        final snackBar = Custom.checkSnackBar("Correctly added to My Games!");
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-        Future.delayed(const Duration(seconds: 3),
-                () => ScaffoldMessenger.of(context).hideCurrentSnackBar());
+        Common.showSnackBar(context, "Correctly added to My Games!");
       }
     });
   }
@@ -93,8 +91,8 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
     setState(() {
       _searchResult = finalResult!;
       List<Game> _selectedGames =
-      Custom.allGamesList.where((game) => game.name == _searchResult).toList();
-      Custom.resetOpenPanels();
+      Common.allGamesList.where((game) => game.name == _searchResult).toList();
+      Common.resetOpenPanels();
       if (_searchResult.isNotEmpty) {
         Navigator.push(
           context,
@@ -112,8 +110,8 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
         _trendingDescriptionDisplayed = !_trendingDescriptionDisplayed;
       }
       else if (!_trendingDescriptionDisplayed) {
-        Custom.percentageController.reset();
-        Custom.percentageController.forward();
+        Common.percentageController.reset();
+        Common.percentageController.forward();
         _trendingController.reset();
         _trendingController.forward();
         _trendingDecriptionIndex = _index;
@@ -126,7 +124,7 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
   @override
   void initState() {
     CustomColors.currentColor = CustomColors.blueColor.shade900;
-    Custom.percentageController =
+    Common.percentageController =
         AnimationController(duration: const Duration(seconds: 1), vsync: this);
     _trendingController = AnimationController(
         duration: const Duration(milliseconds: 300),
@@ -136,15 +134,15 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
 
   @override
   void dispose() {
-    Custom.percentageController.dispose();
+    Common.percentageController.dispose();
     _trendingController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: Custom.appBar(context, "Shop", Icon(Icons.home)),
+    return Container(); /*Scaffold(
+        appBar: Common.appBar(context, "Shop", Icon(Icons.home)),
         floatingActionButton: FloatingActionButton(
           onPressed: _onPressedSearch,
           child: const Icon(Icons.search),
@@ -153,7 +151,7 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
         body: Center(child: SizedBox(width: min(1000, MediaQuery.of(context).size.width), child: DefaultTabController(
           length: 4,
           child: NestedScrollView(
-            physics: Custom.isWeb
+            physics: Common.isWeb
                 ? const ClampingScrollPhysics()
                 : const NeverScrollableScrollPhysics(),
             headerSliverBuilder: (context, isScrolled) {
@@ -201,7 +199,7 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
                     ],
                     labelColor: CustomColors.currentColor,
                     indicatorColor: CustomColors.currentColor,
-                    unselectedLabelColor: Custom.darkTheme
+                    unselectedLabelColor: Common.darkTheme
                         ? CustomColors.greyColor.shade900
                         : CustomColors.blackColor.shade900,
                   )),
@@ -212,35 +210,14 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
             },
             body: TabBarView(
               children: [
-                _gamesExpansionPanelList(Custom.allGamesList, false),
+                _gamesExpansionPanelList(Common.allGamesList, false),
                 _gamesExpansionPanelList(_physicalGames, false),
                 _gamesExpansionPanelList(_cerebralGames, false),
                 _gamesExpansionPanelList(_socialGames, false)
               ],
             ),
           ),
-        ))));
-  }
-
-  //General widget for drop down games list
-  Widget _gamesExpansionPanelList(List<Game> _gamesList, bool _inMyGames) {
-    List<ExpansionPanel> result = [];
-    for (int i = 0; i < _gamesList.length; i++) {
-      result.add(gameExpansionPanel(_gamesList, i, false, context,
-          onPressedMain: _onPressedMain));
-    }
-    return ListView(children: [
-      ExpansionPanelList(
-          children: result,
-          expansionCallback: (i, isOpen) => setState(() {
-            for (int j = 0; j < _gamesList.length; j++) {
-              if (j != i) _gamesList[j].isExpanded = false;
-            }
-            _gamesList[i].isExpanded = !isOpen;
-            Custom.percentageController.reset();
-            Custom.percentageController.forward();
-          }))
-    ]);
+        ))));*/
   }
 
   //Trending games list
@@ -252,13 +229,13 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
           itemSize: 300,
           dynamicItemSize: true,
           onReachEnd: () {},
-          itemCount: Custom.allGamesList.length,
+          itemCount: Common.allGamesList.length,
           onItemFocus: (int _index) => {
             setState(() {
               if (_trendingDescriptionDisplayed) {
                 _trendingDecriptionIndex = _index;
-                Custom.percentageController.reset();
-                Custom.percentageController.forward();
+                Common.percentageController.reset();
+                Common.percentageController.forward();
               }
             })
           },
@@ -274,7 +251,7 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
       child: TextButton(
         onPressed: () => _onPressedTrending(index),
         child: Text(
-          Custom.allGamesList[index].name,
+          Common.allGamesList[index].name,
           textAlign: TextAlign.center,
           style: Style.gameStyle(),
         ),
@@ -282,13 +259,13 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(50),
           image: DecorationImage(
-              image: Image.network(Custom.allGamesList[index].backgroundImage).image,
+              image: Image.network(Common.allGamesList[index].backgroundImage).image,
               fit: BoxFit.fitHeight
           ),
           boxShadow: [
             BoxShadow(
               blurRadius: 2,
-              color: Custom.darkTheme ? Colors.grey.shade900 : Colors.grey.shade300,
+              color: Common.darkTheme ? Colors.grey.shade900 : Colors.grey.shade300,
               offset: const Offset(0, 10), // changes position of shadow
             ),
           ]

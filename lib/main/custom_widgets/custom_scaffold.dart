@@ -1,0 +1,51 @@
+import 'package:flutter/material.dart';
+
+import '../custom_colors.dart';
+
+class CustomScaffold extends StatefulWidget {
+  final String name;
+  final Widget child;
+  final IconData leading;
+  final bool hasFloating;
+  final IconData? floating;
+  final void Function()? onPressedFloating;
+  const CustomScaffold(
+      {Key? key,
+      required this.name,
+      required this.leading,
+      required this.hasFloating,
+      this.floating,
+      this.onPressedFloating,
+      required this.child})
+      : super(key: key);
+
+  @override
+  State<CustomScaffold> createState() => _CustomScaffoldState();
+}
+
+class _CustomScaffoldState extends State<CustomScaffold> {
+  AppBar _appBar() {
+    return AppBar(
+      centerTitle: true,
+      backgroundColor: CustomColors.currentColor,
+      title: Text(widget.name),
+      leading: IconButton(
+        icon: Icon(widget.leading),
+        onPressed: () => Navigator.of(context).pop(),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: _appBar(),
+      floatingActionButton: widget.hasFloating ? FloatingActionButton(
+        onPressed: widget.onPressedFloating,
+        child: Icon(widget.floating),
+      ) : null,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
+      body: widget.child,
+    );
+  }
+}

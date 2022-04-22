@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'custom.dart';
+import 'common.dart';
 import 'custom_colors.dart';
 
 class Progress extends StatefulWidget {
@@ -20,8 +20,6 @@ class _ProgressState extends State<Progress> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: Custom.appBar(context, "Progress", Icon(Icons.home)),
-        body: const Align(child: Text("Progress")));
+    return Container();
   }
 }

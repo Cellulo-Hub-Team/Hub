@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../main.dart';
-import 'custom.dart';
+import 'common.dart';
 
 Map<int, Color> _redMap = {
   900: const Color.fromRGBO(253, 99, 125, 1),
@@ -35,8 +35,8 @@ class CustomColors{
   static MaterialColor blackColor = MaterialColor(0x000000, _blackMap);
 
   static Color currentColor = redColor;
-  static Color darkThemeColor = Custom.darkTheme ? Colors.white : blackColor.shade900;
-  static Color inversedDarkThemeColor = Custom.darkTheme ? blackColor.shade900 : Colors.white;
+  static Color darkThemeColor = Common.darkTheme ? Colors.white : blackColor.shade900;
+  static Color inversedDarkThemeColor = Common.darkTheme ? blackColor.shade900 : Colors.white;
 }
 
 

@@ -6,32 +6,47 @@ import 'custom_colors.dart';
 import 'game.dart';
 import 'dart:io';
 
-class Custom{
+class Common{
   static bool darkTheme = false;
   static late AnimationController percentageController;
   static List<Game> allGamesList = [];
 
+  //Safe version of platform detection methods
   static bool get isLinux => !kIsWeb && Platform.isLinux;
   static bool get isAndroid => !kIsWeb && Platform.isAndroid;
   static bool get isWeb => kIsWeb;
 
-  static void resetOpenPanels() {
+  //Closes all expanded panels
+  static resetOpenPanels() {
     for (var localGame in allGamesList) {
       localGame.isExpanded = false;
     }
   }
 
+  //Returns true if build exists for the current platform (web only returns false)
   static bool canBeInstalledOnThisPlatform(Game _game) {
     if (isAndroid && _game.androidBuild != "") return true;
     if (isLinux && _game.linuxBuild != "") return true;
     return false;
   }
 
-  //Pop up at bottom of the screen
-  static SnackBar checkSnackBar(String _text){
-    return SnackBar(
+  //Display pop-up at the bottom of the screen
+  static showSnackBar(BuildContext _context, String _text) {
+    final snackBar = SnackBar(
       backgroundColor: CustomColors.currentColor,
       content: Text(_text, style: Style.snackStyle()),
+    );
+    ScaffoldMessenger.of(_context).showSnackBar(snackBar);
+    Future.delayed(const Duration(seconds: 3),
+            () => ScaffoldMessenger.of(_context).hideCurrentSnackBar());
+  }
+
+  //Navigate to new screen
+  static goToTarget(BuildContext _context, Widget _target) {
+    Common.resetOpenPanels();
+    Navigator.push(
+      _context,
+      MaterialPageRoute(builder: (context) => _target),
     );
   }
 
@@ -39,19 +54,5 @@ class Custom{
   static ButtonStyle elevatedColorStyle(){
     return ElevatedButton.styleFrom(primary: CustomColors.currentColor);
   }
-
-  static AppBar appBar(BuildContext _context, String _text, Icon _icon){
-    return AppBar(
-      centerTitle: true,
-      backgroundColor: CustomColors.currentColor,
-      title: Text(_text),
-      leading: IconButton(
-        icon: _icon,
-        onPressed: () => Navigator.of(_context).pop(),
-      ),
-    );
-  }
-
-
 
 }
