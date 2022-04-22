@@ -42,8 +42,8 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(); /*Scaffold(
-      appBar: Common.appBar(context, "Login", Icon(Ionicons.md_person)),
+    return Scaffold(
+      //appBar: Common.appBar(context, "Login", Icon(Ionicons.md_person)),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -86,6 +86,6 @@ class _LoginState extends State<Login> {
           ),
         ],
       ),
-    );*/
+    );
   }
 }
