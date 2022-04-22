@@ -1,3 +1,4 @@
+import 'package:cellulo_hub/main/game_description.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
@@ -75,7 +76,7 @@ class _MainMenuState extends State<MainMenu> {
   _onPressedProgress() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const Progress()),
+      MaterialPageRoute(builder: (context) => GameDescription(game: Common.allGamesList[0])),
     );
   }
 

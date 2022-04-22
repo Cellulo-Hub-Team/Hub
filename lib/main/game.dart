@@ -41,16 +41,14 @@ ExpansionPanel gameExpansionPanel(
     {Function? onPressedMain, Function? onPressedSecond}) {
   Game _game = _gamesList[_index];
   return ExpansionPanel(
-      headerBuilder: (context, isOpen) =>
-          _gameHeaderBuilder(_gamesList, _index, _myGames, _context),
-      body: gameBody(_game, _myGames,
-          onPressedMain: onPressedMain, onPressedSecond: onPressedSecond),
+      headerBuilder: (context, isOpen) => gameHeaderBuilder(_gamesList, _index, _myGames, _context),
+      body: gameBody(_game, _myGames, onPressedMain: onPressedMain, onPressedSecond: onPressedSecond),
       isExpanded: _game.isExpanded,
       canTapOnHeader: true,
-      hasIcon: false); //TODO fix hasIcon
+      hasIcon: false);
 }
 
-Widget _gameHeaderBuilder(
+Widget gameHeaderBuilder(
     List<Game> _gamesList, int _index, bool _myGames, BuildContext _context) {
   Game _game = _gamesList[_index];
   double _height = 150;

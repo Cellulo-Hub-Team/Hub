@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cellulo_hub/main/search_result.dart';
 import 'package:cellulo_hub/main/style.dart';
 import 'package:flutter/material.dart';
@@ -105,7 +107,6 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
   //Function called when pressing a trending game thumbnail
   _onPressedTrending(int _index) {
     setState(() {
-      _trendingKey.currentState?.focusToItem(_index);
       if (_trendingDescriptionDisplayed && _index == _trendingDecriptionIndex) {
         _trendingController.reverse();
         _trendingDescriptionDisplayed = !_trendingDescriptionDisplayed;
@@ -118,6 +119,7 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
         _trendingDecriptionIndex = _index;
         _trendingDescriptionDisplayed = !_trendingDescriptionDisplayed;
       }
+      _trendingKey.currentState?.focusToItem(_index);
     });
   }
 
@@ -148,7 +150,7 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
           child: const Icon(Icons.search),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
-        body: DefaultTabController(
+        body: Center(child: SizedBox(width: min(1000, MediaQuery.of(context).size.width), child: DefaultTabController(
           length: 4,
           child: NestedScrollView(
             physics: Common.isWeb
@@ -217,7 +219,7 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
               ],
             ),
           ),
-        ));
+        ))));
   }
 
   //General widget for drop down games list

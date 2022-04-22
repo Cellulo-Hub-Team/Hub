@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cellulo_hub/main/shop.dart';
 import 'package:device_apps/device_apps.dart';
 import 'package:flutter/material.dart';
@@ -70,7 +72,7 @@ class _MyGamesState extends State<MyGames> with TickerProviderStateMixin {
     for (int i = 0; i < _gamesList.length; i++) {
       result.add(gameExpansionPanel(_gamesList, i, true, context, onPressedMain: _onPressedInstall, onPressedSecond: _onPressedLaunch));
     }
-    return ListView(children: [
+    return Center(child: SizedBox(width: min(1000, MediaQuery.of(context).size.width), child: ListView(children: [
       ExpansionPanelList(
           children: result,
           expansionCallback: (i, isOpen) => setState(() {
@@ -81,6 +83,6 @@ class _MyGamesState extends State<MyGames> with TickerProviderStateMixin {
             Common.percentageController.reset();
             Common.percentageController.forward();
           }))
-    ]);
+    ])));
   }
 }
