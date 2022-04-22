@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 
 import '../api/firebase_api.dart';
-import '../main/common.dart';
+import '../main/custom.dart';
 import '../main/custom_colors.dart';
 
 class Signup extends StatefulWidget {
@@ -105,7 +105,7 @@ class _SignupState extends State<Signup> {
             ),
             Align(
               child: ElevatedButton(
-                style: Common.elevatedColorStyle(),
+                style: Custom.elevatedColorStyle(),
                 onPressed: () {
                   // Validate returns true if the form is valid, or false otherwise.
                   if (_formKey.currentState!.validate()) {
@@ -125,7 +125,7 @@ class _SignupState extends State<Signup> {
     await FirebaseApi.signUp(
         emailController.text, passwordController.text);
     FocusScope.of(context).unfocus();
-    final snackBar = Common.checkSnackBar("New user correctly added !");
+    final snackBar = Custom.checkSnackBar("New user correctly added !");
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
     Future.delayed(const Duration(seconds: 6),
             () => ScaffoldMessenger.of(context).hideCurrentSnackBar());

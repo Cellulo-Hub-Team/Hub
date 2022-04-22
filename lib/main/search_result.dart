@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import '../api/firebase_api.dart';
-import 'common.dart';
+import 'custom.dart';
 import 'custom_colors.dart';
 import 'game.dart';
 import 'my_games.dart';
@@ -28,7 +28,7 @@ class _SearchResultState extends State<SearchResult> with TickerProviderStateMix
       } else {
         _game.isInLibrary = true;
         await FirebaseApi.addToUserLibrary(_game);
-        final snackBar = Common.checkSnackBar("Correctly added to My Games!");
+        final snackBar = Custom.checkSnackBar("Correctly added to My Games!");
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
         Future.delayed(const Duration(seconds: 3),
                 () => ScaffoldMessenger.of(context).hideCurrentSnackBar());
@@ -38,7 +38,7 @@ class _SearchResultState extends State<SearchResult> with TickerProviderStateMix
 
   @override
   void initState() {
-    Common.percentageController =
+    Custom.percentageController =
         AnimationController(duration: const Duration(seconds: 1), vsync: this);
     super.initState();
   }
@@ -71,8 +71,8 @@ class _SearchResultState extends State<SearchResult> with TickerProviderStateMix
               if (j != i) _gamesList[j].isExpanded = false;
             }
             _gamesList[i].isExpanded = !isOpen;
-            Common.percentageController.reset();
-            Common.percentageController.forward();
+            Custom.percentageController.reset();
+            Custom.percentageController.forward();
           }))
     ]);
   }

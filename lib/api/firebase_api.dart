@@ -9,7 +9,7 @@ import 'package:firebase_core/firebase_core.dart' as firebase_core;
 import 'package:open_file/open_file.dart';
 import 'package:device_apps/device_apps.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../main/common.dart';
+import '../main/custom.dart';
 import '../main/game.dart';
 
 //TODO: Trouver un moyen clean de faire une ref static/ Exceptions/ Link à firebase storage quand on aura les jeux
@@ -56,7 +56,7 @@ class FirebaseApi {
           source.nextDouble(),
           game.get("Company Name"));
       _toAdd.isInstalled = await gameIsInstalled(_toAdd);
-      Common.allGamesList.add(_toAdd);
+      Custom.allGamesList.add(_toAdd);
     }
   }
 
@@ -65,13 +65,13 @@ class FirebaseApi {
     final allData = querySnapshot.docs.map((doc) => doc).toList();
     User? user = auth.currentUser;
     //Reset current user games list
-    for (var localGame in Common.allGamesList){
+    for (var localGame in Custom.allGamesList){
       localGame.isInLibrary = false;
     }
     //Create new user games list
     for (var game in allData){
       if (game.get("User Uid") == user?.uid){
-        for (var localGame in Common.allGamesList){
+        for (var localGame in Custom.allGamesList){
           if (localGame.name == game.get("Game Uid")){
             localGame.isInLibrary = true;
           }
@@ -110,13 +110,13 @@ class FirebaseApi {
         .path; //get the path to the application (data/user/0/...)
     File downloadToFile;
 
-    if (Common.isAndroid) {
+    if (Custom.isAndroid) {
       downloadToFile = File(
           '$path/${game.name.toLowerCase()}.apk'); //declare where the apk with be store (in the Application Documents right now)
-    } else if (Common.isLinux) {
+    } else if (Custom.isLinux) {
       downloadToFile =
           File((await getDownloadsDirectory())!.path); //to download directory
-    } else if (Common.isWeb) {
+    } else if (Custom.isWeb) {
       downloadToFile = File('');
       return;
     } else {

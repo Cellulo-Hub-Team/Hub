@@ -1,13 +1,12 @@
 import 'package:cellulo_hub/main/style.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
 
 import 'custom_colors.dart';
 import 'game.dart';
 import 'dart:io';
 
-class Common{
+class Custom{
   static bool darkTheme = false;
   static late AnimationController percentageController;
   static List<Game> allGamesList = [];

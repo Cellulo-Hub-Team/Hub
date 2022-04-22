@@ -6,7 +6,7 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
-import 'common.dart';
+import 'custom.dart';
 
 class Game {
   String name = "";
@@ -84,7 +84,7 @@ Widget gameHeaderBuilder(
                 ],
               ),
             )
-          : ((_game.webUrl != "" || Common.canBeInstalledOnThisPlatform(_game))
+          : ((_game.webUrl != "" || Custom.canBeInstalledOnThisPlatform(_game))
               ? Container()
               : SizedBox(
                   height: 150,
@@ -120,9 +120,9 @@ Widget gameBody(Game _game, bool _myGames,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ElevatedButton(
-                    style: Common.elevatedColorStyle(),
+                    style: Custom.elevatedColorStyle(),
                     onPressed:
-                        _myGames && !Common.canBeInstalledOnThisPlatform(_game)
+                        _myGames && !Custom.canBeInstalledOnThisPlatform(_game)
                             ? null
                             : () => onPressedMain!(_game),
                     child: _myGames
@@ -133,7 +133,7 @@ Widget gameBody(Game _game, bool _myGames,
                 _myGames ? const SizedBox(width: 30) : Container(),
                 _myGames
                     ? ElevatedButton(
-                        style: Common.elevatedColorStyle(),
+                        style: Custom.elevatedColorStyle(),
                         onPressed: (_game.isInstalled || _game.webUrl != "")
                             ? () => onPressedSecond!(_game)
                             : null,
@@ -208,7 +208,7 @@ Widget _unavailableTag(BuildContext _context) {
 
 //TODO fix spamming tag
 void _showTagSnack(BuildContext _context, String _text) {
-  final snackBar = Common.checkSnackBar(_text);
+  final snackBar = Custom.checkSnackBar(_text);
   ScaffoldMessenger.of(_context).showSnackBar(snackBar);
   Future.delayed(const Duration(seconds: 3),
       () => ScaffoldMessenger.of(_context).hideCurrentSnackBar());
@@ -217,13 +217,13 @@ void _showTagSnack(BuildContext _context, String _text) {
 //TODO generalize AnimatedBuilder
 Widget _physicalPercentage(Game _game) {
   return AnimatedBuilder(
-    animation: Common.percentageController,
+    animation: Custom.percentageController,
     builder: (BuildContext context, Widget? child) {
       return CircularPercentIndicator(
               circularStrokeCap: CircularStrokeCap.round,
               radius: 40.0,
               lineWidth: 5.0,
-              percent: min(Common.percentageController.value, _game.physicalPercentage),
+              percent: min(Custom.percentageController.value, _game.physicalPercentage),
               center: const Icon(
                 Ionicons.ios_fitness,
                 color: Colors.deepOrangeAccent,
@@ -238,13 +238,13 @@ Widget _physicalPercentage(Game _game) {
 
 Widget _cerebralPercentage(Game _game) {
   return AnimatedBuilder(
-    animation: Common.percentageController,
+    animation: Custom.percentageController,
     builder: (BuildContext context, Widget? child) {
       return CircularPercentIndicator(
         circularStrokeCap: CircularStrokeCap.round,
         radius: 40.0,
         lineWidth: 5.0,
-        percent: min(Common.percentageController.value, _game.cognitivePercentage),
+        percent: min(Custom.percentageController.value, _game.cognitivePercentage),
         center: const Icon(
           MaterialCommunityIcons.brain,
           color: Colors.lightBlueAccent,
@@ -259,13 +259,13 @@ Widget _cerebralPercentage(Game _game) {
 
 Widget _socialPercentage(Game _game) {
   return AnimatedBuilder(
-    animation: Common.percentageController,
+    animation: Custom.percentageController,
     builder: (BuildContext context, Widget? child) {
       return CircularPercentIndicator(
         circularStrokeCap: CircularStrokeCap.round,
         radius: 40.0,
         lineWidth: 5.0,
-        percent: min(Common.percentageController.value, _game.socialPercentage),
+        percent: min(Custom.percentageController.value, _game.socialPercentage),
         center: const Icon(
           MaterialIcons.people,
           color: Colors.greenAccent,

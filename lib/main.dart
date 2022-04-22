@@ -8,7 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import 'account/profile.dart';
 import 'firebase_options.dart';
-import 'main/common.dart';
+import 'main/custom.dart';
 import 'main/custom_colors.dart';
 import 'main/my_games.dart';
 import 'main/progress.dart';
@@ -60,7 +60,7 @@ class MainMenu extends StatefulWidget {
 
 class _MainMenuState extends State<MainMenu> {
   _goToTarget(Widget _target) {
-    Common.resetOpenPanels();
+    Custom.resetOpenPanels();
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => _target),
@@ -69,12 +69,12 @@ class _MainMenuState extends State<MainMenu> {
 
   _switchTheme() {
     setState(() {
-      Common.darkTheme = !Common.darkTheme;
+      Custom.darkTheme = !Custom.darkTheme;
       MyApp.themeNotifier.value =
-          Common.darkTheme ? ThemeMode.dark : ThemeMode.light;
+          Custom.darkTheme ? ThemeMode.dark : ThemeMode.light;
       CustomColors.currentColor = CustomColors.greyColor.shade900;
-      final snackBar = Common.checkSnackBar(
-          Common.darkTheme ? "Switched to Night mode" : "Switched to Day mode");
+      final snackBar = Custom.checkSnackBar(
+          Custom.darkTheme ? "Switched to Night mode" : "Switched to Day mode");
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
       Future.delayed(const Duration(seconds: 3),
           () => ScaffoldMessenger.of(context).hideCurrentSnackBar());
@@ -114,14 +114,22 @@ class _MainMenuState extends State<MainMenu> {
           ],
         )),
         Container(
-          padding: EdgeInsets.all(30),
+            padding: const EdgeInsets.only(right: 30, bottom: 60),
             alignment: Alignment.bottomRight,
             child: CustomIconButton(
                 label: "Theme",
                 icon:
-                    Common.darkTheme ? Icons.wb_sunny : Icons.wb_sunny_outlined,
+                    Custom.darkTheme ? Icons.wb_sunny : Icons.wb_sunny_outlined,
                 color: CustomColors.yellowColor.shade900,
-                onPressed: _switchTheme))
+                onPressed: _switchTheme)),
+        Container(
+            padding: const EdgeInsets.only(left: 30, bottom: 60),
+            alignment: Alignment.bottomLeft,
+            child: CustomIconButton(
+                label: "Profile",
+                icon: Ionicons.md_person,
+                color: CustomColors.purpleColor.shade900,
+                onPressed: () => _goToTarget(const Profile())))
       ],
     ));
   }
