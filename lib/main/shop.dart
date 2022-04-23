@@ -150,6 +150,10 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
     return SliverAppBar(
         collapsedHeight: 360,
     expandedHeight: (_trendingController.drive(CurveTween(curve: Curves.ease)).value * myChildSize.height) + 360,
+
+      backgroundColor: CustomColors.inversedDarkThemeColor,
+      /*automaticallyImplyLeading: false,
+      leading: null,*/
                   flexibleSpace: FlexibleSpaceBar(
                   background: SingleChildScrollView(
                   //physics: NeverScrollableScrollPhysics(),

@@ -116,7 +116,7 @@ class _MainMenuState extends State<MainMenu> {
                 icon:
                     Common.darkTheme ? Icons.wb_sunny : Icons.wb_sunny_outlined,
                 color: CustomColors.yellowColor.shade900,
-                onPressed: () => _switchTheme)),
+                onPressed: () => _switchTheme())),
         Container(
             padding: const EdgeInsets.only(left: 30, bottom: 60),
             alignment: Alignment.bottomLeft,
