@@ -4,9 +4,11 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'account/profile.dart';
+import 'custom_widgets/custom_menu_button.dart';
+import 'custom_widgets/custom_icon_button.dart';
 import 'firebase_options.dart';
 import 'main/common.dart';
-import 'main/custom_colors.dart';
+import 'custom_widgets/custom_colors.dart';
 import 'main/my_games.dart';
 import 'main/progress.dart';
 import 'main/shop.dart';
@@ -24,7 +26,7 @@ void main() async {
 class MyApp extends StatelessWidget {
   // Using "static" so that we can easily access it later
   static final ValueNotifier<ThemeMode> themeNotifier =
-  ValueNotifier(ThemeMode.light);
+      ValueNotifier(ThemeMode.light);
 
   @override
   Widget build(BuildContext context) {
@@ -56,136 +58,74 @@ class MainMenu extends StatefulWidget {
 }
 
 class _MainMenuState extends State<MainMenu> {
-  _onPressedMyGames() {
-    Common.resetOpenGameExpansionPanels();
+  _goToTarget(Widget _target) {
+    Common.resetOpenPanels();
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const MyGames()),
+      MaterialPageRoute(builder: (context) => _target),
     );
   }
 
-  _onPressedShop() {
-    Common.resetOpenGameExpansionPanels();
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const Shop()),
-    );
-  }
-
-  _onPressedProgress() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const Progress()),
-    );
-  }
-
-  _onPressedDark() {
+  _switchTheme() {
     setState(() {
       Common.darkTheme = !Common.darkTheme;
-      MyApp.themeNotifier.value = Common.darkTheme ? ThemeMode.dark : ThemeMode.light;
+      MyApp.themeNotifier.value =
+          Common.darkTheme ? ThemeMode.dark : ThemeMode.light;
       CustomColors.currentColor = CustomColors.greyColor.shade900;
-      final snackBar = Common.checkSnackBar(Common.darkTheme ? "Switched to Night mode" : "Switched to Day mode");
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-      Future.delayed(const Duration(seconds: 3),
-              () => ScaffoldMessenger.of(context).hideCurrentSnackBar());
+      Common.showSnackBar(context, Common.darkTheme ? "Switched to Night mode" : "Switched to Day mode");
     });
-  }
-
-  _onPressedProfile() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const Profile()),
-    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: Stack(
+      children: [
+        Center(
+            child: Column(
           children: [
-            Align(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    ElevatedButton.icon(
-                        onPressed: _onPressedMyGames,
-                        icon: const Icon(
-                          FontAwesome.gamepad,
-                          color: Colors.white,
-                          size: 30,
-                        ),
-                        label: const Text(" My Games", style: TextStyle(fontSize: 25)),
-                        style: ElevatedButton.styleFrom(
-                            primary: CustomColors.greenColor.shade900,
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-                            fixedSize: const Size(300, 100))),
-                    const SizedBox(height: 50),
-                    ElevatedButton.icon(
-                        onPressed: _onPressedShop,
-                        icon: const Icon(
-                          Entypo.shop,
-                          color: Colors.white,
-                          size: 30,
-                        ),
-                        label: const Text(" Shop", style: TextStyle(fontSize: 25)),
-                        style: ElevatedButton.styleFrom(
-                            primary: CustomColors.blueColor.shade900,
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-                            fixedSize: const Size(300, 100))),
-                    const SizedBox(height: 50),
-                    ElevatedButton.icon(
-                        onPressed: _onPressedProgress,
-                        icon: const Icon(
-                          Octicons.graph,
-                          color: Colors.white,
-                          size: 30,
-                        ),
-                        label: const Text(" Progress", style: TextStyle(fontSize: 25)),
-                        style: ElevatedButton.styleFrom(
-                            primary: CustomColors.redColor.shade900,
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-                            fixedSize: const Size(300, 100))),
-                    const SizedBox(height: 50),
-                    ElevatedButton(
-                        onPressed: _onPressedProgress,
-                        child: const Text("Why don't you try beating your highscore on Golf Sheep game today?",
-                          style: TextStyle(fontSize: 16),
-                          textAlign: TextAlign.center,),
-                        style: ElevatedButton.styleFrom(
-                            primary: CustomColors.greyColor.shade900,
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0.0)),
-                            fixedSize: const Size(300, 100))
-                    ),
-                  ],
-                )),
-            Align(
-                alignment: Alignment.bottomRight,
-                child: Padding(
-                    padding: const EdgeInsets.only(right: 50, bottom: 70),
-                    child: ElevatedButton(
-                        onPressed: _onPressedDark,
-                        style: ElevatedButton.styleFrom(
-                            primary: CustomColors.yellowColor.shade900,
-                            fixedSize: const Size(70, 70),
-                            shape: const CircleBorder()),
-                        child: Icon(Common.darkTheme
-                            ? Icons.wb_sunny
-                            : Icons.wb_sunny_outlined,
-                            size: 36)))),
-            Align(
-                alignment: Alignment.bottomLeft,
-                child: Padding(
-                    padding: const EdgeInsets.only(left: 50, bottom: 70),
-                    child: ElevatedButton(
-                        onPressed: _onPressedProfile,
-                        style: ElevatedButton.styleFrom(
-                            primary: CustomColors.purpleColor.shade900,
-                            fixedSize: const Size(70, 70),
-                            shape: const CircleBorder()),
-                        child: const Icon(Ionicons.md_person,
-                            size: 36))))
+            const Spacer(flex: 2),
+            CustomMenuButton(
+              label: "My Games",
+              icon: FontAwesome.gamepad,
+              color: CustomColors.greenColor.shade900,
+              onPressed: () => Common.goToTarget(context, const MyGames()),
+            ),
+            const Spacer(),
+            CustomMenuButton(
+              label: "Shop",
+              icon: Entypo.shop,
+              color: CustomColors.blueColor.shade900,
+              onPressed: () => Common.goToTarget(context, const Shop()),
+            ),
+            const Spacer(),
+            CustomMenuButton(
+              label: "Progress",
+              icon: Octicons.graph,
+              color: CustomColors.redColor.shade900,
+              onPressed: () => Common.goToTarget(context, const Progress()),
+            ),
+            const Spacer(flex: 2),
           ],
-        ));
+        )),
+        Container(
+            padding: const EdgeInsets.only(right: 30, bottom: 60),
+            alignment: Alignment.bottomRight,
+            child: CustomIconButton(
+                label: "Theme",
+                icon:
+                    Common.darkTheme ? Icons.wb_sunny : Icons.wb_sunny_outlined,
+                color: CustomColors.yellowColor.shade900,
+                onPressed: () => _switchTheme())),
+        Container(
+            padding: const EdgeInsets.only(left: 30, bottom: 60),
+            alignment: Alignment.bottomLeft,
+            child: CustomIconButton(
+                label: "Profile",
+                icon: Ionicons.md_person,
+                color: CustomColors.purpleColor.shade900,
+                onPressed: () => Common.goToTarget(context, const Profile())))
+      ],
+    ));
   }
 }

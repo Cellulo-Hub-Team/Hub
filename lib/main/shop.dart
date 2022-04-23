@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:cellulo_hub/main.dart';
 import 'package:cellulo_hub/main/search_result.dart';
 import 'package:cellulo_hub/main/style.dart';
 import 'package:flutter/material.dart';
@@ -5,11 +8,13 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:scroll_snap_list/scroll_snap_list.dart';
 
 import '../api/firebase_api.dart';
+import '../custom_widgets/custom_scaffold.dart';
+import '../game/game_body.dart';
+import '../game/game_panel_list.dart';
 import 'common.dart';
-import 'custom_colors.dart';
-import 'custom_delegate.dart';
-import 'custom_search.dart';
-import 'game.dart';
+import '../custom_widgets/custom_colors.dart';
+import '../custom_widgets/custom_search.dart';
+import '../game/game.dart';
 import 'measure_size.dart';
 import 'my_games.dart';
 
@@ -30,17 +35,6 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
   final GlobalKey<ScrollSnapListState> _trendingKey = GlobalKey();
   late AnimationController _trendingController;
 
-  Widget _trendingDescription(){
-    return MeasureSize(
-        onChange: (size) {
-          setState(() {
-            myChildSize = size;
-          });
-        },
-        child: gameBody(Common.allGamesList[_trendingDecriptionIndex], false, onPressedMain: _onPressedMain)
-    );
-  }
-
   var myChildSize = Size.zero;
 
   //Create sublists for each category
@@ -49,7 +43,7 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
   game.physicalPercentage >= game.socialPercentage &&
       game.physicalPercentage >= game.cognitivePercentage)
       .toList();
-  final List<Game> _cerebralGames = Common.allGamesList
+  final List<Game> _cognitiveGames = Common.allGamesList
       .where((game) =>
   game.cognitivePercentage >= game.socialPercentage &&
       game.cognitivePercentage >= game.physicalPercentage)
@@ -61,7 +55,7 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
       .toList();
 
   //Function called when pressing Add to My Games button
-  _onPressedMain(Game _game) {
+  _onPressedPrimary(Game _game) {
     setState(() async {
       if (_game.isInLibrary) {
         Navigator.pop(context);
@@ -74,10 +68,7 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
           _game.isInLibrary = true;
         });
         await FirebaseApi.addToUserLibrary(_game);
-        final snackBar = Common.checkSnackBar("Correctly added to My Games!");
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-        Future.delayed(const Duration(seconds: 3),
-                () => ScaffoldMessenger.of(context).hideCurrentSnackBar());
+        Common.showSnackBar(context, "Correctly added to My Games!");
       }
     });
   }
@@ -92,7 +83,7 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
       _searchResult = finalResult!;
       List<Game> _selectedGames =
       Common.allGamesList.where((game) => game.name == _searchResult).toList();
-      Common.resetOpenGameExpansionPanels();
+      Common.resetOpenPanels();
       if (_searchResult.isNotEmpty) {
         Navigator.push(
           context,
@@ -105,7 +96,6 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
   //Function called when pressing a trending game thumbnail
   _onPressedTrending(int _index) {
     setState(() {
-      _trendingKey.currentState?.focusToItem(_index);
       if (_trendingDescriptionDisplayed && _index == _trendingDecriptionIndex) {
         _trendingController.reverse();
         _trendingDescriptionDisplayed = !_trendingDescriptionDisplayed;
@@ -118,6 +108,7 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
         _trendingDecriptionIndex = _index;
         _trendingDescriptionDisplayed = !_trendingDescriptionDisplayed;
       }
+      _trendingKey.currentState?.focusToItem(_index);
     });
   }
 
@@ -132,23 +123,86 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
     super.initState();
   }
 
-  @override
+  /*@override
   void dispose() {
     Common.percentageController.dispose();
     _trendingController.dispose();
     super.dispose();
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: Common.appBar(context, "Shop", Icon(Icons.home)),
-        floatingActionButton: FloatingActionButton(
-          onPressed: _onPressedSearch,
-          child: const Icon(Icons.search),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
-        body: DefaultTabController(
+    return CustomScaffold(
+      name: "Shop",
+      leading: Icons.home,
+      leadingTarget: MainMenu(),
+      hasFloating: true,
+      floating: Icons.search,
+      onPressedFloating: () => _onPressedSearch,
+      body: DefaultTabController(
+        length: 4,
+        child: Center(child: Container(width: 1000, alignment: Alignment.center, child: NestedScrollView(
+          headerSliverBuilder: (context, value) {
+            return [
+            AnimatedBuilder(
+                animation: _trendingController,
+                builder: (BuildContext context, Widget? child) {
+    return SliverAppBar(
+      collapsedHeight: 340,
+      expandedHeight: (_trendingController.drive(CurveTween(curve: Curves.ease)).value * (myChildSize.height + 60)) + 340,
+      backgroundColor: CustomColors.inversedDarkThemeColor,
+                  flexibleSpace: FlexibleSpaceBar(
+                  background: Column(children: [
+                    _trendingWidget(),
+                    _trendingDescriptionDisplayed ? _trendingDescription() : Container(),
+                  ])),
+                bottom: TabBar(
+                  tabs: [
+                    Tab(
+                        icon: const Icon(FontAwesome.gamepad),
+                        child: Text("All", style: Style.tabStyle())),
+                    Tab(
+                      icon: const Icon(Ionicons.ios_fitness),
+                      child: Text("Physical", style: Style.tabStyle()),
+                    ),
+                    Tab(
+                      icon: const Icon(MaterialCommunityIcons.brain),
+                      child: Text("Cognitive", style: Style.tabStyle()),
+                    ),
+                    Tab(
+                      icon: const Icon(MaterialIcons.people),
+                      child: Text("Social", style: Style.tabStyle()),
+                    ),
+                  ],
+                  labelColor: CustomColors.currentColor,
+                  indicatorColor: CustomColors.currentColor,
+                  unselectedLabelColor: Common.darkTheme
+                      ? CustomColors.greyColor.shade900
+                      : CustomColors.blackColor.shade900,
+                ),
+              );
+                }),
+            ];
+          },
+          body: TabBarView(
+            children: [
+              GamePanelList(games: Common.allGamesList, inMyGames: false, onPressedPrimary: _onPressedPrimary),
+              GamePanelList(games: _physicalGames, inMyGames: false, onPressedPrimary: _onPressedPrimary),
+              GamePanelList(games: _cognitiveGames, inMyGames: false, onPressedPrimary: _onPressedPrimary),
+              GamePanelList(games: _socialGames, inMyGames: false, onPressedPrimary: _onPressedPrimary),
+            ],
+          ),
+        ))),
+      ),
+    );
+
+      /*CustomScaffold(
+    name: "Shop",
+    leading: Icons.home,
+    hasFloating: true,
+    floating: Icons.search,
+    onPressedFloating: () => _onPressedSearch,
+    body: Center(child: SizedBox(width: 1000, child: DefaultTabController(
           length: 4,
           child: NestedScrollView(
             physics: Common.isWeb
@@ -172,14 +226,13 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
                                 const SizedBox(height: 30),
                                 _trendingWidget(),
                                 const SizedBox(height: 20),
-                                _trendingDescription(),
+                                //_trendingDescription(),
                               ])),
                         ),
                       );
                     }),
                 SliverPersistentHeader(
                   delegate: CustomDelegate(TabBar(
-
                     tabs: [
                       Tab(
                           icon: const Icon(FontAwesome.gamepad),
@@ -210,35 +263,14 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
             },
             body: TabBarView(
               children: [
-                _gamesExpansionPanelList(Common.allGamesList, false),
-                _gamesExpansionPanelList(_physicalGames, false),
-                _gamesExpansionPanelList(_cerebralGames, false),
-                _gamesExpansionPanelList(_socialGames, false)
+                GamePanelList(games: Common.allGamesList, inMyGames: false, onPressedPrimary: _onPressedPrimary),
+                GamePanelList(games: _physicalGames, inMyGames: false, onPressedPrimary: _onPressedPrimary),
+                GamePanelList(games: _cognitiveGames, inMyGames: false, onPressedPrimary: _onPressedPrimary),
+                GamePanelList(games: _socialGames, inMyGames: false, onPressedPrimary: _onPressedPrimary),
               ],
             ),
           ),
-        ));
-  }
-
-  //General widget for drop down games list
-  Widget _gamesExpansionPanelList(List<Game> _gamesList, bool _inMyGames) {
-    List<ExpansionPanel> result = [];
-    for (int i = 0; i < _gamesList.length; i++) {
-      result.add(gameExpansionPanel(_gamesList, i, false, context,
-          onPressedMain: _onPressedMain));
-    }
-    return ListView(children: [
-      ExpansionPanelList(
-          children: result,
-          expansionCallback: (i, isOpen) => setState(() {
-            for (int j = 0; j < _gamesList.length; j++) {
-              if (j != i) _gamesList[j].isExpanded = false;
-            }
-            _gamesList[i].isExpanded = !isOpen;
-            Common.percentageController.reset();
-            Common.percentageController.forward();
-          }))
-    ]);
+        ))));*/
   }
 
   //Trending games list
@@ -292,5 +324,17 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
           ]
       ),
     ));
+  }
+
+  Widget _trendingDescription(){
+    Game _game = Common.allGamesList[_trendingDecriptionIndex];
+    return MeasureSize(
+        onChange: (size) {
+          setState(() {
+            myChildSize = size;
+          });
+        },
+        child: GameBody(game: _game, inMyGames: false, onPressedPrimary: () => _onPressedPrimary(_game),)
+    );
   }
 }

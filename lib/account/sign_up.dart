@@ -2,17 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 
 import '../api/firebase_api.dart';
+import '../custom_widgets/custom_elevated_button.dart';
+import '../custom_widgets/custom_scaffold.dart';
 import '../main/common.dart';
-import '../main/custom_colors.dart';
+import '../custom_widgets/custom_colors.dart';
+import 'profile_home.dart';
 
-class Signup extends StatefulWidget {
-  const Signup({Key? key}) : super(key: key);
+class SignUp extends StatefulWidget {
+  const SignUp({Key? key}) : super(key: key);
 
   @override
-  State<Signup> createState() => _SignupState();
+  State<SignUp> createState() => _SignUpState();
 }
 
-class _SignupState extends State<Signup> {
+class _SignUpState extends State<SignUp> {
   final _formKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
@@ -31,22 +34,18 @@ class _SignupState extends State<Signup> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        backgroundColor: CustomColors.currentColor,
-        title: const Text('Sign Up'),
-        leading: IconButton(
-          icon: Icon(Ionicons.md_person),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-      ),
-      body: Form(
+    return CustomScaffold(
+        name: "Sign Up",
+        leading: Ionicons.md_person,
+        leadingTarget: const ProfileHome(),
+    hasFloating: false,
+    body: Form(
         key: _formKey,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
+            Spacer(flex: 5),
             TextFormField(
               keyboardType: TextInputType.emailAddress,
               decoration: const InputDecoration(
@@ -103,18 +102,16 @@ class _SignupState extends State<Signup> {
                 return null;
               },
             ),
-            Align(
-              child: ElevatedButton(
-                style: Common.elevatedColorStyle(),
-                onPressed: () {
-                  // Validate returns true if the form is valid, or false otherwise.
-                  if (_formKey.currentState!.validate()) {
-                    addUserAndClear();
-                  }
-                },
-                child: const Text('Submit'),
-              ),
-            )
+            Spacer(),
+            CustomElevatedButton(
+                  label: "Submit",
+                  onPressed: () {
+                    // Validate returns true if the form is valid, or false otherwise.
+                    if (_formKey.currentState!.validate()) {
+                      addUserAndClear();
+                    }
+                  }),
+            Spacer(flex: 5),
           ],
         ),
       ),
@@ -125,10 +122,7 @@ class _SignupState extends State<Signup> {
     await FirebaseApi.signUp(
         emailController.text, passwordController.text);
     FocusScope.of(context).unfocus();
-    final snackBar = Common.checkSnackBar("New user correctly added !");
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    Future.delayed(const Duration(seconds: 6),
-            () => ScaffoldMessenger.of(context).hideCurrentSnackBar());
+    Common.showSnackBar(context, "New user correctly added !");
     emailController.clear();
     passwordController.clear();
     confirmationController.clear();
