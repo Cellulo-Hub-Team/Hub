@@ -11,6 +11,7 @@ import 'common.dart';
 import '../custom_widgets/custom_colors.dart';
 import '../game/game.dart';
 
+//User games library
 class MyGames extends StatefulWidget {
   const MyGames({Key? key}) : super(key: key);
 
@@ -34,7 +35,7 @@ class _MyGamesState extends State<MyGames> with TickerProviderStateMixin {
 
   //Launches the installed game or the web game if no game can be installed on this platform
   _onPressedLaunch(Game _game) {
-    if (_game.webUrl != "" && !Common.canBeInstalledOnThisPlatform(_game)) {
+    if (!_game.isInstalled) {
       FirebaseApi.launchWebApp(_game);
     } else {
       FirebaseApi.launchApp(_game);
@@ -57,7 +58,11 @@ class _MyGamesState extends State<MyGames> with TickerProviderStateMixin {
       hasFloating: true,
       floating: Icons.add,
       onPressedFloating: () => Common.goToTarget(context, const Shop()),
-      child: GamePanelList(games: Common.allGamesList, inMyGames: true, onPressedPrimary: _onPressedInstall, onPressedSecondary: _onPressedLaunch)
+      body: GamePanelList(
+          games: Common.allGamesList,
+          inMyGames: true,
+          onPressedPrimary: _onPressedInstall,
+          onPressedSecondary: _onPressedLaunch)
     );
   }
 }

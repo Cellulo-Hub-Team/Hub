@@ -6,7 +6,7 @@ import 'custom_colors.dart';
 //The base scaffold for each screen with custom app bar and floating app bar button
 class CustomScaffold extends StatefulWidget {
   final String name;
-  final Widget child;
+  final Widget body;
   final IconData leading;
   final bool hasFloating;
   final IconData? floating;
@@ -18,7 +18,7 @@ class CustomScaffold extends StatefulWidget {
       required this.hasFloating,
       this.floating,
       this.onPressedFloating,
-      required this.child})
+      required this.body})
       : super(key: key);
 
   @override
@@ -48,7 +48,7 @@ class _CustomScaffoldState extends State<CustomScaffold> {
         child: Icon(widget.floating),
       ) : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
-      body: widget.child,
+      body: widget.body,
     );
   }
 }

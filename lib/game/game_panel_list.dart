@@ -63,8 +63,12 @@ class _GamePanelListState extends State<GamePanelList> with TickerProviderStateM
         body: GameBody(
             game: _game,
             inMyGames: widget.inMyGames,
-            onPressedPrimary: () => widget.onPressedPrimary!(_game),
-            onPressedSecondary: () => widget.onPressedSecondary!(_game)),
+            onPressedPrimary: !Common.canBeInstalledOnThisPlatform(_game)
+                ? null
+                : () => widget.onPressedPrimary!(_game),
+            onPressedSecondary: !_game.isInstalled && _game.webUrl == null
+                ? null
+                : () => widget.onPressedSecondary!(_game)),
         isExpanded: _game.isExpanded,
         canTapOnHeader: true,
         hasIcon: false);

@@ -27,7 +27,7 @@ class _ProfileState extends State<Profile> {
         name: "Profile",
         leading: Icons.home,
         hasFloating: false,
-        child: Center(child: Column(
+        body: Center(child: Column(
           children: [
             Spacer(flex: 3),
             Text("Welcome ${FirebaseApi.auth.currentUser!.email}", style: TextStyle(fontSize: 20)),
