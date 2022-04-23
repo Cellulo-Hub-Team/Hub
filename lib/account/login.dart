@@ -9,7 +9,7 @@ import '../main/common.dart';
 import '../custom_widgets/custom_colors.dart';
 
 import 'forgot_password.dart';
-import 'login_home.dart';
+import 'profile_home.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -48,7 +48,7 @@ class _LoginState extends State<Login> {
     return CustomScaffold(
       name: "Login",
       leading: Ionicons.md_person,
-      leadingTarget: const LoginHome(),
+      leadingTarget: const ProfileHome(),
       hasFloating: false,
       body: Center(child: Column(
         mainAxisAlignment: MainAxisAlignment.center,

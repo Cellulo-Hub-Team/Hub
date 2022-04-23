@@ -7,14 +7,14 @@ import '../custom_widgets/custom_menu_button.dart';
 import '../main/common.dart';
 import 'login.dart';
 
-class LoginHome extends StatefulWidget {
-  const LoginHome({Key? key}) : super(key: key);
+class ProfileHome extends StatefulWidget {
+  const ProfileHome({Key? key}) : super(key: key);
 
   @override
-  State<LoginHome> createState() => _LoginHomeState();
+  State<ProfileHome> createState() => _ProfileHomeState();
 }
 
-class _LoginHomeState extends State<LoginHome> {
+class _ProfileHomeState extends State<ProfileHome> {
   @override
   void initState() {
     CustomColors.currentColor = CustomColors.purpleColor.shade900;

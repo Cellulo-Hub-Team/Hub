@@ -6,7 +6,7 @@ import '../custom_widgets/custom_elevated_button.dart';
 import '../custom_widgets/custom_scaffold.dart';
 import '../main/common.dart';
 import '../custom_widgets/custom_colors.dart';
-import 'login_home.dart';
+import 'profile_home.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({Key? key}) : super(key: key);
@@ -37,7 +37,7 @@ class _SignUpState extends State<SignUp> {
     return CustomScaffold(
         name: "Sign Up",
         leading: Ionicons.md_person,
-        leadingTarget: const LoginHome(),
+        leadingTarget: const ProfileHome(),
     hasFloating: false,
     body: Form(
         key: _formKey,

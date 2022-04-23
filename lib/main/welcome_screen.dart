@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../account/login_home.dart';
+import '../account/profile_home.dart';
 import '../api/firebase_api.dart';
 import '../main.dart';
 
@@ -16,7 +16,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   Widget _getStartingScreen() {
     if (!FirebaseApi.isLoggedIn()) {
       FirebaseApi.buildAllGamesList();
-      return const LoginHome();
+      return const ProfileHome();
     } else {
       _buildLists();
       return const MainMenu();

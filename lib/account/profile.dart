@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import '../api/firebase_api.dart';
 import '../main.dart';
 import '../custom_widgets/custom_colors.dart';
-import 'login_home.dart';
+import 'profile_home.dart';
 
 class Profile extends StatefulWidget {
   const Profile({Key? key}) : super(key: key);
@@ -40,7 +40,7 @@ class _ProfileState extends State<Profile> {
                 await FirebaseApi.auth.signOut();
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const LoginHome()),
+                  MaterialPageRoute(builder: (context) => const ProfileHome()),
                 );
               }),
             Spacer(flex: 3)

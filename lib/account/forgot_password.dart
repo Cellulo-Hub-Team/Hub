@@ -5,7 +5,7 @@ import 'package:flutter_icons/flutter_icons.dart';
 import '../api/firebase_api.dart';
 import '../custom_widgets/custom_colors.dart';
 import '../custom_widgets/custom_scaffold.dart';
-import 'login_home.dart';
+import 'profile_home.dart';
 
 class Forgot extends StatefulWidget {
   const Forgot({Key? key}) : super(key: key);
@@ -30,7 +30,7 @@ class _ForgotState extends State<Forgot> {
     return CustomScaffold(
       name: "Login",
       leading: Ionicons.md_person,
-      leadingTarget: const LoginHome(),
+      leadingTarget: const ProfileHome(),
       hasFloating: false,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
