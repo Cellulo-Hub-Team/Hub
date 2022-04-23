@@ -1,7 +1,9 @@
+import 'package:cellulo_hub/custom_widgets/custom_elevated_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 
 import '../api/firebase_api.dart';
+import '../custom_widgets/custom_scaffold.dart';
 import '../main.dart';
 import '../main/common.dart';
 import '../custom_widgets/custom_colors.dart';
@@ -42,9 +44,12 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      //appBar: Common.appBar(context, "Login", Icon(Ionicons.md_person)),
-      body: Column(
+    return CustomScaffold(
+      name: "Login",
+      leading: Icons.home,
+      leadingTarget: const MainMenu(),
+      hasFloating: false,
+      body: Center(child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -71,21 +76,19 @@ class _LoginState extends State<Login> {
               style: TextStyle(color: Colors.blue),
             ),
           ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(primary: CustomColors.currentColor),
-            onPressed: () async {
-              // Validate returns true if the form is valid, or false otherwise.
-              await FirebaseApi.signIn(
-                  _emailController.text, _passwordController.text);
-              if (FirebaseApi.isLoggedIn()) {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const MainMenu()));
-              }
-            },
-            child: const Text('Log in'),
-          ),
+          CustomElevatedButton(
+              label: "Log In",
+              onPressed: () async {
+                // Validate returns true if the form is valid, or false otherwise.
+                await FirebaseApi.signIn(
+                    _emailController.text, _passwordController.text);
+                if (FirebaseApi.isLoggedIn()) {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => const MainMenu()));
+                }
+              })
         ],
-      ),
+      )),
     );
   }
 }

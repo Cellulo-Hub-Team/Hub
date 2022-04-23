@@ -144,7 +144,6 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
         child: Center(child: Container(width: 1000, alignment: Alignment.center, child: NestedScrollView(
           headerSliverBuilder: (context, value) {
             return [
-
             AnimatedBuilder(
                 animation: _trendingController,
                 builder: (BuildContext context, Widget? child) {
@@ -153,12 +152,10 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
       expandedHeight: (_trendingController.drive(CurveTween(curve: Curves.ease)).value * (myChildSize.height + 60)) + 340,
       backgroundColor: CustomColors.inversedDarkThemeColor,
                   flexibleSpace: FlexibleSpaceBar(
-                  background: SingleChildScrollView(
-                  //physics: NeverScrollableScrollPhysics(),
-                  child: Column(children: [
+                  background: Column(children: [
                     _trendingWidget(),
                     _trendingDescriptionDisplayed ? _trendingDescription() : Container(),
-                  ]))),
+                  ])),
                 bottom: TabBar(
                   tabs: [
                     Tab(

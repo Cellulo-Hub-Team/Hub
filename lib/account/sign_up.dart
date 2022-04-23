@@ -6,14 +6,14 @@ import '../custom_widgets/custom_elevated_button.dart';
 import '../main/common.dart';
 import '../custom_widgets/custom_colors.dart';
 
-class Signup extends StatefulWidget {
-  const Signup({Key? key}) : super(key: key);
+class SignUp extends StatefulWidget {
+  const SignUp({Key? key}) : super(key: key);
 
   @override
-  State<Signup> createState() => _SignupState();
+  State<SignUp> createState() => _SignUpState();
 }
 
-class _SignupState extends State<Signup> {
+class _SignUpState extends State<SignUp> {
   final _formKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();

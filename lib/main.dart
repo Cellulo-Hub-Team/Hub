@@ -89,21 +89,21 @@ class _MainMenuState extends State<MainMenu> {
               label: "My Games",
               icon: FontAwesome.gamepad,
               color: CustomColors.greenColor.shade900,
-              onPressed: () => _goToTarget(const MyGames()),
+              onPressed: () => Common.goToTarget(context, const MyGames()),
             ),
             const Spacer(),
             CustomMenuButton(
               label: "Shop",
               icon: Entypo.shop,
               color: CustomColors.blueColor.shade900,
-              onPressed: () => _goToTarget(const Shop()),
+              onPressed: () => Common.goToTarget(context, const Shop()),
             ),
             const Spacer(),
             CustomMenuButton(
               label: "Progress",
               icon: Octicons.graph,
               color: CustomColors.redColor.shade900,
-              onPressed: () => _goToTarget(const Progress()),
+              onPressed: () => Common.goToTarget(context, const Progress()),
             ),
             const Spacer(flex: 2),
           ],
@@ -124,7 +124,7 @@ class _MainMenuState extends State<MainMenu> {
                 label: "Profile",
                 icon: Ionicons.md_person,
                 color: CustomColors.purpleColor.shade900,
-                onPressed: () => _goToTarget(const Profile())))
+                onPressed: () => Common.goToTarget(context, const Profile())))
       ],
     ));
   }
