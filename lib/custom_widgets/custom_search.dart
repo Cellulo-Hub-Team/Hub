@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:cellulo_hub/main/custom_colors.dart';
+import 'package:cellulo_hub/custom_widgets/custom_colors.dart';
 import 'package:cellulo_hub/main/style.dart';
 import 'package:google_fonts/google_fonts.dart';
 

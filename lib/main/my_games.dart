@@ -1,15 +1,15 @@
 import 'dart:math';
 
-import 'package:cellulo_hub/main/custom_widgets/custom_scaffold.dart';
-import 'package:cellulo_hub/main/custom_widgets/game_panel_list.dart';
+import 'package:cellulo_hub/custom_widgets/custom_scaffold.dart';
+import 'package:cellulo_hub/game/game_panel_list.dart';
 import 'package:cellulo_hub/main/shop.dart';
 import 'package:device_apps/device_apps.dart';
 import 'package:flutter/material.dart';
 
 import '../api/firebase_api.dart';
 import 'common.dart';
-import 'custom_colors.dart';
-import 'game.dart';
+import '../custom_widgets/custom_colors.dart';
+import '../game/game.dart';
 
 class MyGames extends StatefulWidget {
   const MyGames({Key? key}) : super(key: key);

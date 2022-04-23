@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../main.dart';
-import 'common.dart';
+import '../main/common.dart';
 
 Map<int, Color> _redMap = {
   900: const Color.fromRGBO(253, 99, 125, 1),

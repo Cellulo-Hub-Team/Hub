@@ -1,15 +1,14 @@
-import 'package:cellulo_hub/main/custom_widgets/custom_elevated_button.dart';
-import 'package:cellulo_hub/main/custom_widgets/custom_icon_button.dart';
-import 'package:cellulo_hub/main/game_description.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'account/profile.dart';
+import 'custom_widgets/custom_menu_button.dart';
+import 'custom_widgets/custom_icon_button.dart';
 import 'firebase_options.dart';
 import 'main/common.dart';
-import 'main/custom_colors.dart';
+import 'custom_widgets/custom_colors.dart';
 import 'main/my_games.dart';
 import 'main/progress.dart';
 import 'main/shop.dart';
@@ -86,21 +85,21 @@ class _MainMenuState extends State<MainMenu> {
             child: Column(
           children: [
             const Spacer(flex: 2),
-            CustomElevatedButton(
+            CustomMenuButton(
               label: "My Games",
               icon: FontAwesome.gamepad,
               color: CustomColors.greenColor.shade900,
               onPressed: () => _goToTarget(const MyGames()),
             ),
             const Spacer(),
-            CustomElevatedButton(
+            CustomMenuButton(
               label: "Shop",
               icon: Entypo.shop,
               color: CustomColors.blueColor.shade900,
               onPressed: () => _goToTarget(const Shop()),
             ),
             const Spacer(),
-            CustomElevatedButton(
+            CustomMenuButton(
               label: "Progress",
               icon: Octicons.graph,
               color: CustomColors.redColor.shade900,
@@ -117,7 +116,7 @@ class _MainMenuState extends State<MainMenu> {
                 icon:
                     Common.darkTheme ? Icons.wb_sunny : Icons.wb_sunny_outlined,
                 color: CustomColors.yellowColor.shade900,
-                onPressed: _switchTheme)),
+                onPressed: () => _switchTheme)),
         Container(
             padding: const EdgeInsets.only(left: 30, bottom: 60),
             alignment: Alignment.bottomLeft,

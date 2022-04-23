@@ -1,19 +1,21 @@
 import 'dart:math';
 
+import 'package:cellulo_hub/custom_widgets/custom_elevated_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
-import '../common.dart';
-import '../game.dart';
-import '../style.dart';
+import '../main/common.dart';
+import 'game.dart';
+import '../main/style.dart';
+
 
 //The bottom expanded part of the game panel
 class GameBody extends StatefulWidget {
   final Game game;
   final bool inMyGames;
-  final Function? onPressedPrimary;
-  final Function? onPressedSecondary;
+  final VoidCallback? onPressedPrimary;
+  final VoidCallback? onPressedSecondary;
   const GameBody({Key? key,
     required this.game,
     required this.inMyGames,
@@ -38,37 +40,39 @@ class _GameBodyState extends State<GameBody> {
           Padding(
               padding: const EdgeInsets.all(15), //apply padding to all four sides
               child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                Spacer(),
                 _percentageIndicator(widget.game.physicalPercentage, Colors.deepOrangeAccent, Ionicons.ios_fitness),
-                const SizedBox(width: 30),
+                Spacer(),
                 _percentageIndicator(widget.game.cognitivePercentage, Colors.lightBlueAccent, MaterialCommunityIcons.brain),
-                const SizedBox(width: 30),
+                Spacer(),
                 _percentageIndicator(widget.game.socialPercentage, Colors.greenAccent, MaterialIcons.people),
+                Spacer()
               ])),
           Padding(
               padding: const EdgeInsets.all(15), //apply padding to all four sides
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ElevatedButton(
-                      style: Common.elevatedColorStyle(),
-                      onPressed: () {},
+                  Spacer(),
+                  CustomElevatedButton(
+                    label: widget.inMyGames
+                        ? (widget.game.isInstalled ? "Uninstall" : "Install")
+                        : (widget.game.isInLibrary ? "See in library" : "Add to My Games"),
+                    onPressed: widget.onPressedPrimary),
                       /*widget.inMyGames && !Common.canBeInstalledOnThisPlatform(widget.game)
                           ? null
                           : widget.onPressedPrimary!(widget.game),*/
-                      child: widget.inMyGames
-                          ? Text(widget.game.isInstalled ? "Uninstall" : "Install")
-                          : Text(widget.game.isInLibrary
-                          ? "See in library"
-                          : "Add to My Games")),
-                  widget.inMyGames ? const SizedBox(width: 30) : Container(),
-                  widget.inMyGames
-                      ? ElevatedButton(
-                      style: Common.elevatedColorStyle(),
-                      onPressed: () {},/*(widget.game.isInstalled || widget.game.webUrl != "")
+                  Spacer(),
+                  widget.inMyGames ? CustomElevatedButton(
+                    label: "Launch",
+                    onPressed: widget.onPressedSecondary,
+                  ) : Container(),
+                  /*widget.inMyGames && !Common.canBeInstalledOnThisPlatform(widget.game)
+                          ? null
+                          : widget.onPressedPrimary!(widget.game),*//*(widget.game.isInstalled || widget.game.webUrl != "")
                           ? widget.onPressedSecondary!(widget.game)
                           : null,*/
-                      child: const Text("Launch"))
-                      : Container(),
+                  Spacer(),
                 ],
               ))
         ],

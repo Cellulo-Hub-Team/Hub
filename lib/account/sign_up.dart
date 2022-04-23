@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 
 import '../api/firebase_api.dart';
+import '../custom_widgets/custom_elevated_button.dart';
 import '../main/common.dart';
-import '../main/custom_colors.dart';
+import '../custom_widgets/custom_colors.dart';
 
 class Signup extends StatefulWidget {
   const Signup({Key? key}) : super(key: key);
@@ -104,16 +105,14 @@ class _SignupState extends State<Signup> {
               },
             ),
             Align(
-              child: ElevatedButton(
-                style: Common.elevatedColorStyle(),
-                onPressed: () {
-                  // Validate returns true if the form is valid, or false otherwise.
-                  if (_formKey.currentState!.validate()) {
-                    addUserAndClear();
-                  }
-                },
-                child: const Text('Submit'),
-              ),
+              child: CustomElevatedButton(
+                  label: "Submit",
+                  onPressed: () {
+                    // Validate returns true if the form is valid, or false otherwise.
+                    if (_formKey.currentState!.validate()) {
+                      addUserAndClear();
+                    }
+                  })
             )
           ],
         ),

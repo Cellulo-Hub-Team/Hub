@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../api/firebase_api.dart';
-import '../main/custom_colors.dart';
+import '../custom_widgets/custom_colors.dart';
 
 class Forgot extends StatefulWidget {
   const Forgot({Key? key}) : super(key: key);

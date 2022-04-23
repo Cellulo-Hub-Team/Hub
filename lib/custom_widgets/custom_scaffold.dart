@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../custom_colors.dart';
+import 'custom_colors.dart';
+
 
 //The base scaffold for each screen with custom app bar and floating app bar button
 class CustomScaffold extends StatefulWidget {
@@ -9,7 +10,7 @@ class CustomScaffold extends StatefulWidget {
   final IconData leading;
   final bool hasFloating;
   final IconData? floating;
-  final void Function()? onPressedFloating;
+  final VoidCallback? onPressedFloating;
   const CustomScaffold(
       {Key? key,
       required this.name,

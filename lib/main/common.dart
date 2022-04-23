@@ -2,8 +2,8 @@ import 'package:cellulo_hub/main/style.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'custom_colors.dart';
-import 'game.dart';
+import '../custom_widgets/custom_colors.dart';
+import '../game/game.dart';
 import 'dart:io';
 
 class Common{
@@ -53,11 +53,6 @@ class Common{
       _context,
       MaterialPageRoute(builder: (context) => _target),
     );
-  }
-
-  //Color for ElevatedButton
-  static ButtonStyle elevatedColorStyle(){
-    return ElevatedButton.styleFrom(primary: CustomColors.currentColor);
   }
 
 }

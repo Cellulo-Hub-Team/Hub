@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 //The custom square button from the menu
-class CustomElevatedButton extends StatefulWidget {
+class CustomMenuButton extends StatefulWidget {
   final Color color;
   final IconData icon;
   final String label;
-  final void Function()? onPressed;
-  const CustomElevatedButton(
+  final VoidCallback? onPressed;
+  const CustomMenuButton(
       {Key? key,
       required this.label,
       required this.icon,
@@ -15,10 +15,10 @@ class CustomElevatedButton extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<CustomElevatedButton> createState() => _CustomElevatedButtonState();
+  State<CustomMenuButton> createState() => _CustomMenuButtonState();
 }
 
-class _CustomElevatedButtonState extends State<CustomElevatedButton> {
+class _CustomMenuButtonState extends State<CustomMenuButton> {
 
   @override
   Widget build(BuildContext context) {

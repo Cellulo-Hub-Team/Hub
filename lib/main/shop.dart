@@ -1,7 +1,5 @@
 import 'dart:math';
 
-import 'package:cellulo_hub/main/custom_widgets/game_body.dart';
-import 'package:cellulo_hub/main/custom_widgets/game_panel_list.dart';
 import 'package:cellulo_hub/main/search_result.dart';
 import 'package:cellulo_hub/main/style.dart';
 import 'package:flutter/material.dart';
@@ -9,12 +7,14 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:scroll_snap_list/scroll_snap_list.dart';
 
 import '../api/firebase_api.dart';
+import '../custom_widgets/custom_scaffold.dart';
+import '../game/game_body.dart';
+import '../game/game_panel_list.dart';
 import 'common.dart';
-import 'custom_colors.dart';
-import 'custom_delegate.dart';
-import 'custom_search.dart';
-import 'custom_widgets/custom_scaffold.dart';
-import 'game.dart';
+import '../custom_widgets/custom_colors.dart';
+import '../custom_widgets/custom_delegate.dart';
+import '../custom_widgets/custom_search.dart';
+import '../game/game.dart';
 import 'measure_size.dart';
 import 'my_games.dart';
 
@@ -36,13 +36,14 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
   late AnimationController _trendingController;
 
   Widget _trendingDescription(){
+    Game _game = Common.allGamesList[_trendingDecriptionIndex];
     return MeasureSize(
         onChange: (size) {
           setState(() {
             myChildSize = size;
           });
         },
-        child: GameBody(game: Common.allGamesList[_trendingDecriptionIndex], inMyGames: false, onPressedPrimary: _onPressedPrimary,)
+        child: GameBody(game: _game, inMyGames: false, onPressedPrimary: _onPressedPrimary(_game),)
     );
   }
 

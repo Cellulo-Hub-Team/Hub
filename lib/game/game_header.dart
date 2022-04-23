@@ -1,10 +1,11 @@
-import 'package:cellulo_hub/main/custom_widgets/custom_icon_button.dart';
 import 'package:flutter/material.dart';
 import 'package:cellulo_hub/main/common.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 
-import '../game.dart';
-import '../style.dart';
+import '../custom_widgets/custom_icon_button.dart';
+import 'game.dart';
+import '../main/style.dart';
+
 
 
 //The top constant part of the game panel
@@ -50,6 +51,7 @@ class _GameHeaderState extends State<GameHeader> {
                 height: _height,
                 child: Column(
                   children: [
+                    Spacer(),
                     CustomIconButton(
                         label: "Android",
                         icon: FontAwesome.android,
@@ -61,6 +63,7 @@ class _GameHeaderState extends State<GameHeader> {
                                     ? " "
                                     : " not ") +
                                 "available on Android")),
+                    Spacer(),
                     CustomIconButton(
                         label: "Linux",
                         icon: MaterialCommunityIcons.linux,
@@ -72,6 +75,7 @@ class _GameHeaderState extends State<GameHeader> {
                                     ? " "
                                     : " not ") +
                                 "available on Linux")),
+                    Spacer(),
                     CustomIconButton(
                         label: "Web",
                         icon: MaterialCommunityIcons.web,
@@ -81,6 +85,7 @@ class _GameHeaderState extends State<GameHeader> {
                             "This game is" +
                                 (widget.game.webUrl != null ? " " : " not ") +
                                 "available on Web")),
+                    Spacer(),
                   ],
                 ),
               )
@@ -97,7 +102,26 @@ class _GameHeaderState extends State<GameHeader> {
   }
 
   Widget _unavailableTag(BuildContext _context) {
-    return ElevatedButton.icon(
+    return Container(); /*ElevatedButton.icon(
+      onPressed: () => Common.showSnackBar(
+        _context, "This game is not available on this platform"),
+      icon: Icon(
+        FontAwesome.warning,
+        color: Colors.white,
+      ),
+      label: Text(
+        'Not available on your device',
+        style: Style.tagStyle(true, true),
+        textAlign: TextAlign.center,),
+      style: ElevatedButton.styleFrom(
+          primary: widget.color,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+          fixedSize: const Size(150, 30)),
+    );
+
+      ElevatedButton.icon(
       onPressed: () => Common.showSnackBar(
           _context, "This game is not available on this platform"),
       icon: const Icon(
@@ -117,6 +141,6 @@ class _GameHeaderState extends State<GameHeader> {
                 topRight: Radius.circular(30.0))),
         fixedSize: const Size(180, 50),
       ),
-    );
+    );*/
   }
 }

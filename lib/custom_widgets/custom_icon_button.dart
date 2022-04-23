@@ -5,7 +5,7 @@ class CustomIconButton extends StatefulWidget {
   final String label;
   final IconData icon;
   final Color color;
-  final void Function()? onPressed;
+  final VoidCallback? onPressed;
   const CustomIconButton({Key? key, required this.label, required this.icon, required this.color, required this.onPressed}) : super(key: key);
 
   @override

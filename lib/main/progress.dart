@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'common.dart';
-import 'custom_colors.dart';
+import '../custom_widgets/custom_colors.dart';
 
 class Progress extends StatefulWidget {
   const Progress({Key? key}) : super(key: key);

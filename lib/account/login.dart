@@ -4,7 +4,7 @@ import 'package:flutter_icons/flutter_icons.dart';
 import '../api/firebase_api.dart';
 import '../main.dart';
 import '../main/common.dart';
-import '../main/custom_colors.dart';
+import '../custom_widgets/custom_colors.dart';
 
 import 'forgot_password.dart';
 

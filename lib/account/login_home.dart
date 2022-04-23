@@ -2,7 +2,7 @@ import 'package:cellulo_hub/account/sign_up.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 
-import '../main/custom_colors.dart';
+import '../custom_widgets/custom_colors.dart';
 import 'login.dart';
 
 class LoginHome extends StatefulWidget {

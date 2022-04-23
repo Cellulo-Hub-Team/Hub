@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 
 import 'common.dart';
-import 'game.dart';
+import '../game/game.dart';
 
 class GameDescription extends StatefulWidget {
   final Game game;

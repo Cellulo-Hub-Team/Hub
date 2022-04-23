@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import '../api/firebase_api.dart';
+import '../game/game_panel_list.dart';
 import 'common.dart';
-import 'custom_colors.dart';
-import 'custom_widgets/game_panel_list.dart';
-import 'game.dart';
+import '../custom_widgets/custom_colors.dart';
+import '../game/game.dart';
 import 'my_games.dart';
 
 class SearchResult extends StatefulWidget {

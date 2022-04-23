@@ -1,16 +1,16 @@
-import 'package:cellulo_hub/main/custom_widgets/game_body.dart';
-import 'package:cellulo_hub/main/custom_widgets/game_header.dart';
 import 'package:flutter/material.dart';
 
-import '../common.dart';
-import '../game.dart';
+import '../main/common.dart';
+import 'game.dart';
+import 'game_body.dart';
+import 'game_header.dart';
 
 
 //The list of expandable game panels
 class GamePanelList extends StatefulWidget {
   final List<Game> games;
-  final Function? onPressedPrimary;
-  final Function? onPressedSecondary;
+  final Function(Game)? onPressedPrimary;
+  final Function(Game)? onPressedSecondary;
   final bool inMyGames;
   const GamePanelList(
       {Key? key,
@@ -44,7 +44,7 @@ class _GamePanelListState extends State<GamePanelList> with TickerProviderStateM
     for (int i = 0; i < widget.games.length; i++) {
       result.add(gameExpansionPanel(widget.games[i]));
     }
-    return ListView(children: [ExpansionPanelList(
+    return Center(child: Container(width: 1000, alignment: Alignment.center, child: ListView(children: [ExpansionPanelList(
         children: result,
         expansionCallback: (i, isOpen) => setState(() {
               for (int j = 0; j < result.length; j++) {
@@ -53,7 +53,7 @@ class _GamePanelListState extends State<GamePanelList> with TickerProviderStateM
               widget.games[i].isExpanded = !isOpen;
               Common.percentageController.reset();
               Common.percentageController.forward();
-            }))]);
+            }))])));
   }
 
   //The expandable panel for each game
@@ -63,8 +63,8 @@ class _GamePanelListState extends State<GamePanelList> with TickerProviderStateM
         body: GameBody(
             game: _game,
             inMyGames: widget.inMyGames,
-            onPressedPrimary: widget.onPressedPrimary,
-            onPressedSecondary: widget.onPressedSecondary),
+            onPressedPrimary: () => widget.onPressedPrimary!(_game),
+            onPressedSecondary: () => widget.onPressedSecondary!(_game)),
         isExpanded: _game.isExpanded,
         canTapOnHeader: true,
         hasIcon: false);
