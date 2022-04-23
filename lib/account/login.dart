@@ -9,6 +9,7 @@ import '../main/common.dart';
 import '../custom_widgets/custom_colors.dart';
 
 import 'forgot_password.dart';
+import 'login_home.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -46,13 +47,14 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     return CustomScaffold(
       name: "Login",
-      leading: Icons.home,
-      leadingTarget: const MainMenu(),
+      leading: Ionicons.md_person,
+      leadingTarget: const LoginHome(),
       hasFloating: false,
       body: Center(child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          Spacer(flex: 5),
           TextField(
             controller: _emailController,
             keyboardType: TextInputType.emailAddress,
@@ -76,6 +78,7 @@ class _LoginState extends State<Login> {
               style: TextStyle(color: Colors.blue),
             ),
           ),
+          Spacer(),
           CustomElevatedButton(
               label: "Log In",
               onPressed: () async {
@@ -86,7 +89,8 @@ class _LoginState extends State<Login> {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => const MainMenu()));
                 }
-              })
+              }),
+          Spacer(flex: 5)
         ],
       )),
     );

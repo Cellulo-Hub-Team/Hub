@@ -1,7 +1,11 @@
+import 'package:cellulo_hub/custom_widgets/custom_elevated_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 
 import '../api/firebase_api.dart';
 import '../custom_widgets/custom_colors.dart';
+import '../custom_widgets/custom_scaffold.dart';
+import 'login_home.dart';
 
 class Forgot extends StatefulWidget {
   const Forgot({Key? key}) : super(key: key);
@@ -23,14 +27,16 @@ class _ForgotState extends State<Forgot> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-          backgroundColor: CustomColors.greenColor.shade900,
-          title: const Text('Forgot password')),
+    return CustomScaffold(
+      name: "Login",
+      leading: Ionicons.md_person,
+      leadingTarget: const LoginHome(),
+      hasFloating: false,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          Spacer(flex: 5),
           TextField(
             controller: _emailController,
             keyboardType: TextInputType.emailAddress,
@@ -39,13 +45,14 @@ class _ForgotState extends State<Forgot> {
               prefixIcon: Icon(Icons.mail, color: Colors.black),
             ),
           ),
-          ElevatedButton(
-            onPressed: () {
-              FirebaseApi.auth
-                  .sendPasswordResetEmail(email: _emailController.text);
-            },
-            child: const Text('Reset password'),
-          ),
+          Spacer(),
+          CustomElevatedButton(
+              label: "Reset Password",
+              onPressed: () {
+                FirebaseApi.auth
+                    .sendPasswordResetEmail(email: _emailController.text);
+              }),
+          Spacer(flex: 5),
         ],
       ),
     );

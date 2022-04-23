@@ -3,8 +3,10 @@ import 'package:flutter_icons/flutter_icons.dart';
 
 import '../api/firebase_api.dart';
 import '../custom_widgets/custom_elevated_button.dart';
+import '../custom_widgets/custom_scaffold.dart';
 import '../main/common.dart';
 import '../custom_widgets/custom_colors.dart';
+import 'login_home.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({Key? key}) : super(key: key);
@@ -32,22 +34,18 @@ class _SignUpState extends State<SignUp> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        backgroundColor: CustomColors.currentColor,
-        title: const Text('Sign Up'),
-        leading: IconButton(
-          icon: Icon(Ionicons.md_person),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-      ),
-      body: Form(
+    return CustomScaffold(
+        name: "Sign Up",
+        leading: Ionicons.md_person,
+        leadingTarget: const LoginHome(),
+    hasFloating: false,
+    body: Form(
         key: _formKey,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
+            Spacer(flex: 5),
             TextFormField(
               keyboardType: TextInputType.emailAddress,
               decoration: const InputDecoration(
@@ -104,16 +102,16 @@ class _SignUpState extends State<SignUp> {
                 return null;
               },
             ),
-            Align(
-              child: CustomElevatedButton(
+            Spacer(),
+            CustomElevatedButton(
                   label: "Submit",
                   onPressed: () {
                     // Validate returns true if the form is valid, or false otherwise.
                     if (_formKey.currentState!.validate()) {
                       addUserAndClear();
                     }
-                  })
-            )
+                  }),
+            Spacer(flex: 5),
           ],
         ),
       ),
