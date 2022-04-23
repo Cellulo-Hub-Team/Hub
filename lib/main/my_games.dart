@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:cellulo_hub/custom_widgets/custom_scaffold.dart';
 import 'package:cellulo_hub/game/game_panel_list.dart';
+import 'package:cellulo_hub/main.dart';
 import 'package:cellulo_hub/main/shop.dart';
 import 'package:device_apps/device_apps.dart';
 import 'package:flutter/material.dart';
@@ -55,11 +56,15 @@ class _MyGamesState extends State<MyGames> with TickerProviderStateMixin {
     return CustomScaffold(
       name: "My Games",
       leading: Icons.home,
+      leadingTarget: MainMenu(),
       hasFloating: true,
       floating: Icons.add,
-      onPressedFloating: () => Common.goToTarget(context, const Shop()),
+      onPressedFloating: () {
+          Navigator.pop(context);
+          Common.goToTarget(context, const Shop())
+        ;},
       body: GamePanelList(
-          games: Common.allGamesList,
+          games: Common.allGamesList.where((game) => game.isInLibrary).toList(),
           inMyGames: true,
           onPressedPrimary: _onPressedInstall,
           onPressedSecondary: _onPressedLaunch)

@@ -62,7 +62,7 @@ class _GameBodyState extends State<GameBody> {
                       /*widget.inMyGames && !Common.canBeInstalledOnThisPlatform(widget.game)
                           ? null
                           : widget.onPressedPrimary!(widget.game),*/
-                  Spacer(),
+                  widget.inMyGames ? Spacer() : Container(),
                   widget.inMyGames ? CustomElevatedButton(
                     label: "Launch",
                     onPressed: widget.onPressedSecondary,

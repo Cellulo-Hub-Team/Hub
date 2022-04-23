@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../main/common.dart';
 import 'custom_colors.dart';
 
 
@@ -8,6 +9,7 @@ class CustomScaffold extends StatefulWidget {
   final String name;
   final Widget body;
   final IconData leading;
+  final Widget leadingTarget;
   final bool hasFloating;
   final IconData? floating;
   final VoidCallback? onPressedFloating;
@@ -15,6 +17,7 @@ class CustomScaffold extends StatefulWidget {
       {Key? key,
       required this.name,
       required this.leading,
+      required this.leadingTarget,
       required this.hasFloating,
       this.floating,
       this.onPressedFloating,
@@ -34,7 +37,7 @@ class _CustomScaffoldState extends State<CustomScaffold> {
       title: Text(widget.name),
       leading: IconButton(
         icon: Icon(widget.leading),
-        onPressed: () => Navigator.of(context).pop(),
+        onPressed: () => Common.goToTarget(context, widget.leadingTarget),
       ),
     );
   }

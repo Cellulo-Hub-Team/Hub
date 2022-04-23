@@ -26,6 +26,7 @@ class _ProfileState extends State<Profile> {
     return CustomScaffold(
         name: "Profile",
         leading: Icons.home,
+        leadingTarget: MainMenu(),
         hasFloating: false,
         body: Center(child: Column(
           children: [

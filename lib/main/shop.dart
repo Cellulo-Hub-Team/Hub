@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:cellulo_hub/main.dart';
 import 'package:cellulo_hub/main/search_result.dart';
 import 'package:cellulo_hub/main/style.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +13,6 @@ import '../game/game_body.dart';
 import '../game/game_panel_list.dart';
 import 'common.dart';
 import '../custom_widgets/custom_colors.dart';
-import '../custom_widgets/custom_delegate.dart';
 import '../custom_widgets/custom_search.dart';
 import '../game/game.dart';
 import 'measure_size.dart';
@@ -123,18 +123,19 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
     super.initState();
   }
 
-  @override
+  /*@override
   void dispose() {
     Common.percentageController.dispose();
     _trendingController.dispose();
     super.dispose();
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
       name: "Shop",
       leading: Icons.home,
+      leadingTarget: MainMenu(),
       hasFloating: true,
       floating: Icons.search,
       onPressedFloating: () => _onPressedSearch,
@@ -148,20 +149,15 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
                 animation: _trendingController,
                 builder: (BuildContext context, Widget? child) {
     return SliverAppBar(
-        collapsedHeight: 360,
-    expandedHeight: (_trendingController.drive(CurveTween(curve: Curves.ease)).value * myChildSize.height) + 360,
-
+      collapsedHeight: 340,
+      expandedHeight: (_trendingController.drive(CurveTween(curve: Curves.ease)).value * (myChildSize.height + 60)) + 340,
       backgroundColor: CustomColors.inversedDarkThemeColor,
-      /*automaticallyImplyLeading: false,
-      leading: null,*/
                   flexibleSpace: FlexibleSpaceBar(
                   background: SingleChildScrollView(
                   //physics: NeverScrollableScrollPhysics(),
                   child: Column(children: [
-                  const SizedBox(height: 30),
-                  _trendingWidget(),
-                  const SizedBox(height: 20),
-                  _trendingDescription(),
+                    _trendingWidget(),
+                    _trendingDescriptionDisplayed ? _trendingDescription() : Container(),
                   ]))),
                 bottom: TabBar(
                   tabs: [
@@ -181,6 +177,11 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
                       child: Text("Social", style: Style.tabStyle()),
                     ),
                   ],
+                  labelColor: CustomColors.currentColor,
+                  indicatorColor: CustomColors.currentColor,
+                  unselectedLabelColor: Common.darkTheme
+                      ? CustomColors.greyColor.shade900
+                      : CustomColors.blackColor.shade900,
                 ),
               );
                 }),
