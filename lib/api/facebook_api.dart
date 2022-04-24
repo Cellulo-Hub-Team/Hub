@@ -3,6 +3,8 @@ import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 class FacebookApi{
   static FacebookAuth auth = FacebookAuth.instance;
 
+  static bool loggedWithFacebook = false;
+
   static Future<bool> isLoggedIn() async{
     AccessToken? token = await auth.accessToken;
     return token != null;

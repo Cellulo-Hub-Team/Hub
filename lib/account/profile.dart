@@ -3,9 +3,11 @@ import 'package:cellulo_hub/custom_widgets/custom_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
+import '../api/facebook_api.dart';
 import '../api/firebase_api.dart';
 import '../main.dart';
 import '../custom_widgets/custom_colors.dart';
+import '../main/common.dart';
 import 'profile_home.dart';
 
 class Profile extends StatefulWidget {
@@ -16,20 +18,21 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
+
   _signOut() async {
     if (FirebaseApi.auth.currentUser != null) {
       await FirebaseApi.auth.signOut();
-    } else if ((await FacebookApi.isLoggedIn())) {
+    } else if (FacebookApi.loggedWithFacebook) {
       await FacebookApi.logout();
+      FacebookApi.loggedWithFacebook = false;
     }
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => const LoginHome()));
+    Common.goToTarget(context, const ProfileHome());
   }
 
   Future<String> _getCurrentAuth() async {
     if (FirebaseApi.isLoggedIn()) {
       return (FirebaseApi.getUser()!.email)!;
-    } else if (await FacebookApi.isLoggedIn()) {
+    } else if (FacebookApi.loggedWithFacebook) {
       Map<String, dynamic> userData =
           await FacebookApi.auth.getUserData(fields: "name");
       return userData["name"];
@@ -48,24 +51,34 @@ class _ProfileState extends State<Profile> {
     return CustomScaffold(
         name: "Profile",
         leading: Icons.home,
-        leadingTarget: MainMenu(),
+        leadingTarget: const MainMenu(),
         hasFloating: false,
         body: Center(child: Column(
           children: [
-            Spacer(flex: 3),
-            Text("Welcome ${FirebaseApi.auth.currentUser!.email}", style: TextStyle(fontSize: 20)),
-            Spacer(),
+            const Spacer(flex: 3),
+            FutureBuilder(
+              future: _getCurrentAuth(),
+              builder: (BuildContext context,
+                  AsyncSnapshot<String> snapshot) {
+                if (!snapshot.hasData) {
+                  // while data is loading:
+                  return const CircularProgressIndicator();
+                } else {
+                  // data loaded:
+                  final output = snapshot.data;
+                  return Center(
+                    child:
+                    Text('Welcome $output'),
+                  );
+                }
+              },
+            ),
+            const Spacer(),
             CustomElevatedButton(
               label: "Log out",
-              onPressed: () async {
-                // Validate returns true if the form is valid, or false otherwise.
-                await FirebaseApi.auth.signOut();
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const ProfileHome()),
-                );
-              }),
-            Spacer(flex: 3)
+              onPressed: _signOut
+              ),
+            const Spacer(flex: 3)
           ]))
     );
   }
