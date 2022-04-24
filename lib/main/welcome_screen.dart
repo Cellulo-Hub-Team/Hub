@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../account/login_home.dart';
-import '../api/facebook_api.dart';
+import '../account/profile_home.dart';
 import '../api/firebase_api.dart';
 import '../main.dart';
 
@@ -17,9 +16,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   Future<Widget> _getStartingScreen() async {
     if (!FirebaseApi.isLoggedIn() && !(await FacebookApi.isLoggedIn())) {
       FirebaseApi.buildAllGamesList();
-      return const LoginHome();
-    }
-    else {
+      return const ProfileHome();
+    } else {
       _buildLists();
       return const MainMenu();
     }

@@ -10,7 +10,7 @@ import 'package:syncfusion_flutter_sliders/sliders.dart';
 
 import '../api/firebase_api.dart';
 import '../firebase_options.dart';
-import '../main/custom_colors.dart';
+import '../custom_widgets/custom_colors.dart';
 import '../main/style.dart';
 
 void main() async {

@@ -10,7 +10,7 @@ import 'package:open_file/open_file.dart';
 import 'package:device_apps/device_apps.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../main/common.dart';
-import '../main/game.dart';
+import '../game/game.dart';
 
 //TODO: Trouver un moyen clean de faire une ref static/ Exceptions/ Link à firebase storage quand on aura les jeux
 
