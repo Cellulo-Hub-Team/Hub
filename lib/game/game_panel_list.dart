@@ -59,7 +59,10 @@ class _GamePanelListState extends State<GamePanelList> with TickerProviderStateM
   //The expandable panel for each game
   ExpansionPanel gameExpansionPanel(Game _game) {
     return ExpansionPanel(
-        headerBuilder: (context, isOpen) => GameHeader(game: _game, inMyGames: widget.inMyGames),
+        headerBuilder: (context, isOpen) =>
+        Hero(
+          tag: 'game',
+            child: GameHeader(game: _game, inMyGames: widget.inMyGames)),
         body: GameBody(
             game: _game,
             inMyGames: widget.inMyGames,

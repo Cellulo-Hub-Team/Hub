@@ -50,8 +50,10 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     return CustomScaffold(
         name: "Profile",
-        leading: Icons.home,
-        leadingTarget: const MainMenu(),
+        leadingIcon: Icons.home,
+        leadingName: "Menu",
+        leadingScreen: Activity.Menu,
+        leadingTarget: MainMenu(),
         hasFloating: false,
         body: Center(child: Column(
           children: [

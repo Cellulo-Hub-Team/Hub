@@ -36,7 +36,9 @@ class _SignUpState extends State<SignUp> {
   Widget build(BuildContext context) {
     return CustomScaffold(
         name: "Sign Up",
-        leading: Ionicons.md_person,
+        leadingIcon: Ionicons.md_person,
+        leadingName: "Profile",
+      leadingScreen: Activity.Profile,
         leadingTarget: const ProfileHome(),
     hasFloating: false,
     body: Form(

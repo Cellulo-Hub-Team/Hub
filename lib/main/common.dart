@@ -6,7 +6,18 @@ import '../custom_widgets/custom_colors.dart';
 import '../game/game.dart';
 import 'dart:io';
 
+enum Activity {
+  Menu,
+  MyGames,
+  Shop,
+  Profile,
+  Progress
+}
+
 class Common{
+  //The variable storing the current screen we are in
+  static Activity currentScreen = Activity.Menu;
+
   //The variable storing the current theme state
   static bool darkTheme = false;
 
@@ -30,8 +41,8 @@ class Common{
 
   //Returns true if build exists for the current platform (web only returns false)
   static bool canBeInstalledOnThisPlatform(Game _game) {
-    if (isAndroid && _game.androidBuild != "") return true;
-    if (isLinux && _game.linuxBuild != "") return true;
+    if (isAndroid && _game.androidBuild != null) return true;
+    if (isLinux && _game.linuxBuild != null) return true;
     return false;
   }
 
@@ -41,14 +52,18 @@ class Common{
       backgroundColor: CustomColors.currentColor,
       content: Text(_text, style: Style.snackStyle()),
     );
+    ScaffoldMessenger.of(_context).hideCurrentSnackBar();
     ScaffoldMessenger.of(_context).showSnackBar(snackBar);
     Future.delayed(const Duration(seconds: 3),
             () => ScaffoldMessenger.of(_context).hideCurrentSnackBar());
   }
 
   //Navigate to new screen
-  static goToTarget(BuildContext _context, Widget _target) {
-    Common.resetOpenPanels();
+  static goToTarget(BuildContext _context, Widget _target, bool _resetPanels, Activity _screen) {
+    Common.currentScreen = _screen;
+    if (_resetPanels) {
+      Common.resetOpenPanels();
+    }
     Navigator.push(
       _context,
       MaterialPageRoute(builder: (context) => _target),

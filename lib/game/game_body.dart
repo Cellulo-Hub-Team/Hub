@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:cellulo_hub/custom_widgets/custom_elevated_button.dart';
+import 'package:cellulo_hub/custom_widgets/custom_text_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
@@ -8,6 +9,7 @@ import 'package:percent_indicator/circular_percent_indicator.dart';
 import '../main/common.dart';
 import 'game.dart';
 import '../main/style.dart';
+import 'game_description.dart';
 
 
 //The bottom expanded part of the game panel
@@ -34,6 +36,9 @@ class _GameBodyState extends State<GameBody> {
       alignment: Alignment.center,
       child: Column(
         children: [
+          Padding(
+              padding: const EdgeInsets.all(15), //apply padding to all four sides
+              child: Text("A game by: " + widget.game.company, style: Style.descriptionStyle())),
           Padding(
               padding: const EdgeInsets.all(15), //apply padding to all four sides
               child: Text(widget.game.description, style: Style.descriptionStyle())),
@@ -72,6 +77,15 @@ class _GameBodyState extends State<GameBody> {
                           : widget.onPressedPrimary!(widget.game),*//*(widget.game.isInstalled || widget.game.webUrl != "")
                           ? widget.onPressedSecondary!(widget.game)
                           : null,*/
+                  Spacer(),
+                  CustomElevatedButton(
+                      label: "See more",
+                      onPressed: () => Common.goToTarget(
+                          context,
+                          GameDescription(game: widget.game, inMyGames: widget.inMyGames),
+                          false,
+                          Common.currentScreen
+                      )),
                   Spacer(),
                 ],
               ))

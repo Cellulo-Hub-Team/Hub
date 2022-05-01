@@ -19,15 +19,15 @@ class _CustomIconButtonState extends State<CustomIconButton> {
       onPressed: widget.onPressed,
       icon: Icon(
         widget.icon,
-        color: Colors.white,
+        color: widget.color == Colors.white ? Colors.grey.shade900 : Colors.white,
       ),
-      label: Text(widget.label, style: TextStyle(fontSize: 15)),
+      label: Text(widget.label, style: TextStyle(fontSize: 15, color: widget.color == Colors.white ? Colors.grey.shade900 : Colors.white)),
       style: ElevatedButton.styleFrom(
           primary: widget.color,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20.0),
           ),
-          fixedSize: const Size(150, 30)),
+          fixedSize: const Size(140, 40)),
     );
   }
 }
