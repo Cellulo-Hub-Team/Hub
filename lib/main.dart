@@ -13,13 +13,23 @@ import 'main/my_games.dart';
 import 'main/progress.dart';
 import 'main/shop.dart';
 import 'main/welcome_screen.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  print(DefaultFirebaseOptions.currentPlatform);
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  if (kIsWeb) {
+    // initialize the facebook javascript SDK
+    await FacebookAuth.i.webInitialize(
+      appId: "5399562753408881",
+      cookie: true,
+      xfbml: true,
+      version: "v13.0",
+    );
+  }
   runApp(MyApp());
 }
 
