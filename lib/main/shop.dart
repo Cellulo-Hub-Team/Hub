@@ -149,21 +149,27 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
                           animation: _trendingController,
                           builder: (BuildContext context, Widget? child) {
                             return SliverAppBar(
-                                collapsedHeight: 340,
+                                collapsedHeight: 410,
                                 expandedHeight: (_trendingController
                                             .drive(
                                                 CurveTween(curve: Curves.ease))
                                             .value *
-                                        (myChildSize.height + 60)) +
-                                    340,
+                                        (myChildSize.height + 30)) +
+                                    410,
                                 backgroundColor:
                                     CustomColors.inversedDarkThemeColor,
                                 flexibleSpace: FlexibleSpaceBar(
                                     background: Column(children: [
+                                      Text("Trending", style: Style.titleStyle()),
                                   _trendingWidget(),
                                   _trendingDescriptionDisplayed
                                       ? _trendingDescription()
                                       : Container(),
+                                      Padding(
+                                          padding: EdgeInsets.symmetric(horizontal: 100),
+                                        child: Divider(color: Colors.black),
+                                      ),
+                                      Text("Search all games", style: Style.titleStyle()),
                                 ])));
                           }),
                       SliverPersistentHeader(
