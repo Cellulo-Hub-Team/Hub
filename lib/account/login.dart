@@ -47,7 +47,9 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     return CustomScaffold(
       name: "Login",
-      leading: Ionicons.md_person,
+      leadingIcon: Ionicons.md_person,
+      leadingName: "Profile",
+      leadingScreen: Activity.Profile,
       leadingTarget: const ProfileHome(),
       hasFloating: false,
       body: Center(child: Column(

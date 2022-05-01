@@ -54,15 +54,17 @@ class _MyGamesState extends State<MyGames> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      name: "My Games",
-      leading: Icons.home,
+      name: "My games",
+      leadingIcon: Icons.home,
+      leadingName: "Menu",
+      leadingScreen: Activity.Menu,
       leadingTarget: MainMenu(),
       hasFloating: true,
-      floating: Icons.add,
+      floatingIcon: Icons.add,
+      floatingLabel: "Add game",
       onPressedFloating: () {
-          Navigator.pop(context);
-          Common.goToTarget(context, const Shop())
-        ;},
+          Common.goToTarget(context, const Shop(), false, Activity.Shop);
+          },
       body: GamePanelList(
           games: Common.allGamesList.where((game) => game.isInLibrary).toList(),
           inMyGames: true,

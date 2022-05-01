@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../api/firebase_api.dart';
 import '../main.dart';
 import '../custom_widgets/custom_colors.dart';
+import '../main/common.dart';
 import 'profile_home.dart';
 
 class Profile extends StatefulWidget {
@@ -25,7 +26,9 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     return CustomScaffold(
         name: "Profile",
-        leading: Icons.home,
+        leadingIcon: Icons.home,
+        leadingName: "Menu",
+        leadingScreen: Activity.Menu,
         leadingTarget: MainMenu(),
         hasFloating: false,
         body: Center(child: Column(

@@ -31,14 +31,14 @@ class _ProfileHomeState extends State<ProfileHome> {
         label: "Login",
         icon: Ionicons.md_key,
         color: CustomColors.currentColor,
-        onPressed: () => Common.goToTarget(context, const Login()),
+        onPressed: () => Common.goToTarget(context, const Login(), true, Common.currentScreen),
       ),
       const Spacer(),
       CustomMenuButton(
         label: "Sign Up",
         icon: Entypo.shop,
         color: CustomColors.currentColor,
-        onPressed: () => Common.goToTarget(context, const SignUp()),
+        onPressed: () => Common.goToTarget(context, const SignUp(), true, Common.currentScreen),
       ),
       const Spacer(flex: 2),
     ])));
