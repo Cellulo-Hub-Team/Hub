@@ -41,8 +41,8 @@ class Common{
 
   //Returns true if build exists for the current platform (web only returns false)
   static bool canBeInstalledOnThisPlatform(Game _game) {
-    if (isAndroid && _game.androidBuild != "") return true;
-    if (isLinux && _game.linuxBuild != "") return true;
+    if (isAndroid && _game.androidBuild != null) return true;
+    if (isLinux && _game.linuxBuild != null) return true;
     return false;
   }
 
