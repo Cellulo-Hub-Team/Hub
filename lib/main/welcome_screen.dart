@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../account/profile_home.dart';
+import '../api/facebook_api.dart';
 import '../api/firebase_api.dart';
 import '../main.dart';
 
@@ -13,8 +14,8 @@ class WelcomeScreen extends StatefulWidget {
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
 
-  Widget _getStartingScreen() {
-    if (!FirebaseApi.isLoggedIn()) {
+  Future<Widget> _getStartingScreen() async {
+    if (!FirebaseApi.isLoggedIn() && !(await FacebookApi.isLoggedIn())) {
       FirebaseApi.buildAllGamesList();
       return const ProfileHome();
     } else {
@@ -33,10 +34,24 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     super.initState();
     Future.delayed(
         const Duration(seconds: 0),
-            () => Navigator.push(
+            () => {
+                Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => _getStartingScreen()),
-        )
+          MaterialPageRoute(builder: (context) =>
+              FutureBuilder(
+                future: _getStartingScreen(),
+                builder: (BuildContext context, AsyncSnapshot<Widget> snapshot) {
+                  if(!snapshot.hasData){
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  else{
+                    return snapshot.data!;
+                  }
+                },
+              )),
+            )}
     );
   }
 
