@@ -89,7 +89,7 @@ class _GameHeaderState extends State<GameHeader> {
                   ],
                 ),
               )
-            : ((widget.game.webUrl != "" ||
+            : ((widget.game.webUrl != null ||
                     Common.canBeInstalledOnThisPlatform(widget.game))
                 ? Container()
                 : SizedBox(
@@ -102,26 +102,7 @@ class _GameHeaderState extends State<GameHeader> {
   }
 
   Widget _unavailableTag(BuildContext _context) {
-    return Container(); /*ElevatedButton.icon(
-      onPressed: () => Common.showSnackBar(
-        _context, "This game is not available on this platform"),
-      icon: Icon(
-        FontAwesome.warning,
-        color: Colors.white,
-      ),
-      label: Text(
-        'Not available on your device',
-        style: Style.tagStyle(true, true),
-        textAlign: TextAlign.center,),
-      style: ElevatedButton.styleFrom(
-          primary: widget.color,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20.0),
-          ),
-          fixedSize: const Size(150, 30)),
-    );
-
-      ElevatedButton.icon(
+    return ElevatedButton.icon(
       onPressed: () => Common.showSnackBar(
           _context, "This game is not available on this platform"),
       icon: const Icon(
@@ -141,6 +122,6 @@ class _GameHeaderState extends State<GameHeader> {
                 topRight: Radius.circular(30.0))),
         fixedSize: const Size(180, 50),
       ),
-    );*/
+    );
   }
 }

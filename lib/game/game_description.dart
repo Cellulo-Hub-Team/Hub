@@ -54,6 +54,8 @@ class _GameDescriptionState extends State<GameDescription> {
                           collapsedHeight: 150,
                           expandedHeight: 150,
                           backgroundColor: CustomColors.inversedDarkThemeColor,
+                          automaticallyImplyLeading: false,
+                          leading: null,
                           flexibleSpace: FlexibleSpaceBar(
                             background: Hero(
                                 tag: 'game',
@@ -115,9 +117,9 @@ class _GameDescriptionState extends State<GameDescription> {
               padding:
                   const EdgeInsets.all(15), //apply padding to all four sides
               child: Text(
-                  "Turn on the robot by putting your fingers on the 6 touch sensors at the same"
+                  "Turn on the robot by putting your fingers on the 6 touch sensors at the same "
                   "time for around 3 seconds. After it’s turned on, the LEDs will light up.\n"
-                  "Turn off the robot by pressing three non-adjacent touch sensors at the same"
+                  "Turn off the robot by pressing three non-adjacent touch sensors at the same "
                   "time for around 3 seconds. After it’s turned on, the LEDs will turn off.\n",
                   style: Style.descriptionStyle()))
         ]));
