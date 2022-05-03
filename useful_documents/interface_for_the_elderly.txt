@@ -1,0 +1,43 @@
+Enable users to adjust interface size, especially text
+→ Limit multi-finger gestures
+
+Text field formatting
+→ Large text to be readable
+→ No text justification (fit text to the end of the line)
+
+Color coding
+→ Add description to color to compensate color blindness
+→ Text > symbols & colors
+
+Contrast
+→ Necessary: > 4.5:1
+→ Best: > 7.0:1
+
+Indicate interactivity
+→ Visual clues for clickable elements
+
+Indicate external links
+→ If the link leads to a different website, make that clear
+
+Current location indicator
+→ Clear titles or navigation indicators to indicate where we are
+→ Add titles to image buttons whenever possible
+
+Animations
+→ Keep them to a minimum except when serving a purpose (navigation)
+
+Time limited activities
+→ Avoid them or add an indicator and a way to add time
+
+Language
+→ Avoid abbreviations and anything that would require extra cognitive effort to understand
+→ Use the most obvious wording
+
+High error tolerance
+→ Error tolerance to typo
+→ Easy recover/undo
+→ Easily bring back important information
+
+Find analogies to processes in the real world
+→ Icons referring to real life objects
+→ Manual swipe is easy

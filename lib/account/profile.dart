@@ -26,7 +26,7 @@ class _ProfileState extends State<Profile> {
       await FacebookApi.logout();
       FacebookApi.loggedWithFacebook = false;
     }
-    Common.goToTarget(context, const ProfileHome());
+    Common.goToTarget(context, const ProfileHome(), false, Activity.Profile);
   }
 
   Future<String> _getCurrentAuth() async {
