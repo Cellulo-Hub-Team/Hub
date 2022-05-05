@@ -299,7 +299,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                         enableInteractiveSelection: false, //useless btw
                         controller: backgroundImageController,
                         validator: (value) {
-                          if (value == null || value.isEmpty) {
+                          if (value == null || value.isEmpty || value == 'No file selected !') {
                             return 'Please enter a background image';
                           }
                           return null;

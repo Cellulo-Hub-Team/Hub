@@ -11,6 +11,7 @@ import 'package:device_apps/device_apps.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../main/common.dart';
 import '../game/game.dart';
+import '../main/my_games.dart';
 
 //TODO: Trouver un moyen clean de faire une ref static/ Exceptions/ Link à firebase storage quand on aura les jeux
 
@@ -28,6 +29,7 @@ class FirebaseApi {
   static CollectionReference userGames =
   FirebaseFirestore.instance.collection('owns');
 
+  /// Build the list of all games stored on Firebase
   static Future<void> buildAllGamesList() async {
     QuerySnapshot querySnapshot = await games.get();
     final allData = querySnapshot.docs.map((doc) => doc).toList();
@@ -60,6 +62,7 @@ class FirebaseApi {
     }
   }
 
+  ///
   static Future<void> buildUserGamesList() async {
     QuerySnapshot querySnapshot = await userGames.get();
     final allData = querySnapshot.docs.map((doc) => doc).toList();
@@ -142,6 +145,7 @@ class FirebaseApi {
     //TODO Check if 0 is returned then set game.isInstalled to true
     OpenFile.open(
         '$path/${game.name.toLowerCase()}.apk'); //open the apk = message to install it
+    MyGames.isNotFocused = true;
   }
 
   ///Basic Email+password signUp (found on FirebaseAuth doc)
@@ -186,6 +190,7 @@ class FirebaseApi {
       if (_isInstalled) {
         DeviceApps.openApp(_packageName);
       } else {
+
         OpenFile.open('${appDocDir.path}/${game.name.toLowerCase()}.apk');
       }
     }

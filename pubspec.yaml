@@ -49,6 +49,7 @@ dependencies:
   syncfusion_flutter_core: ^20.1.48
   syncfusion_flutter_sliders: ^20.1.48
   flutter_facebook_auth: ^4.3.0
+  flutter_fgbg: ^0.2.0
 
 dev_dependencies:
   flutter_test:

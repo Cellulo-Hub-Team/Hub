@@ -38,7 +38,7 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
 
   var myChildSize = Size.zero;
 
-  //Create sublists for each category
+  ///Create sublists for each category
   final List<Game> _physicalGames = Common.allGamesList
       .where((game) =>
           game.physicalPercentage >= game.socialPercentage &&
@@ -55,7 +55,7 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
           game.socialPercentage >= game.physicalPercentage)
       .toList();
 
-  //Function called when pressing Add to My Games button
+  ///Function called when pressing Add to My Games button
   _onPressedPrimary(Game _game) {
     setState(() async {
       if (_game.isInLibrary) {
@@ -70,7 +70,7 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
     });
   }
 
-  //Function called when pressing search icon
+  ///Function called when pressing search icon
   _onPressedSearch() async {
     final finalResult = await showSearch(
       context: context,
@@ -93,7 +93,7 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
     });
   }
 
-  //Function called when pressing a trending game thumbnail
+  ///Function called when pressing a trending game thumbnail
   _onPressedTrending(int _index) {
     setState(() {
       if (_trendingDescriptionDisplayed && _index == _trendingDecriptionIndex) {
@@ -307,7 +307,7 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
         ))));*/
   }
 
-  //Trending games list
+  ///Trending games list
   Widget _trendingWidget() {
     return SizedBox(
         height: 320,
@@ -330,7 +330,7 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
         ));
   }
 
-  //Builder for each game in the trending list
+  ///Builder for each game in the trending list
   Widget _buildItemTrendingList(BuildContext context, int index) {
     return Padding(
         padding: const EdgeInsets.only(top: 15, bottom: 15),

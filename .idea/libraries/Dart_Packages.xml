@@ -205,6 +205,13 @@
             </list>
           </value>
         </entry>
+        <entry key="flutter_fgbg">
+          <value>
+            <list>
+              <option value="$PROJECT_DIR$/../../../flutter/.pub-cache/hosted/pub.dartlang.org/flutter_fgbg-0.2.0/lib" />
+            </list>
+          </value>
+        </entry>
         <entry key="flutter_icons">
           <value>
             <list>
@@ -579,6 +586,7 @@
       <root url="file://$PROJECT_DIR$/../../../flutter/.pub-cache/hosted/pub.dartlang.org/flutter_facebook_auth-4.3.0/lib" />
       <root url="file://$PROJECT_DIR$/../../../flutter/.pub-cache/hosted/pub.dartlang.org/flutter_facebook_auth_platform_interface-3.1.0/lib" />
       <root url="file://$PROJECT_DIR$/../../../flutter/.pub-cache/hosted/pub.dartlang.org/flutter_facebook_auth_web-3.1.0/lib" />
+      <root url="file://$PROJECT_DIR$/../../../flutter/.pub-cache/hosted/pub.dartlang.org/flutter_fgbg-0.2.0/lib" />
       <root url="file://$PROJECT_DIR$/../../../flutter/.pub-cache/hosted/pub.dartlang.org/flutter_icons-1.1.0/lib" />
       <root url="file://$PROJECT_DIR$/../../../flutter/.pub-cache/hosted/pub.dartlang.org/flutter_lints-1.0.4/lib" />
       <root url="file://$PROJECT_DIR$/../../../flutter/.pub-cache/hosted/pub.dartlang.org/flutter_plugin_android_lifecycle-2.0.5/lib" />

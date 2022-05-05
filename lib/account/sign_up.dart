@@ -29,9 +29,6 @@ class _SignUpState extends State<SignUp> {
     super.dispose();
   }
 
-  // Clean up the controller when the widget is removed from the
-  // widget tree.
-
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
@@ -120,6 +117,7 @@ class _SignUpState extends State<SignUp> {
     );
   }
 
+  /// Add user to the Database, close the keyboard and clear the form fields
   Future<void> addUserAndClear() async{
     await FirebaseApi.signUp(
         emailController.text, passwordController.text);

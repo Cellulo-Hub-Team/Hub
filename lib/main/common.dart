@@ -32,21 +32,21 @@ class Common{
   static bool get isAndroid => !kIsWeb && Platform.isAndroid;
   static bool get isWeb => kIsWeb;
 
-  //Closes all expanded panels
+  ///Closes all expanded panels
   static resetOpenPanels() {
     for (var localGame in allGamesList) {
       localGame.isExpanded = false;
     }
   }
 
-  //Returns true if build exists for the current platform (web only returns false)
+  ///Returns true if build exists for the current platform (web only returns false)
   static bool canBeInstalledOnThisPlatform(Game _game) {
     if (isAndroid && _game.androidBuild != null) return true;
     if (isLinux && _game.linuxBuild != null) return true;
     return false;
   }
 
-  //Display pop-up at the bottom of the screen
+  ///Display pop-up at the bottom of the screen
   static showSnackBar(BuildContext _context, String _text) {
     final snackBar = SnackBar(
       backgroundColor: CustomColors.currentColor,
@@ -58,7 +58,7 @@ class Common{
             () => ScaffoldMessenger.of(_context).hideCurrentSnackBar());
   }
 
-  //Navigate to new screen
+  ///Navigate to new screen
   static goToTarget(BuildContext _context, Widget _target, bool _resetPanels, Activity _screen) {
     Common.currentScreen = _screen;
     if (_resetPanels) {
