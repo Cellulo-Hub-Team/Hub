@@ -16,7 +16,11 @@ import 'game.dart';
 class GameDescription extends StatefulWidget {
   final Game game;
   final bool inMyGames;
-  const GameDescription({Key? key, required this.game, required this.inMyGames})
+  final int index;
+  const GameDescription({Key? key,
+    required this.game,
+    required this.inMyGames,
+    required this.index})
       : super(key: key);
 
   @override
@@ -58,7 +62,7 @@ class _GameDescriptionState extends State<GameDescription> {
                           leading: null,
                           flexibleSpace: FlexibleSpaceBar(
                             background: Hero(
-                                tag: 'game',
+                                tag: 'game' + widget.index.toString(),
                                 child: GameHeader(
                                     game: widget.game, inMyGames: true)),
                           )),
@@ -93,7 +97,7 @@ class _GameDescriptionState extends State<GameDescription> {
                   },
                   body: TabBarView(
                     children: [
-                      GameBody(game: widget.game, inMyGames: true),
+                      GameBody(game: widget.game, inMyGames: true, index: widget.index),
                       _instructions(),
                       _successes(),
                     ],

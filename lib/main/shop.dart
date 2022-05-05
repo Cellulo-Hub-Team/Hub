@@ -301,6 +301,7 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
         child: GameBody(
           game: _game,
           inMyGames: false,
+          index: 0,
           onPressedPrimary: () => _onPressedPrimary(_game),
         ));
   }

@@ -27,9 +27,9 @@ class _CustomMenuButtonState extends State<CustomMenuButton> {
           icon: Icon(
             widget.icon,
             color: Colors.white,
-            size: 30,
+            size: 40,
           ),
-          label: Text(" " + widget.label, style: const TextStyle(fontSize: 25)),
+          label: Text(" " + widget.label, style: const TextStyle(fontSize: 25), textAlign: TextAlign.center),
           style: ElevatedButton.styleFrom(
             primary: widget.color,
             shape: RoundedRectangleBorder(

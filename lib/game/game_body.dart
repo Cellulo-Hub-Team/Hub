@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:cellulo_hub/custom_widgets/custom_elevated_button.dart';
-import 'package:cellulo_hub/custom_widgets/custom_text_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
@@ -16,11 +15,13 @@ import 'game_description.dart';
 class GameBody extends StatefulWidget {
   final Game game;
   final bool inMyGames;
+  final int index;
   final VoidCallback? onPressedPrimary;
   final VoidCallback? onPressedSecondary;
   const GameBody({Key? key,
     required this.game,
     required this.inMyGames,
+    required this.index,
     this.onPressedPrimary,
     this.onPressedSecondary}) : super(key: key);
 
@@ -64,25 +65,17 @@ class _GameBodyState extends State<GameBody> {
                         ? (widget.game.isInstalled ? "Uninstall" : "Install")
                         : (widget.game.isInLibrary ? "See in library" : "Add to My Games"),
                     onPressed: widget.onPressedPrimary),
-                      /*widget.inMyGames && !Common.canBeInstalledOnThisPlatform(widget.game)
-                          ? null
-                          : widget.onPressedPrimary!(widget.game),*/
                   widget.inMyGames ? Spacer() : Container(),
                   widget.inMyGames ? CustomElevatedButton(
                     label: "Launch",
                     onPressed: widget.onPressedSecondary,
                   ) : Container(),
-                  /*widget.inMyGames && !Common.canBeInstalledOnThisPlatform(widget.game)
-                          ? null
-                          : widget.onPressedPrimary!(widget.game),*//*(widget.game.isInstalled || widget.game.webUrl != "")
-                          ? widget.onPressedSecondary!(widget.game)
-                          : null,*/
                   Spacer(),
                   CustomElevatedButton(
                       label: "See more",
                       onPressed: () => Common.goToTarget(
                           context,
-                          GameDescription(game: widget.game, inMyGames: widget.inMyGames),
+                          GameDescription(game: widget.game, inMyGames: widget.inMyGames, index: widget.index),
                           false,
                           Common.currentScreen
                       )),

@@ -42,7 +42,7 @@ class _GamePanelListState extends State<GamePanelList> with TickerProviderStateM
   Widget build(BuildContext context) {
     List<ExpansionPanel> result = [];
     for (int i = 0; i < widget.games.length; i++) {
-      result.add(gameExpansionPanel(widget.games[i]));
+      result.add(gameExpansionPanel(widget.games[i], i));
     }
     return Center(child: Container(width: 1000, alignment: Alignment.center, child: ListView(children: [ExpansionPanelList(
         children: result,
@@ -57,15 +57,16 @@ class _GamePanelListState extends State<GamePanelList> with TickerProviderStateM
   }
 
   //The expandable panel for each game
-  ExpansionPanel gameExpansionPanel(Game _game) {
+  ExpansionPanel gameExpansionPanel(Game _game, int _index) {
     return ExpansionPanel(
         headerBuilder: (context, isOpen) =>
         Hero(
-          tag: 'game',
+          tag: 'game' + _index.toString(),
             child: GameHeader(game: _game, inMyGames: widget.inMyGames)),
         body: GameBody(
             game: _game,
             inMyGames: widget.inMyGames,
+            index: _index,
             onPressedPrimary: widget.inMyGames && !Common.canBeInstalledOnThisPlatform(_game)
                 ? null
                 : () => widget.onPressedPrimary!(_game),
