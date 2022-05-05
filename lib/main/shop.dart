@@ -119,6 +119,8 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
         AnimationController(duration: const Duration(seconds: 1), vsync: this);
     _trendingController = AnimationController(
         duration: const Duration(milliseconds: 300), vsync: this);
+    Common.percentageController.reset();
+    Common.percentageController.forward();
     super.initState();
   }
 
@@ -212,19 +214,15 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
                     children: [
                       GamePanelList(
                           games: Common.allGamesList,
-                          inMyGames: false,
                           onPressedPrimary: _onPressedPrimary),
                       GamePanelList(
                           games: _physicalGames,
-                          inMyGames: false,
                           onPressedPrimary: _onPressedPrimary),
                       GamePanelList(
                           games: _cognitiveGames,
-                          inMyGames: false,
                           onPressedPrimary: _onPressedPrimary),
                       GamePanelList(
                           games: _socialGames,
-                          inMyGames: false,
                           onPressedPrimary: _onPressedPrimary),
                     ],
                   ),
@@ -300,8 +298,8 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
         },
         child: GameBody(
           game: _game,
-          inMyGames: false,
-          index: 0,
+          index: 0, //TODO actual index
+          isDescription: false,
           onPressedPrimary: () => _onPressedPrimary(_game),
         ));
   }

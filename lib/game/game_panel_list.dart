@@ -11,11 +11,9 @@ class GamePanelList extends StatefulWidget {
   final List<Game> games;
   final Function(Game)? onPressedPrimary;
   final Function(Game)? onPressedSecondary;
-  final bool inMyGames;
   const GamePanelList(
       {Key? key,
       required this.games,
-      required this.inMyGames,
       this.onPressedPrimary,
       this.onPressedSecondary})
       : super(key: key);
@@ -30,12 +28,6 @@ class _GamePanelListState extends State<GamePanelList> with TickerProviderStateM
   void initState() {
     Common.percentageController = AnimationController(duration: const Duration(seconds: 1), vsync: this);
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    Common.percentageController.dispose();
-    super.dispose();
   }
 
   @override
@@ -62,12 +54,12 @@ class _GamePanelListState extends State<GamePanelList> with TickerProviderStateM
         headerBuilder: (context, isOpen) =>
         Hero(
           tag: 'game' + _index.toString(),
-            child: GameHeader(game: _game, inMyGames: widget.inMyGames)),
+            child: GameHeader(game: _game)),
         body: GameBody(
             game: _game,
-            inMyGames: widget.inMyGames,
             index: _index,
-            onPressedPrimary: widget.inMyGames && !Common.canBeInstalledOnThisPlatform(_game)
+            isDescription: false,
+            onPressedPrimary: Common.currentScreen == Activity.MyGames && !Common.canBeInstalledOnThisPlatform(_game)
                 ? null
                 : () => widget.onPressedPrimary!(_game),
             onPressedSecondary: !_game.isInstalled && _game.webUrl == null

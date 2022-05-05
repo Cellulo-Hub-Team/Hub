@@ -15,11 +15,9 @@ import 'game.dart';
 
 class GameDescription extends StatefulWidget {
   final Game game;
-  final bool inMyGames;
   final int index;
   const GameDescription({Key? key,
     required this.game,
-    required this.inMyGames,
     required this.index})
       : super(key: key);
 
@@ -27,7 +25,17 @@ class GameDescription extends StatefulWidget {
   State<GameDescription> createState() => _GameDescriptionState();
 }
 
-class _GameDescriptionState extends State<GameDescription> {
+class _GameDescriptionState extends State<GameDescription> with TickerProviderStateMixin {
+
+  @override
+  void initState() {
+    Common.percentageController =
+        AnimationController(duration: const Duration(seconds: 1), vsync: this);
+    Common.percentageController.reset();
+    Common.percentageController.forward();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
@@ -35,7 +43,7 @@ class _GameDescriptionState extends State<GameDescription> {
       leadingIcon: Icons.arrow_back,
       leadingName: "Back",
       leadingScreen: Common.currentScreen,
-      leadingTarget: widget.inMyGames ? MyGames() : Shop(),
+      leadingTarget: Common.currentScreen == Activity.MyGames ? MyGames() : Shop(),
       hasFloating: true,
       floatingIcon: Icons.add,
       floatingLabel: "Add game",
@@ -63,8 +71,7 @@ class _GameDescriptionState extends State<GameDescription> {
                           flexibleSpace: FlexibleSpaceBar(
                             background: Hero(
                                 tag: 'game' + widget.index.toString(),
-                                child: GameHeader(
-                                    game: widget.game, inMyGames: true)),
+                                child: GameHeader(game: widget.game)),
                           )),
                       SliverPersistentHeader(
                         delegate: CustomDelegate(TabBar(
@@ -97,7 +104,7 @@ class _GameDescriptionState extends State<GameDescription> {
                   },
                   body: TabBarView(
                     children: [
-                      GameBody(game: widget.game, inMyGames: true, index: widget.index),
+                      GameBody(game: widget.game, index: widget.index, isDescription: true),
                       _instructions(),
                       _successes(),
                     ],

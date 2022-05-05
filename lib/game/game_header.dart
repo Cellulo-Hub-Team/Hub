@@ -11,8 +11,8 @@ import '../main/style.dart';
 //The top constant part of the game panel
 class GameHeader extends StatefulWidget {
   final Game game;
-  final bool inMyGames;
-  const GameHeader({Key? key, required this.game, required this.inMyGames})
+  const GameHeader({Key? key,
+    required this.game})
       : super(key: key);
 
   @override
@@ -38,7 +38,7 @@ class _GameHeaderState extends State<GameHeader> {
             image: DecorationImage(
                 colorFilter: widget.game.isInstalled ||
                         widget.game.webUrl != null ||
-                        !widget.inMyGames
+                        Common.currentScreen != Activity.MyGames
                     ? null
                     : ColorFilter.mode(
                         Colors.black.withOpacity(.8), BlendMode.darken),
