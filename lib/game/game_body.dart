@@ -1,26 +1,27 @@
 import 'dart:math';
 
 import 'package:cellulo_hub/custom_widgets/custom_elevated_button.dart';
-import 'package:cellulo_hub/custom_widgets/custom_text_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
 import '../main/common.dart';
 import 'game.dart';
-import '../main/style.dart';
+import '../custom_widgets/style.dart';
 import 'game_description.dart';
 
 
 //The bottom expanded part of the game panel
 class GameBody extends StatefulWidget {
   final Game game;
-  final bool inMyGames;
+  final int index;
+  final bool isDescription;
   final VoidCallback? onPressedPrimary;
   final VoidCallback? onPressedSecondary;
   const GameBody({Key? key,
     required this.game,
-    required this.inMyGames,
+    required this.index,
+    required this.isDescription,
     this.onPressedPrimary,
     this.onPressedSecondary}) : super(key: key);
 
@@ -60,32 +61,29 @@ class _GameBodyState extends State<GameBody> {
                 children: [
                   Spacer(),
                   CustomElevatedButton(
-                    label: widget.inMyGames
+                    label: Common.currentScreen == Activity.MyGames
                         ? (widget.game.isInstalled ? "Uninstall" : "Install")
                         : (widget.game.isInLibrary ? "See in library" : "Add to My Games"),
                     onPressed: widget.onPressedPrimary),
-                      /*widget.inMyGames && !Common.canBeInstalledOnThisPlatform(widget.game)
-                          ? null
-                          : widget.onPressedPrimary!(widget.game),*/
-                  widget.inMyGames ? Spacer() : Container(),
-                  widget.inMyGames ? CustomElevatedButton(
+                  Common.currentScreen == Activity.MyGames ? Spacer() : Container(),
+                  Common.currentScreen == Activity.MyGames ? CustomElevatedButton(
                     label: "Launch",
                     onPressed: widget.onPressedSecondary,
                   ) : Container(),
-                  /*widget.inMyGames && !Common.canBeInstalledOnThisPlatform(widget.game)
-                          ? null
-                          : widget.onPressedPrimary!(widget.game),*//*(widget.game.isInstalled || widget.game.webUrl != "")
-                          ? widget.onPressedSecondary!(widget.game)
-                          : null,*/
-                  Spacer(),
-                  CustomElevatedButton(
+                  !widget.isDescription ? Spacer() : Container(),
+                  !widget.isDescription ? CustomElevatedButton(
                       label: "See more",
                       onPressed: () => Common.goToTarget(
                           context,
-                          GameDescription(game: widget.game, inMyGames: widget.inMyGames),
+                          GameDescription(
+                            game: widget.game,
+                            index: widget.index,
+                            onPressedPrimary: widget.onPressedPrimary,
+                            onPressedSecondary: widget.onPressedSecondary,
+                          ),
                           false,
                           Common.currentScreen
-                      )),
+                      )) : Container(),
                   Spacer(),
                 ],
               ))

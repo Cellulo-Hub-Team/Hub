@@ -1,6 +1,8 @@
 import 'package:cellulo_hub/custom_widgets/custom_colors.dart';
 import 'package:flutter/material.dart';
 
+import '../main/common.dart';
+
 class CustomDelegate extends SliverPersistentHeaderDelegate{
   CustomDelegate(this.tabBar);
   final TabBar tabBar;
@@ -8,7 +10,7 @@ class CustomDelegate extends SliverPersistentHeaderDelegate{
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
     return Container(
-      color: CustomColors.inversedDarkThemeColor,
+      color: Common.darkTheme ? CustomColors.blackColor.shade900 : Colors.white,
       child: tabBar,
     );
   }

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:cellulo_hub/custom_widgets/custom_colors.dart';
-import 'package:cellulo_hub/main/style.dart';
+import 'package:cellulo_hub/custom_widgets/style.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import '../main/common.dart';
 
 class CustomSearch extends SearchDelegate<String> {
   final List<String> allGames;
@@ -11,20 +13,26 @@ class CustomSearch extends SearchDelegate<String> {
   @override
   ThemeData appBarTheme(BuildContext context) {
     return ThemeData(
-      // Define the default brightness and colors.
-      //brightness: Common.darkTheme ? Brightness.dark : Brightness.light,
-      primaryColor: CustomColors.currentColor,
+      colorScheme: ColorScheme(
+          //primary: Common.darkTheme ? Colors.white : CustomColors.currentColor,
+          primary: CustomColors.currentColor,
+          secondary: Colors.white,
+          brightness: Common.darkTheme ? Brightness.dark : Brightness.light,
+          onSecondary: Colors.white,
+          onError: Colors.white,
+          onBackground: Colors.white,
+          error: Colors.white,
+          surface: CustomColors.currentColor,
+          onPrimary: Colors.white,
+          background: Colors.white,
+          onSurface: Colors.white),
 
-
-      // Define the default font family.
       fontFamily: GoogleFonts.comfortaa().fontFamily,
 
-      // Define the default `TextTheme`. Use this to specify the default
-      // text styling for headlines, titles, bodies of text, and more.
       textTheme: const TextTheme(
-        headline1: TextStyle(fontSize: 40, fontWeight: FontWeight.normal, decoration: TextDecoration.lineThrough),
-        headline6: TextStyle(fontSize: 32, fontStyle: FontStyle.normal, decoration: TextDecoration.none),
-        bodyText2: TextStyle(fontSize: 14.0, fontFamily: 'Hind', decoration: TextDecoration.lineThrough),
+        headline6: TextStyle(
+            fontSize: 24
+        )
       ),
     );
   }
@@ -45,7 +53,7 @@ class CustomSearch extends SearchDelegate<String> {
     return IconButton(
       icon: Icon(Icons.arrow_back),
       color: Colors.white,
-      onPressed: (){
+      onPressed: () {
         close(context, query);
       },
     );
@@ -59,12 +67,12 @@ class CustomSearch extends SearchDelegate<String> {
     return ListView.builder(
         itemCount: result.length,
         itemBuilder: (context, index) => ListTile(
-          title: Text(result[index], style: Style.descriptionStyle()),
-          onTap: () {
-            query = result[index];
-            close(context, query);
-          },
-        ));
+              title: Text(result[index], style: Style.descriptionStyle()),
+              onTap: () {
+                query = result[index];
+                close(context, query);
+              },
+            ));
   }
 
   @override
@@ -74,14 +82,13 @@ class CustomSearch extends SearchDelegate<String> {
         .toList();
     return ListView.builder(
       itemCount: suggestionList.length,
-      itemBuilder: (context, index) =>
-          ListTile(
-            title: Text(suggestionList[index], style: Style.descriptionStyle()),
-            onTap: () {
-              query = suggestionList[index];
-              close(context, query);
-            },
-          ),
+      itemBuilder: (context, index) => ListTile(
+        title: Text(suggestionList[index], style: Style.descriptionStyle()),
+        onTap: () {
+          query = suggestionList[index];
+          close(context, query);
+        },
+      ),
     );
   }
 }

@@ -1,8 +1,9 @@
 import 'dart:math';
 
+import 'package:cellulo_hub/custom_widgets/colored_app_bar.dart';
 import 'package:cellulo_hub/main.dart';
 import 'package:cellulo_hub/main/search_result.dart';
-import 'package:cellulo_hub/main/style.dart';
+import 'package:cellulo_hub/custom_widgets/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:scroll_snap_list/scroll_snap_list.dart';
@@ -87,7 +88,10 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
           context,
           MaterialPageRoute(
               builder: (context) =>
-                  SearchResult(selectedGames: _selectedGames)),
+                  SearchResult(
+                      selectedGames: _selectedGames,
+                      onPressedPrimary: _onPressedPrimary,
+                  )),
         );
       }
     });
@@ -118,6 +122,8 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
         AnimationController(duration: const Duration(seconds: 1), vsync: this);
     _trendingController = AnimationController(
         duration: const Duration(milliseconds: 300), vsync: this);
+    Common.percentageController.reset();
+    Common.percentageController.forward();
     super.initState();
   }
 
@@ -149,6 +155,9 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
                           animation: _trendingController,
                           builder: (BuildContext context, Widget? child) {
                             return SliverAppBar(
+                                backgroundColor: Common.darkTheme ? CustomColors.blackColor.shade900 : Colors.white,
+                                automaticallyImplyLeading: false,
+                                leading: null,
                                 collapsedHeight: 410,
                                 expandedHeight: (_trendingController
                                             .drive(
@@ -156,8 +165,6 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
                                             .value *
                                         (myChildSize.height + 30)) +
                                     410,
-                                backgroundColor:
-                                    CustomColors.inversedDarkThemeColor,
                                 flexibleSpace: FlexibleSpaceBar(
                                     background: Column(children: [
                                       Text("Trending", style: Style.titleStyle()),
@@ -166,8 +173,8 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
                                       ? _trendingDescription()
                                       : Container(),
                                       Padding(
-                                          padding: EdgeInsets.symmetric(horizontal: 100),
-                                        child: Divider(color: Colors.black),
+                                          padding: EdgeInsets.only(left: 100, right: 100, top: 10, bottom: 10),
+                                        child: Container(height: 2, color: Colors.grey.shade200, child: Container()),
                                       ),
                                       Text("Search all games", style: Style.titleStyle()),
                                 ])));
@@ -196,9 +203,7 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
                             ],
                             labelColor: CustomColors.currentColor,
                             indicatorColor: CustomColors.currentColor,
-                            unselectedLabelColor: Common.darkTheme
-                                ? CustomColors.greyColor.shade900
-                                : CustomColors.blackColor.shade900,
+                            unselectedLabelColor: Common.darkTheme ? Colors.white : CustomColors.blackColor.shade900,
                           ),
                         ),
                         floating: true,
@@ -210,101 +215,21 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
                     children: [
                       GamePanelList(
                           games: Common.allGamesList,
-                          inMyGames: false,
                           onPressedPrimary: _onPressedPrimary),
                       GamePanelList(
                           games: _physicalGames,
-                          inMyGames: false,
                           onPressedPrimary: _onPressedPrimary),
                       GamePanelList(
                           games: _cognitiveGames,
-                          inMyGames: false,
                           onPressedPrimary: _onPressedPrimary),
                       GamePanelList(
                           games: _socialGames,
-                          inMyGames: false,
                           onPressedPrimary: _onPressedPrimary),
                     ],
                   ),
                 ))),
       ),
     );
-
-    /*CustomScaffold(
-    name: "Shop",
-    leading: Icons.home,
-    hasFloating: true,
-    floating: Icons.search,
-    onPressedFloating: () => _onPressedSearch,
-    body: Center(child: SizedBox(width: 1000, child: DefaultTabController(
-          length: 4,
-          child: NestedScrollView(
-            physics: Common.isWeb
-                ? const ClampingScrollPhysics()
-                : const NeverScrollableScrollPhysics(),
-            headerSliverBuilder: (context, isScrolled) {
-              return [
-                AnimatedBuilder(
-                    animation: _trendingController,
-                    builder: (BuildContext context, Widget? child) {
-                      return SliverAppBar(
-                        backgroundColor: CustomColors.inversedDarkThemeColor,
-                        automaticallyImplyLeading: false,
-                        leading: null,
-                        collapsedHeight: 360,
-                        expandedHeight: (_trendingController.drive(CurveTween(curve: Curves.ease)).value * myChildSize.height) + 360,
-                        flexibleSpace: FlexibleSpaceBar(
-                          background: SingleChildScrollView(
-                              physics: NeverScrollableScrollPhysics(),
-                              child: Column(children: [
-                                const SizedBox(height: 30),
-                                _trendingWidget(),
-                                const SizedBox(height: 20),
-                                //_trendingDescription(),
-                              ])),
-                        ),
-                      );
-                    }),
-                SliverPersistentHeader(
-                  delegate: CustomDelegate(TabBar(
-                    tabs: [
-                      Tab(
-                          icon: const Icon(FontAwesome.gamepad),
-                          child: Text("All", style: Style.tabStyle())),
-                      Tab(
-                        icon: const Icon(Ionicons.ios_fitness),
-                        child: Text("Physical", style: Style.tabStyle()),
-                      ),
-                      Tab(
-                        icon: const Icon(MaterialCommunityIcons.brain),
-                        child: Text("Cognitive", style: Style.tabStyle()),
-                      ),
-                      Tab(
-                        icon: const Icon(MaterialIcons.people),
-                        child: Text("Social", style: Style.tabStyle()),
-                      ),
-                    ],
-                    labelColor: CustomColors.currentColor,
-                    indicatorColor: CustomColors.currentColor,
-                    unselectedLabelColor: Common.darkTheme
-                        ? CustomColors.greyColor.shade900
-                        : CustomColors.blackColor.shade900,
-                  )),
-                  floating: true,
-                  pinned: true,
-                )
-              ];
-            },
-            body: TabBarView(
-              children: [
-                GamePanelList(games: Common.allGamesList, inMyGames: false, onPressedPrimary: _onPressedPrimary),
-                GamePanelList(games: _physicalGames, inMyGames: false, onPressedPrimary: _onPressedPrimary),
-                GamePanelList(games: _cognitiveGames, inMyGames: false, onPressedPrimary: _onPressedPrimary),
-                GamePanelList(games: _socialGames, inMyGames: false, onPressedPrimary: _onPressedPrimary),
-              ],
-            ),
-          ),
-        ))));*/
   }
 
   //Trending games list
@@ -342,7 +267,7 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
             child: Text(
               Common.allGamesList[index].name,
               textAlign: TextAlign.center,
-              style: Style.gameStyle(),
+              style: Style.bannerStyle(),
             ),
           ),
           decoration: BoxDecoration(
@@ -374,7 +299,8 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
         },
         child: GameBody(
           game: _game,
-          inMyGames: false,
+          index: 0, //TODO actual index
+          isDescription: false,
           onPressedPrimary: () => _onPressedPrimary(_game),
         ));
   }

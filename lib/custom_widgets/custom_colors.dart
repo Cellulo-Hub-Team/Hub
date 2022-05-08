@@ -38,10 +38,10 @@ class CustomColors{
   static Color currentColor = redColor;
 
   //The default color adapted to each theme
-  static Color darkThemeColor = Common.darkTheme ? Colors.white : blackColor.shade900;
+  static Color darkThmeColor = Common.darkTheme ? Colors.white : blackColor.shade900;
 
   //The default color adapted to each theme inversed
-  static Color inversedDarkThemeColor = Common.darkTheme ? blackColor.shade900 : Colors.white;
+  static Color inversedDarkThmeColor = Common.darkTheme ? blackColor.shade900 : Colors.white;
 }
 
 

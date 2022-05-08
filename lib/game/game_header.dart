@@ -4,15 +4,15 @@ import 'package:flutter_icons/flutter_icons.dart';
 
 import '../custom_widgets/custom_icon_button.dart';
 import 'game.dart';
-import '../main/style.dart';
+import '../custom_widgets/style.dart';
 
 
 
 //The top constant part of the game panel
 class GameHeader extends StatefulWidget {
   final Game game;
-  final bool inMyGames;
-  const GameHeader({Key? key, required this.game, required this.inMyGames})
+  const GameHeader({Key? key,
+    required this.game})
       : super(key: key);
 
   @override
@@ -32,13 +32,13 @@ class _GameHeaderState extends State<GameHeader> {
               child: Center(
                   child: Text(
                 widget.game.name,
-                style: Style.gameStyle(),
+                style: Style.bannerStyle(),
               ))),
           decoration: BoxDecoration(
             image: DecorationImage(
                 colorFilter: widget.game.isInstalled ||
                         widget.game.webUrl != null ||
-                        !widget.inMyGames
+                        Common.currentScreen != Activity.MyGames
                     ? null
                     : ColorFilter.mode(
                         Colors.black.withOpacity(.8), BlendMode.darken),
@@ -89,7 +89,7 @@ class _GameHeaderState extends State<GameHeader> {
                   ],
                 ),
               )
-            : ((widget.game.webUrl != "" ||
+            : ((widget.game.webUrl != null ||
                     Common.canBeInstalledOnThisPlatform(widget.game))
                 ? Container()
                 : SizedBox(
@@ -102,26 +102,7 @@ class _GameHeaderState extends State<GameHeader> {
   }
 
   Widget _unavailableTag(BuildContext _context) {
-    return Container(); /*ElevatedButton.icon(
-      onPressed: () => Common.showSnackBar(
-        _context, "This game is not available on this platform"),
-      icon: Icon(
-        FontAwesome.warning,
-        color: Colors.white,
-      ),
-      label: Text(
-        'Not available on your device',
-        style: Style.tagStyle(true, true),
-        textAlign: TextAlign.center,),
-      style: ElevatedButton.styleFrom(
-          primary: widget.color,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20.0),
-          ),
-          fixedSize: const Size(150, 30)),
-    );
-
-      ElevatedButton.icon(
+    return ElevatedButton.icon(
       onPressed: () => Common.showSnackBar(
           _context, "This game is not available on this platform"),
       icon: const Icon(
@@ -141,6 +122,6 @@ class _GameHeaderState extends State<GameHeader> {
                 topRight: Radius.circular(30.0))),
         fixedSize: const Size(180, 50),
       ),
-    );*/
+    );
   }
 }

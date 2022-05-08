@@ -46,8 +46,9 @@ class _MyGamesState extends State<MyGames> with TickerProviderStateMixin {
   @override
   void initState() {
     CustomColors.currentColor = CustomColors.greenColor.shade900;
-    Common.percentageController =
-        AnimationController(duration: const Duration(seconds: 1), vsync: this);
+    Common.percentageController = AnimationController(duration: const Duration(seconds: 1), vsync: this);
+    Common.percentageController.reset();
+    Common.percentageController.forward();
     super.initState();
   }
 
@@ -67,7 +68,6 @@ class _MyGamesState extends State<MyGames> with TickerProviderStateMixin {
           },
       body: GamePanelList(
           games: Common.allGamesList.where((game) => game.isInLibrary).toList(),
-          inMyGames: true,
           onPressedPrimary: _onPressedInstall,
           onPressedSecondary: _onPressedLaunch)
     );
