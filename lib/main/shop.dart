@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:cellulo_hub/custom_widgets/colored_app_bar.dart';
 import 'package:cellulo_hub/main.dart';
 import 'package:cellulo_hub/main/search_result.dart';
-import 'package:cellulo_hub/main/style.dart';
+import 'package:cellulo_hub/custom_widgets/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:scroll_snap_list/scroll_snap_list.dart';
@@ -200,9 +200,7 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
                             ],
                             labelColor: CustomColors.currentColor,
                             indicatorColor: CustomColors.currentColor,
-                            unselectedLabelColor: Common.darkTheme
-                                ? CustomColors.greyColor.shade900
-                                : CustomColors.blackColor.shade900,
+                            unselectedLabelColor: Common.darkTheme ? Colors.white : CustomColors.blackColor.shade900,
                           ),
                         ),
                         floating: true,

@@ -7,7 +7,7 @@ import 'package:percent_indicator/circular_percent_indicator.dart';
 
 import '../main/common.dart';
 import 'game.dart';
-import '../main/style.dart';
+import '../custom_widgets/style.dart';
 import 'game_description.dart';
 
 

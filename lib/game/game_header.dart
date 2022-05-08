@@ -4,7 +4,7 @@ import 'package:flutter_icons/flutter_icons.dart';
 
 import '../custom_widgets/custom_icon_button.dart';
 import 'game.dart';
-import '../main/style.dart';
+import '../custom_widgets/style.dart';
 
 
 

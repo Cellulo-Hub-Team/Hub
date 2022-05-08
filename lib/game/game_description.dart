@@ -10,7 +10,7 @@ import '../custom_widgets/custom_colors.dart';
 import '../custom_widgets/custom_delegate.dart';
 import '../main/common.dart';
 import '../main/shop.dart';
-import '../main/style.dart';
+import '../custom_widgets/style.dart';
 import 'game.dart';
 
 class GameDescription extends StatefulWidget {
@@ -64,7 +64,7 @@ class _GameDescriptionState extends State<GameDescription> with TickerProviderSt
                       SliverAppBar(
                           collapsedHeight: 150,
                           expandedHeight: 150,
-                          backgroundColor: CustomColors.inversedDarkThemeColor,
+                          backgroundColor: Common.darkTheme ? CustomColors.blackColor.shade900 : Colors.white,
                           automaticallyImplyLeading: false,
                           leading: null,
                           flexibleSpace: FlexibleSpaceBar(

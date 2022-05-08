@@ -1,4 +1,4 @@
-import 'package:cellulo_hub/main/style.dart';
+import 'package:cellulo_hub/custom_widgets/style.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
