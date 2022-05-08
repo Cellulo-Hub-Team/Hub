@@ -88,7 +88,10 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
           context,
           MaterialPageRoute(
               builder: (context) =>
-                  SearchResult(selectedGames: _selectedGames)),
+                  SearchResult(
+                      selectedGames: _selectedGames,
+                      onPressedPrimary: _onPressedPrimary,
+                  )),
         );
       }
     });

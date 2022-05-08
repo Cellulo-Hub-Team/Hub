@@ -10,9 +10,12 @@ import '../game/game.dart';
 import 'my_games.dart';
 
 class SearchResult extends StatefulWidget {
-  const SearchResult({Key? key, required this.selectedGames}) : super(key: key);
-
   final List<Game> selectedGames;
+  final Function(Game)? onPressedPrimary;
+
+  const SearchResult({Key? key,
+    required this.selectedGames,
+    required this.onPressedPrimary}) : super(key: key);
 
   @override
   State<SearchResult> createState() => _SearchResultState();
@@ -53,6 +56,9 @@ class _SearchResultState extends State<SearchResult> with TickerProviderStateMix
         leadingScreen: Activity.Shop,
         leadingTarget: const Shop(),
         hasFloating: false,
-        body: GamePanelList(games: Common.allGamesList));
+        body: GamePanelList(
+            games: Common.allGamesList,
+            onPressedPrimary: widget.onPressedPrimary,
+        ));
   }
 }
