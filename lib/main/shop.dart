@@ -170,8 +170,8 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
                                       ? _trendingDescription()
                                       : Container(),
                                       Padding(
-                                          padding: EdgeInsets.symmetric(horizontal: 100),
-                                        child: Divider(color: Colors.black),
+                                          padding: EdgeInsets.only(left: 100, right: 100, top: 10, bottom: 10),
+                                        child: Container(height: 2, color: Colors.grey.shade200, child: Container()),
                                       ),
                                       Text("Search all games", style: Style.titleStyle()),
                                 ])));
@@ -264,7 +264,7 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
             child: Text(
               Common.allGamesList[index].name,
               textAlign: TextAlign.center,
-              style: Style.gameStyle(),
+              style: Style.bannerStyle(),
             ),
           ),
           decoration: BoxDecoration(

@@ -387,7 +387,7 @@ class MyCustomFormState extends State<MyCustomForm> {
               child: Center(
                   child: Text(
                     gameNameController.value.text,
-                    style: Style.gameStyle(),
+                    style: Style.bannerStyle(),
                   ))),
           decoration: BoxDecoration(
             image: DecorationImage(

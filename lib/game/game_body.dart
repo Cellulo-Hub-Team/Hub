@@ -75,7 +75,12 @@ class _GameBodyState extends State<GameBody> {
                       label: "See more",
                       onPressed: () => Common.goToTarget(
                           context,
-                          GameDescription(game: widget.game, index: widget.index),
+                          GameDescription(
+                            game: widget.game,
+                            index: widget.index,
+                            onPressedPrimary: widget.onPressedPrimary,
+                            onPressedSecondary: widget.onPressedSecondary,
+                          ),
                           false,
                           Common.currentScreen
                       )) : Container(),

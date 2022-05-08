@@ -16,8 +16,8 @@ import 'game.dart';
 class GameDescription extends StatefulWidget {
   final Game game;
   final int index;
-  final Function(Game)? onPressedPrimary;
-  final Function(Game)? onPressedSecondary;
+  final VoidCallback? onPressedPrimary;
+  final VoidCallback? onPressedSecondary;
   const GameDescription({Key? key,
     required this.game,
     required this.index,
@@ -106,12 +106,8 @@ class _GameDescriptionState extends State<GameDescription> with TickerProviderSt
                       GameBody(game: widget.game,
                           index: widget.index,
                           isDescription: true,
-                      onPressedPrimary: Common.currentScreen == Activity.MyGames && !Common.canBeInstalledOnThisPlatform(widget.game)
-                          ? null
-                          : () => widget.onPressedPrimary!(widget.game),
-                      onPressedSecondary: !widget.game.isInstalled && widget.game.webUrl == null
-                          ? null
-                          : () => widget.onPressedSecondary!(widget.game)),
+                      onPressedPrimary: widget.onPressedPrimary,
+                      onPressedSecondary: widget.onPressedSecondary),
                       _instructions(),
                       _successes(),
                     ],

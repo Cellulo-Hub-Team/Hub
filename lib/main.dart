@@ -9,6 +9,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'account/profile.dart';
 import 'custom_widgets/custom_menu_button.dart';
 import 'custom_widgets/custom_icon_button.dart';
+import 'custom_widgets/style.dart';
 import 'firebase_options.dart';
 import 'main/common.dart';
 import 'custom_widgets/custom_colors.dart';
@@ -128,6 +129,8 @@ class _MainMenuState extends State<MainMenu> {
             child: Column(
           children: [
             const Spacer(flex: 2),
+            Text("Main menu", style: Style.titleStyle()),
+            const Spacer(),
             CustomMenuButton(
               label: "My Games",
               icon: FontAwesome.gamepad,

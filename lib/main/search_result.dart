@@ -1,3 +1,5 @@
+import 'package:cellulo_hub/custom_widgets/custom_scaffold.dart';
+import 'package:cellulo_hub/main/shop.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import '../api/firebase_api.dart';
@@ -45,16 +47,12 @@ class _SearchResultState extends State<SearchResult> with TickerProviderStateMix
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          backgroundColor: CustomColors.currentColor,
-          title: const Text('Search'),
-          leading: IconButton(
-            icon: Icon(Entypo.shop),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
-        ),
+    return CustomScaffold(name: "Search result",
+        leadingIcon: Entypo.shop,
+        leadingName: "Shop",
+        leadingScreen: Activity.Shop,
+        leadingTarget: const Shop(),
+        hasFloating: false,
         body: GamePanelList(games: Common.allGamesList));
   }
 }

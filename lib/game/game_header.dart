@@ -32,7 +32,7 @@ class _GameHeaderState extends State<GameHeader> {
               child: Center(
                   child: Text(
                 widget.game.name,
-                style: Style.gameStyle(),
+                style: Style.bannerStyle(),
               ))),
           decoration: BoxDecoration(
             image: DecorationImage(
