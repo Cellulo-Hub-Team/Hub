@@ -15,7 +15,6 @@ using Button = UnityEngine.UIElements.Button;
 [CustomEditor(typeof(CelluloAchievementDataManager))]
 public class CelluloAchievementEditor : Editor
 {
-    private List<CelluloAchievement> achievementsList = new List<CelluloAchievement>();
     private Box addedAchievementsBox;
     private Button booleanToggle;
     private Button stepsToggle;
@@ -97,7 +96,7 @@ public class CelluloAchievementEditor : Editor
 
     private void RefreshAchievements()
     {
-        List<CelluloAchievement> temp = CelluloAchievementDataManager.ReadFile();
+        List<CelluloAchievement> temp = CelluloAchievementDataManager.achievementsList;
         for (int i = 0; i < temp.Count; i++)
         {
             AddAchievement(temp[i]);
@@ -106,14 +105,14 @@ public class CelluloAchievementEditor : Editor
 
     private void AddAchievement(CelluloAchievement achievement)
     {
-        foreach (var a in achievementsList)
+        foreach (var a in CelluloAchievementDataManager.achievementsList)
         {
             if (a.GetAchievementLabel() == achievement.GetAchievementLabel())
             {
                 return;
             }
         }
-        achievementsList.Add(achievement);
+        CelluloAchievementDataManager.achievementsList.Add(achievement);
         Box achievementBox = new Box();
         achievementBox.Add(new Label(achievement.GetAchievementLabel()));
         if (achievement.GetAchievementType() == CelluloAchievementType.Steps)
@@ -128,7 +127,7 @@ public class CelluloAchievementEditor : Editor
         Button removeAchievement = new Button(() =>
         {
             addedAchievementsBox.Remove(achievementBox);
-            achievementsList.Remove(achievement);
+            CelluloAchievementDataManager.achievementsList.Remove(achievement);
         });
         removeAchievement.Add(new Label("Remove"));
         achievementBox.Add(removeAchievement);
@@ -142,7 +141,7 @@ public class CelluloAchievementEditor : Editor
 
     private void ConfirmAchievements()
     {
-        CelluloAchievementDataManager.WriteFile(achievementsList);
+        CelluloAchievementDataManager.WriteFile();
     }
 
     private void UpdateToggles(CelluloAchievementType type)

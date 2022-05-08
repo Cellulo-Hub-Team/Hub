@@ -1,3 +1,5 @@
+using System;
+
 public enum CelluloAchievementType
 {
     Boolean,
@@ -9,7 +11,8 @@ public class CelluloAchievement
 {
     private string label = "";
     private CelluloAchievementType type = CelluloAchievementType.Boolean;
-    private int steps = 0;
+    private int steps;
+    private int value;
 
     public CelluloAchievement(string label, CelluloAchievementType type, int steps)
     {
@@ -51,5 +54,20 @@ public class CelluloAchievement
     public int GetSteps()
     {
         return steps;
+    }
+    
+    public int GetValue()
+    {
+        return value;
+    }
+
+    public void SetValue(int newValue)
+    {
+        value = newValue;
+    }
+    
+    public void IncreaseValue()
+    {
+        value++;
     }
 }

@@ -27,6 +27,8 @@ class _GamePanelListState extends State<GamePanelList> with TickerProviderStateM
   @override
   void initState() {
     Common.percentageController = AnimationController(duration: const Duration(seconds: 1), vsync: this);
+    Common.percentageController.reset();
+    Common.percentageController.forward();
     super.initState();
   }
 

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 
@@ -9,10 +10,47 @@ public class CelluloAchievementDataManager : MonoBehaviour
 {
     // Create a field for the save file.
     private static string saveFile;
-    public static List<CelluloAchievement> ReadFile()
+    
+    private static int startMinutes;
+    private static DateTime startTime;
+    
+    public static List<CelluloAchievement> achievementsList = new List<CelluloAchievement>();
+
+    private void Awake()
+    {
+        ReadFile();
+    }
+
+    private void Update()
+    {
+        WriteFile();
+    }
+
+    public static void UpdateAchievementValue(String label, int value)
+    {
+        foreach (var achievement in achievementsList)
+        {
+            if (achievement.GetAchievementLabel().Equals(label))
+            {
+                achievement.SetValue(value);
+            }
+        }
+    }
+    
+    public static void IncreaseAchievementValue(String label)
+    {
+        foreach (var achievement in achievementsList)
+        {
+            if (achievement.GetAchievementLabel().Equals(label))
+            {
+                achievement.IncreaseValue();
+            }
+        }
+    }
+
+    public static void ReadFile()
     {
         saveFile = Application.persistentDataPath + "/achievements.json";
-        List<CelluloAchievement> achievementsList = new List<CelluloAchievement>();
         
         // Does the file exist?
         if (File.Exists(saveFile))
@@ -25,7 +63,7 @@ public class CelluloAchievementDataManager : MonoBehaviour
             {
                 // Deserialize the JSON data into a pattern matching the achievementData class.
                 CelluloAchievementData achievementData = JsonUtility.FromJson<CelluloAchievementData>(fileContents[i]);
-                CelluloAchievementType type = CelluloAchievementType.Boolean;
+                CelluloAchievementType type;
                 switch (achievementData.type)
                 {
                     case "one": type = CelluloAchievementType.Boolean; break;
@@ -36,21 +74,23 @@ public class CelluloAchievementDataManager : MonoBehaviour
                     new CelluloAchievement(achievementData.label, type, achievementData.steps);
                 achievementsList.Add(achievement);
             }
-        }
 
-        return achievementsList;
+            startMinutes = Int32.Parse(fileContents[count + 1]);
+            startTime = DateTime.Now;
+        }
     }
 
-    public static void WriteFile(List<CelluloAchievement> achievements)
+    public static void WriteFile()
     {
         saveFile = Application.persistentDataPath + "/achievements.json";
-        File.WriteAllText(saveFile, achievements.Count.ToString() + "\n");
-        foreach (var a in achievements)
+        File.WriteAllText(saveFile, achievementsList.Count + "\n");
+        foreach (var a in achievementsList)
         {
             CelluloAchievementData achievementData = new CelluloAchievementData(
                 a.GetAchievementLabel(),
                 a.GetAchievementTypeData(),
-                a.GetSteps());
+                a.GetSteps(),
+                a.GetValue());
             // Serialize the object into JSON and save string.
             string jsonString = JsonUtility.ToJson(achievementData);
 
@@ -58,6 +98,8 @@ public class CelluloAchievementDataManager : MonoBehaviour
             File.AppendAllText(saveFile, jsonString);
             File.AppendAllText(saveFile, "\n");
         }
+        //Update total minutes played
+        File.AppendAllText(saveFile, Math.Round((DateTime.Now - startTime).TotalMinutes + startMinutes).ToString());
     }
 }
 
@@ -65,12 +107,14 @@ class CelluloAchievementData
 {
     public string label = "";
     public string type = "";
-    public int steps = 0;
+    public int steps;
+    private int value;
     
-    public CelluloAchievementData(string label, string type, int steps)
+    public CelluloAchievementData(string label, string type, int steps, int value)
     {
         this.label = label;
         this.type = type;
         this.steps = steps;
+        this.value = value;
     }
 }

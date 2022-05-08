@@ -46,8 +46,7 @@ class _MyGamesState extends State<MyGames> with TickerProviderStateMixin {
   @override
   void initState() {
     CustomColors.currentColor = CustomColors.greenColor.shade900;
-    Common.percentageController =
-        AnimationController(duration: const Duration(seconds: 1), vsync: this);
+    Common.percentageController = AnimationController(duration: const Duration(seconds: 1), vsync: this);
     Common.percentageController.reset();
     Common.percentageController.forward();
     super.initState();

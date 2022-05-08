@@ -16,9 +16,13 @@ import 'game.dart';
 class GameDescription extends StatefulWidget {
   final Game game;
   final int index;
+  final Function(Game)? onPressedPrimary;
+  final Function(Game)? onPressedSecondary;
   const GameDescription({Key? key,
     required this.game,
-    required this.index})
+    required this.index,
+    this.onPressedPrimary,
+    this.onPressedSecondary})
       : super(key: key);
 
   @override
@@ -44,12 +48,7 @@ class _GameDescriptionState extends State<GameDescription> with TickerProviderSt
       leadingName: "Back",
       leadingScreen: Common.currentScreen,
       leadingTarget: Common.currentScreen == Activity.MyGames ? MyGames() : Shop(),
-      hasFloating: true,
-      floatingIcon: Icons.add,
-      floatingLabel: "Add game",
-      onPressedFloating: () {
-        Common.goToTarget(context, const Shop(), false, Activity.Shop);
-      },
+      hasFloating: false,
       body: DefaultTabController(
         length: 3,
         child: Center(
@@ -104,7 +103,15 @@ class _GameDescriptionState extends State<GameDescription> with TickerProviderSt
                   },
                   body: TabBarView(
                     children: [
-                      GameBody(game: widget.game, index: widget.index, isDescription: true),
+                      GameBody(game: widget.game,
+                          index: widget.index,
+                          isDescription: true,
+                      onPressedPrimary: Common.currentScreen == Activity.MyGames && !Common.canBeInstalledOnThisPlatform(widget.game)
+                          ? null
+                          : () => widget.onPressedPrimary!(widget.game),
+                      onPressedSecondary: !widget.game.isInstalled && widget.game.webUrl == null
+                          ? null
+                          : () => widget.onPressedSecondary!(widget.game)),
                       _instructions(),
                       _successes(),
                     ],

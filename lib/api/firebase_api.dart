@@ -145,7 +145,7 @@ class FirebaseApi {
   }
 
   ///Basic Email+password signUp (found on FirebaseAuth doc)
-  static Future<void> signUp(String email, String password) async {
+  static Future<void>       signUp(String email, String password) async {
     try {
       UserCredential userCredential = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: password);
