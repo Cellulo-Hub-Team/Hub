@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:cellulo_hub/main/style.dart';
+import 'package:cellulo_hub/custom_widgets/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:google_fonts/google_fonts.dart';

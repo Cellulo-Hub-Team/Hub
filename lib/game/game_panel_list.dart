@@ -11,11 +11,9 @@ class GamePanelList extends StatefulWidget {
   final List<Game> games;
   final Function(Game)? onPressedPrimary;
   final Function(Game)? onPressedSecondary;
-  final bool inMyGames;
   const GamePanelList(
       {Key? key,
       required this.games,
-      required this.inMyGames,
       this.onPressedPrimary,
       this.onPressedSecondary})
       : super(key: key);
@@ -29,20 +27,16 @@ class _GamePanelListState extends State<GamePanelList> with TickerProviderStateM
   @override
   void initState() {
     Common.percentageController = AnimationController(duration: const Duration(seconds: 1), vsync: this);
+    Common.percentageController.reset();
+    Common.percentageController.forward();
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    Common.percentageController.dispose();
-    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     List<ExpansionPanel> result = [];
     for (int i = 0; i < widget.games.length; i++) {
-      result.add(gameExpansionPanel(widget.games[i]));
+      result.add(gameExpansionPanel(widget.games[i], i));
     }
     return Center(child: Container(width: 1000, alignment: Alignment.center, child: ListView(children: [ExpansionPanelList(
         children: result,
@@ -57,16 +51,17 @@ class _GamePanelListState extends State<GamePanelList> with TickerProviderStateM
   }
 
   //The expandable panel for each game
-  ExpansionPanel gameExpansionPanel(Game _game) {
+  ExpansionPanel gameExpansionPanel(Game _game, int _index) {
     return ExpansionPanel(
         headerBuilder: (context, isOpen) =>
         Hero(
-          tag: 'game',
-            child: GameHeader(game: _game, inMyGames: widget.inMyGames)),
+          tag: 'game' + _index.toString(),
+            child: GameHeader(game: _game)),
         body: GameBody(
             game: _game,
-            inMyGames: widget.inMyGames,
-            onPressedPrimary: widget.inMyGames && !Common.canBeInstalledOnThisPlatform(_game)
+            index: _index,
+            isDescription: false,
+            onPressedPrimary: Common.currentScreen == Activity.MyGames && !Common.canBeInstalledOnThisPlatform(_game)
                 ? null
                 : () => widget.onPressedPrimary!(_game),
             onPressedSecondary: !_game.isInstalled && _game.webUrl == null

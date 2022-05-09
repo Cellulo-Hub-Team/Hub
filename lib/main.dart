@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
@@ -6,6 +9,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'account/profile.dart';
 import 'custom_widgets/custom_menu_button.dart';
 import 'custom_widgets/custom_icon_button.dart';
+import 'custom_widgets/style.dart';
 import 'firebase_options.dart';
 import 'main/common.dart';
 import 'custom_widgets/custom_colors.dart';
@@ -16,7 +20,36 @@ import 'main/welcome_screen.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
+class Achievement {
+  final String label;
+  final String type;
+  final int steps;
+
+  Achievement(this.label, this.type, this.steps);
+
+  Achievement.fromJson(Map<String, dynamic> json)
+      : label = json['label'],
+        type = json['type'],
+        steps = json['steps'];
+
+  Map<String, dynamic> toJson() =>
+      {'label': label, 'type': type, 'steps': steps};
+}
+
 void main() async {
+  /*var path =
+      "C:/Users/antoi/AppData/LocalLow/DefaultCompany/Achievements/achievements.json";
+  File(path)
+      .openRead()
+      .transform(utf8.decoder)
+      .transform(new LineSplitter())
+      .forEach((l) {
+    Map<String, dynamic> achievementMap = jsonDecode(l);
+    var achievement = Achievement.fromJson(achievementMap);
+
+    print(achievement.label);
+  });*/
+
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -82,7 +115,8 @@ class _MainMenuState extends State<MainMenu> {
       MyApp.themeNotifier.value =
           Common.darkTheme ? ThemeMode.dark : ThemeMode.light;
       CustomColors.currentColor = CustomColors.greyColor.shade900;
-      Common.showSnackBar(context, Common.darkTheme ? "Switched to Night mode" : "Switched to Day mode");
+      Common.showSnackBar(context,
+          Common.darkTheme ? "Switched to Night mode" : "Switched to Day mode");
     });
   }
 
@@ -95,25 +129,30 @@ class _MainMenuState extends State<MainMenu> {
             child: Column(
           children: [
             const Spacer(flex: 2),
+            Text("Main menu", style: Style.titleStyle()),
+            const Spacer(),
             CustomMenuButton(
               label: "My Games",
               icon: FontAwesome.gamepad,
               color: CustomColors.greenColor.shade900,
-              onPressed: () => Common.goToTarget(context, const MyGames(), true, Activity.MyGames),
+              onPressed: () => Common.goToTarget(
+                  context, const MyGames(), true, Activity.MyGames),
             ),
             const Spacer(),
             CustomMenuButton(
               label: "Shop",
               icon: Entypo.shop,
               color: CustomColors.blueColor.shade900,
-              onPressed: () => Common.goToTarget(context, const Shop(), true, Activity.Shop),
+              onPressed: () =>
+                  Common.goToTarget(context, const Shop(), true, Activity.Shop),
             ),
             const Spacer(),
             CustomMenuButton(
               label: "Progress",
               icon: Octicons.graph,
               color: CustomColors.redColor.shade900,
-              onPressed: () => Common.goToTarget(context, const Progress(), true, Activity.Progress),
+              onPressed: () => Common.goToTarget(
+                  context, const Progress(), true, Activity.Progress),
             ),
             const Spacer(flex: 2),
           ],
@@ -134,7 +173,8 @@ class _MainMenuState extends State<MainMenu> {
                 label: "Profile",
                 icon: Ionicons.md_person,
                 color: CustomColors.purpleColor.shade900,
-                onPressed: () => Common.goToTarget(context, const Profile(), true, Activity.Profile)))
+                onPressed: () => Common.goToTarget(
+                    context, const Profile(), true, Activity.Profile)))
       ],
     ));
   }

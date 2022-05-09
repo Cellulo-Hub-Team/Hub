@@ -10,20 +10,36 @@ import '../custom_widgets/custom_colors.dart';
 import '../custom_widgets/custom_delegate.dart';
 import '../main/common.dart';
 import '../main/shop.dart';
-import '../main/style.dart';
+import '../custom_widgets/style.dart';
 import 'game.dart';
 
 class GameDescription extends StatefulWidget {
   final Game game;
-  final bool inMyGames;
-  const GameDescription({Key? key, required this.game, required this.inMyGames})
+  final int index;
+  final VoidCallback? onPressedPrimary;
+  final VoidCallback? onPressedSecondary;
+  const GameDescription({Key? key,
+    required this.game,
+    required this.index,
+    this.onPressedPrimary,
+    this.onPressedSecondary})
       : super(key: key);
 
   @override
   State<GameDescription> createState() => _GameDescriptionState();
 }
 
-class _GameDescriptionState extends State<GameDescription> {
+class _GameDescriptionState extends State<GameDescription> with TickerProviderStateMixin {
+
+  @override
+  void initState() {
+    Common.percentageController =
+        AnimationController(duration: const Duration(seconds: 1), vsync: this);
+    Common.percentageController.reset();
+    Common.percentageController.forward();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
@@ -31,13 +47,8 @@ class _GameDescriptionState extends State<GameDescription> {
       leadingIcon: Icons.arrow_back,
       leadingName: "Back",
       leadingScreen: Common.currentScreen,
-      leadingTarget: widget.inMyGames ? MyGames() : Shop(),
-      hasFloating: true,
-      floatingIcon: Icons.add,
-      floatingLabel: "Add game",
-      onPressedFloating: () {
-        Common.goToTarget(context, const Shop(), false, Activity.Shop);
-      },
+      leadingTarget: Common.currentScreen == Activity.MyGames ? MyGames() : Shop(),
+      hasFloating: false,
       body: DefaultTabController(
         length: 3,
         child: Center(
@@ -53,12 +64,13 @@ class _GameDescriptionState extends State<GameDescription> {
                       SliverAppBar(
                           collapsedHeight: 150,
                           expandedHeight: 150,
-                          backgroundColor: CustomColors.inversedDarkThemeColor,
+                          backgroundColor: Common.darkTheme ? CustomColors.blackColor.shade900 : Colors.white,
+                          automaticallyImplyLeading: false,
+                          leading: null,
                           flexibleSpace: FlexibleSpaceBar(
                             background: Hero(
-                                tag: 'game',
-                                child: GameHeader(
-                                    game: widget.game, inMyGames: true)),
+                                tag: 'game' + widget.index.toString(),
+                                child: GameHeader(game: widget.game)),
                           )),
                       SliverPersistentHeader(
                         delegate: CustomDelegate(TabBar(
@@ -91,7 +103,11 @@ class _GameDescriptionState extends State<GameDescription> {
                   },
                   body: TabBarView(
                     children: [
-                      GameBody(game: widget.game, inMyGames: true),
+                      GameBody(game: widget.game,
+                          index: widget.index,
+                          isDescription: true,
+                      onPressedPrimary: widget.onPressedPrimary,
+                      onPressedSecondary: widget.onPressedSecondary),
                       _instructions(),
                       _successes(),
                     ],
@@ -115,9 +131,9 @@ class _GameDescriptionState extends State<GameDescription> {
               padding:
                   const EdgeInsets.all(15), //apply padding to all four sides
               child: Text(
-                  "Turn on the robot by putting your fingers on the 6 touch sensors at the same"
+                  "Turn on the robot by putting your fingers on the 6 touch sensors at the same "
                   "time for around 3 seconds. After it’s turned on, the LEDs will light up.\n"
-                  "Turn off the robot by pressing three non-adjacent touch sensors at the same"
+                  "Turn off the robot by pressing three non-adjacent touch sensors at the same "
                   "time for around 3 seconds. After it’s turned on, the LEDs will turn off.\n",
                   style: Style.descriptionStyle()))
         ]));

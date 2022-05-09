@@ -11,7 +11,7 @@ import 'package:syncfusion_flutter_sliders/sliders.dart';
 import '../api/firebase_api.dart';
 import '../firebase_options.dart';
 import '../custom_widgets/custom_colors.dart';
-import '../main/style.dart';
+import '../custom_widgets/style.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -379,7 +379,7 @@ class MyCustomFormState extends State<MyCustomForm> {
               child: Center(
                   child: Text(
                     gameNameController.value.text,
-                    style: Style.gameStyle(),
+                    style: Style.bannerStyle(),
                   ))),
           decoration: BoxDecoration(
             image: DecorationImage(

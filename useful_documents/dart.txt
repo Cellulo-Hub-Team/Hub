@@ -1,0 +1,76 @@
+Variables
+---------
+_speed → private variable
+final → unredefinable method
+Nullable: variables that can be null
+• Declaration → varType? varName
+• speed ??= 25 → assigns value only if variable is null
+• 0 ?? 25 → returns left unless null then return right
+• car?.speed → returns property even if property nullable
+• Vehicle(required this.speed) → speed cannot be null
+Collections:
+• List<String> → aListOfStrings = ['one', 'two', 'three'] / <int>[]
+• Set<String> → aSetOfStrings = {'one', 'two', 'three'} / <int>{}
+• Map<String, int> → aMapOfStringsToInts = {  'one': 1,  'two': 2,  'three': 3 } / <int, double>{}
+
+Functions
+---------
+{speed: 25} → optional named parameter
+[speed: 25] → positional named parameter
+String toString() => 'Bicycle: $speed mph'; → one-line method
+methodName( () { _formProgress = progress; } ) → anonymous funciton given as parameter
+
+Classes
+-------
+Constructor: Vehicle(this.speed); → Vehicle(speed) {this.speed = speed};
+• Named constructor → Vehicle.stopped() {speed = 0};
+• Factory → factory Vehicle.fromTypeName(String typeName) { if (typeName == 'car') return Car(); }
+• Redirect constructor → Automobile.hybrid(String make, String model) : this(make, model, 60);
+• Const constructor → faster immutable objects
+Setter: int get speed => _speed; → car.speed
+Getter: set setSpeed(int speed) => _speed = speed; → car.setSpeed = 25;
+Inheritance: implements
+
+Functional programming
+----------------------
+Pass functions as arguments
+Map method
+Lists:
+• fold() → fold left
+• where() → filter elements
+• join() → select next n elements
+• skip() → skip first n elements
+
+String interpolation
+--------------------
+'${3 + 2}' → '5'
+'${"word".toUpperCase()}' → 'WORD'
+'$myObject' → The value of myObject.toString()
+
+Exceptions
+----------
+• throw → sends an exception message
+• try → detect exception on code
+• on → case for each exception
+• catch → intercept exception
+• rethrow → propagate exception
+• finally → execute whether or not an exception is thrown
+
+Cascades
+--------
+myObject..someMethod()..someOtherMethod() → chains operations that should require multiple statements
+
+Initializers
+------------
+Vehicle(int speed): assert(speed >= 0) {...} → code needing to execute before constructor
+
+Flutter
+-------
+Navigator → manages Flutter screens
+pubspec.yaml → manages the assets and dependencies for a Flutter app
+    Add 'uses-material-design: true' in the flutter section
+https://pub.dev/ → list of Flutter and Dart packages
+https://dartpad.dev/ → run Dart code online
+flutter pub add packageName → downloads package
+flutter pug get → imports package into project
+flutter clean → deletes all imports to make a clean reinstall
