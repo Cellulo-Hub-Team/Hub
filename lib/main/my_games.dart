@@ -5,10 +5,14 @@ import 'package:cellulo_hub/custom_widgets/custom_scaffold.dart';
 import 'package:cellulo_hub/game/game_panel_list.dart';
 import 'package:cellulo_hub/main.dart';
 import 'package:cellulo_hub/main/shop.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:device_apps/device_apps.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_fgbg/flutter_fgbg.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+
 
 import '../api/firebase_api.dart';
 import 'common.dart';
@@ -17,18 +21,12 @@ import '../game/game.dart';
 
 //User games library
 class MyGames extends StatefulWidget {
-  static bool _isNotFocused = false;
-
-  static bool get isNotFocused => _isNotFocused;
 
   const MyGames({Key? key}) : super(key: key);
 
   @override
   _MyGamesState createState() => _MyGamesState();
 
-  static set isNotFocused(bool value) {
-    _isNotFocused = value;
-  }
 
 }
 
@@ -39,11 +37,11 @@ class _MyGamesState extends State<MyGames>
 
   ///Installs the game on the device
   _onPressedInstall(Game _game) async {
+    _beingInstalledGame = _game;
     if (_game.isInstalled) {
       DeviceApps.uninstallApp(FirebaseApi.createPackageName(_game));
     }
     else {
-      _beingInstalledGame = _game;
       await FirebaseApi.downloadFile(_game);
     }
   }
@@ -77,29 +75,17 @@ class _MyGamesState extends State<MyGames>
   Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
     super.didChangeAppLifecycleState(state);
 
-    if (state == AppLifecycleState.inactive ||
-        state == AppLifecycleState.detached) {
-      print("STATE IS INACTIVE/DETACHED");
-    }
-
-    if (state == AppLifecycleState.paused) {
-      print("STATE IS PAUSED");
-    }
-    if (state == AppLifecycleState.resumed) {
+    if (state == AppLifecycleState.resumed && _beingInstalledGame != null) {
       if (await DeviceApps.isAppInstalled(FirebaseApi.createPackageName(_beingInstalledGame))) {
         setState(() {
         _beingInstalledGame.isInstalled = true;
       });
-        print('GAME IS INSTALLED');
       }
       else{
         setState(() {
           _beingInstalledGame.isInstalled = false;
         });
-        print('GAME IS NOT');
-
       }
-      print("STATE IS RESUMED");
     }
   }
 

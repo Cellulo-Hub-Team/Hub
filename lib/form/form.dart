@@ -190,8 +190,6 @@ class MyCustomFormState extends State<MyCustomForm> {
                 child: Padding(
                   padding: const EdgeInsets.all(10),
                   child: Column(
-                    //crossAxisAlignment: CrossAxisAlignment.center,
-                    //mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       TextFormField(
                         decoration: const InputDecoration(
@@ -253,12 +251,6 @@ class MyCustomFormState extends State<MyCustomForm> {
                             labelText: 'Web link',
                           ),
                           controller: webLinkController
-                          /* validator: (value) {
-                  if (!_checkAtLeastOne(webController, linuxController, apkController)) {
-                    return 'Please enter at least one build';
-                  }
-                  return null;
-                },*/
                           ),
                       TextFormField(
                         decoration: const InputDecoration(

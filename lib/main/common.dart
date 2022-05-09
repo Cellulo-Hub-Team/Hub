@@ -1,6 +1,7 @@
 import 'package:cellulo_hub/main/style.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:open_file/open_file.dart';
 
 import '../custom_widgets/custom_colors.dart';
 import '../game/game.dart';
@@ -68,6 +69,13 @@ class Common{
       _context,
       MaterialPageRoute(builder: (context) => _target),
     );
+  }
+
+  ///Open the file at the given path only on Android
+  static openFile(String path){
+    if(isAndroid){
+      OpenFile.open(path);
+    }
   }
 
 }

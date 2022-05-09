@@ -3,6 +3,7 @@ import 'dart:math';
 import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:firebase_core/firebase_core.dart' as firebase_core;
@@ -57,7 +58,9 @@ class FirebaseApi {
           source.nextDouble(),
           source.nextDouble(),
           game.get("Company Name"));
-      _toAdd.isInstalled = await gameIsInstalled(_toAdd);
+      if(_toAdd.androidBuild != null){
+        _toAdd.isInstalled = await gameIsInstalled(_toAdd);
+      }
       Common.allGamesList.add(_toAdd);
     }
   }
@@ -108,19 +111,24 @@ class FirebaseApi {
 
   ///Download the game (game) appropriate to the OS
   static Future<void> downloadFile(Game game) async {
-    //Directory appDocDir = await getApplicationDocumentsDirectory();
+    String? apkName = game.androidBuild?.split('/').last;
     String path = (await appDocDir)
         .path; //get the path to the application (data/user/0/...)
     File downloadToFile;
 
     if (Common.isAndroid) {
+      if(await File('$path/$apkName').exists()) {
+        Common.openFile('$path/$apkName');
+        return;
+      }
+
       downloadToFile = File(
-          '$path/${game.name.toLowerCase()}.apk'); //declare where the apk with be store (in the Application Documents right now)
+        //TODO Changer ça pour que ça prenne la valeur du field apk dans le form
+          '$path/$apkName'); //declare where the apk with be store (in the Application Documents right now)
     } else if (Common.isLinux) {
       downloadToFile =
           File((await getDownloadsDirectory())!.path); //to download directory
     } else if (Common.isWeb) {
-      downloadToFile = File('');
       return;
     } else {
       downloadToFile = File('');
@@ -142,26 +150,31 @@ class FirebaseApi {
       // e.g, e.code == 'canceled'
     }
 
-    //TODO Check if 0 is returned then set game.isInstalled to true
-    OpenFile.open(
-        '$path/${game.name.toLowerCase()}.apk'); //open the apk = message to install it
-    MyGames.isNotFocused = true;
+    if(Common.isAndroid){
+      Common.openFile('$path/$apkName'); //open the apk = message to install it
+    }
+
   }
 
   ///Basic Email+password signUp (found on FirebaseAuth doc)
-  static Future<void> signUp(String email, String password) async {
+  static Future<int> signUp(String email, String password, BuildContext context) async {
     try {
       UserCredential userCredential = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: password);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
-        print('The password provided is too weak.');
+        Common.showSnackBar(context, 'The password provided is too weak.');
+        return -1;
       } else if (e.code == 'email-already-in-use') {
+        Common.showSnackBar(context, 'The account already exists for that email.');
         print('The account already exists for that email.');
+        return -1;
       }
     } catch (e) {
       print(e);
+      return -1;
     }
+    return 0;
   }
 
   ///Basic Email+password signIn (found on FirebaseAuth doc)
@@ -197,11 +210,15 @@ class FirebaseApi {
   }
 
   ///Generate the name of the package according to the game company and an optional name
-  static String createPackageName(Game game, [String? name]) {
+  /*static String createPackageName(Game game, [String? name]) {
     return name == null
         ? ('com.${game.company}.${game.name}'.toLowerCase().replaceAll(' ', ''))
         : ('com.${game.company}.$name'.toLowerCase());
+  }*/
+  static String createPackageName(Game game) {
+        return ('com.${game.company}.${game.name}'.toLowerCase().replaceAll(' ', ''));
   }
+
 
   ///Upload the a Uint8List to the Firebase storage given the name of the file
   static Future<void> uploadFile(

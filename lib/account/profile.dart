@@ -1,7 +1,6 @@
 import 'package:cellulo_hub/custom_widgets/custom_elevated_button.dart';
 import 'package:cellulo_hub/custom_widgets/custom_scaffold.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
 import '../api/facebook_api.dart';
 import '../api/firebase_api.dart';
@@ -34,8 +33,9 @@ class _ProfileState extends State<Profile> {
       return (FirebaseApi.getUser()!.email)!;
     } else if (FacebookApi.loggedWithFacebook) {
       Map<String, dynamic> userData =
-          await FacebookApi.auth.getUserData(fields: "name");
-      return userData["name"];
+          await FacebookApi.auth.getUserData(fields: 'name,friends');
+      print(userData['friends']);
+      return userData['name'];
     }
     return 'No User';
   }
@@ -53,7 +53,7 @@ class _ProfileState extends State<Profile> {
         leadingIcon: Icons.home,
         leadingName: "Menu",
         leadingScreen: Activity.Menu,
-        leadingTarget: MainMenu(),
+        leadingTarget: const MainMenu(),
         hasFloating: false,
         body: Center(child: Column(
           children: [

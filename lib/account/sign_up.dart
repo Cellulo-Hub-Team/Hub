@@ -119,12 +119,14 @@ class _SignUpState extends State<SignUp> {
 
   /// Add user to the Database, close the keyboard and clear the form fields
   Future<void> addUserAndClear() async{
-    await FirebaseApi.signUp(
-        emailController.text, passwordController.text);
+    int result = await FirebaseApi.signUp(
+        emailController.text, passwordController.text, context);
     FocusScope.of(context).unfocus();
-    Common.showSnackBar(context, "New user correctly added !");
-    emailController.clear();
-    passwordController.clear();
-    confirmationController.clear();
+    if(result == 0){
+      Common.showSnackBar(context, "New user correctly added !");
+      emailController.clear();
+      passwordController.clear();
+      confirmationController.clear();
+    }
   }
 }

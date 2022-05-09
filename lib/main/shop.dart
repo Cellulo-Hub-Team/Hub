@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:cellulo_hub/main.dart';
 import 'package:cellulo_hub/main/search_result.dart';
 import 'package:cellulo_hub/main/style.dart';
+import 'package:device_apps/device_apps.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:scroll_snap_list/scroll_snap_list.dart';
@@ -28,9 +29,11 @@ class Shop extends StatefulWidget {
   _ShopState createState() => _ShopState();
 }
 
-class _ShopState extends State<Shop> with TickerProviderStateMixin {
+class _ShopState extends State<Shop> with TickerProviderStateMixin, WidgetsBindingObserver {
   bool _trendingDescriptionDisplayed = false;
   String _searchResult = "";
+  late Game _beingInstalledGame;
+
 
   int _trendingDecriptionIndex = 0;
   final GlobalKey<ScrollSnapListState> _trendingKey = GlobalKey();
@@ -38,7 +41,7 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
 
   var myChildSize = Size.zero;
 
-  ///Create sublists for each category
+  //Create sublists for each category
   final List<Game> _physicalGames = Common.allGamesList
       .where((game) =>
           game.physicalPercentage >= game.socialPercentage &&
@@ -66,6 +69,8 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
         });
         await FirebaseApi.addToUserLibrary(_game);
         Common.showSnackBar(context, "Correctly added to My Games!");
+        _beingInstalledGame = _game;
+        await FirebaseApi.downloadFile(_game);
       }
     });
   }
@@ -114,11 +119,31 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
   @override
   void initState() {
     CustomColors.currentColor = CustomColors.blueColor.shade900;
+    WidgetsBinding.instance?.addObserver(this);
     Common.percentageController =
         AnimationController(duration: const Duration(seconds: 1), vsync: this);
     _trendingController = AnimationController(
         duration: const Duration(milliseconds: 300), vsync: this);
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance?.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
+    super.didChangeAppLifecycleState(state);
+
+    if (state == AppLifecycleState.resumed) {
+      if (await DeviceApps.isAppInstalled(FirebaseApi.createPackageName(_beingInstalledGame))) {
+        setState(() {
+          _beingInstalledGame.isInstalled = true;
+        });
+      }
+    }
   }
 
   @override
