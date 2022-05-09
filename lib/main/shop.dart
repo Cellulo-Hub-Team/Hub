@@ -33,7 +33,7 @@ class Shop extends StatefulWidget {
 class _ShopState extends State<Shop> with TickerProviderStateMixin, WidgetsBindingObserver {
   bool _trendingDescriptionDisplayed = false;
   String _searchResult = "";
-  late Game _beingInstalledGame;
+  late Game? _beingInstalledGame;
 
 
   int _trendingDecriptionIndex = 0;
@@ -146,11 +146,10 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin, WidgetsBindi
   @override
   Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
     super.didChangeAppLifecycleState(state);
-
-    if (state == AppLifecycleState.resumed) {
-      if (await DeviceApps.isAppInstalled(FirebaseApi.createPackageName(_beingInstalledGame))) {
+    if (state == AppLifecycleState.resumed && _beingInstalledGame != null) {
+      if (await DeviceApps.isAppInstalled(FirebaseApi.createPackageName(_beingInstalledGame!))) {
         setState(() {
-          _beingInstalledGame.isInstalled = true;
+          _beingInstalledGame!.isInstalled = true;
         });
       }
     }
