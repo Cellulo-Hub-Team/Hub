@@ -17,7 +17,8 @@ class FacebookApi{
   }
 
   static Future<void> login() async{
-    final LoginResult result = await auth.login(); // by default we request the email and the public profile
+    final LoginResult result = await auth.login(permissions: ['email', 'public_profile', 'user_friends']); // by default we request the email and the public profile
+    //final LoginResult result = await auth.login(); // by default we request the email and the public profile
     if (result.status == LoginStatus.success) {
       // you are logged
       final AccessToken accessToken = result.accessToken!;

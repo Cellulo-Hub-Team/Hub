@@ -34,4 +34,9 @@ class Game {
       this.cognitivePercentage,
       this.socialPercentage,
       this.company);
+
+  @override
+  String toString() {
+    return "Game name: $name";
+  }
 }

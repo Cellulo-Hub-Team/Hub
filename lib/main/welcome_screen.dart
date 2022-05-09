@@ -14,6 +14,7 @@ class WelcomeScreen extends StatefulWidget {
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
 
+  /// Determine which screen to display first
   Future<Widget> _getStartingScreen() async {
     if (!FirebaseApi.isLoggedIn() && !(await FacebookApi.isLoggedIn())) {
       FirebaseApi.buildAllGamesList();
@@ -24,6 +25,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     }
   }
 
+  /// Build the list of all games and the user games
   _buildLists() async {
     await FirebaseApi.buildAllGamesList();
     FirebaseApi.buildUserGamesList();
