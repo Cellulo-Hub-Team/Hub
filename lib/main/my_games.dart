@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:math';
 
 import 'package:cellulo_hub/custom_widgets/custom_scaffold.dart';
@@ -38,11 +39,14 @@ class _MyGamesState extends State<MyGames>
   ///Installs the game on the device
   _onPressedInstall(Game _game) async {
     _beingInstalledGame = _game;
+    print(await FirebaseApi.getDownloads(_game));
     if (_game.isInstalled) {
       DeviceApps.uninstallApp(FirebaseApi.createPackageName(_game));
     }
     else {
-      await FirebaseApi.downloadFile(_game);
+      if(await Common.isConnected()){
+        await FirebaseApi.downloadFile(_game);
+      }
     }
   }
 
@@ -56,7 +60,7 @@ class _MyGamesState extends State<MyGames>
   }
 
   @override
-  void initState() {
+  void initState(){
     CustomColors.currentColor = CustomColors.greenColor.shade900;
     WidgetsBinding.instance?.addObserver(this);
 

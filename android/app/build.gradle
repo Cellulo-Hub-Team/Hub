@@ -34,7 +34,6 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.chili.cellulo_hub"
         minSdkVersion 19 //flutter.minSdkVersion
         targetSdkVersion flutter.targetSdkVersion

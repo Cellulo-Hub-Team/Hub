@@ -86,7 +86,7 @@ class _LoginState extends State<Login> {
               onPressed: () async {
                 // Validate returns true if the form is valid, or false otherwise.
                 await FirebaseApi.signIn(
-                    _emailController.text, _passwordController.text);
+                    _emailController.text, _passwordController.text, context);
                 if (FirebaseApi.isLoggedIn()) {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => const MainMenu()));
