@@ -13,7 +13,7 @@ import '../game/game.dart';
 class FiredartApi {
   static Future<Directory> appDocDir = getApplicationDocumentsDirectory();
   static FirebaseAuth auth = FirebaseAuth.instance;
-  static CollectionReference games = Firestore.instance.collection('test');
+  static CollectionReference games = Firestore.instance.collection('games');
   static CollectionReference owns = Firestore.instance.collection('owns');
 
   //Creates local list of all games available in the shop

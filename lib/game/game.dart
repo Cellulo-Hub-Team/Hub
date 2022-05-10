@@ -18,9 +18,9 @@ class Game {
   String? androidBuild;
   String? linuxBuild;
   String? webUrl;
-  double physicalPercentage = 0;
-  double cognitivePercentage = 0;
-  double socialPercentage = 0;
+  int physicalPercentage = 0;
+  int cognitivePercentage = 0;
+  int socialPercentage = 0;
   String company = "";
 
   Game(
