@@ -52,8 +52,8 @@ void main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
 
-  FirebaseAuth.initialize('AIzaSyD7zIHPdDSyLQSloeyYUo2OX4jLt07RYK8', VolatileStore());
-  Firestore.initialize('1:647250430928:web:59e33926f393615de887d5');
+  FirebaseAuth.initialize('AIzaSyB-rpiGCDAUXScHzmUXAhaIuSTJ5cP7SwE', VolatileStore());
+  Firestore.initialize('cellulo-hub-games');
 
   if (kIsWeb) {
     // initialize the facebook javascript SDK

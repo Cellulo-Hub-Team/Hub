@@ -1,6 +1,4 @@
 import 'dart:io';
-import 'dart:math';
-import 'dart:typed_data';
 import 'package:path_provider/path_provider.dart';
 import 'package:open_file/open_file.dart';
 import 'package:device_apps/device_apps.dart';
@@ -20,8 +18,6 @@ class FiredartApi {
 
   //Creates local list of all games available in the shop
   static Future<void> buildAllGamesList() async {
-
-    print("test");
     var allGamesFuture = await games.get();
     final allGames = allGamesFuture.toList();
     for (var game in allGames) {
