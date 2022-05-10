@@ -8,7 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:scroll_snap_list/scroll_snap_list.dart';
 
-import '../api/firebase_api.dart';
+import '../api/flutterfire_api.dart';
+import '../api/firedart_api.dart';
 import '../custom_widgets/custom_delegate.dart';
 import '../custom_widgets/custom_scaffold.dart';
 import '../game/game_body.dart';
@@ -65,7 +66,7 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
         setState(() {
           _game.isInLibrary = true;
         });
-        await FirebaseApi.addToUserLibrary(_game);
+        await Common.isDesktop ? FiredartApi.addToUserLibrary(_game) : FlutterfireApi.addToUserLibrary(_game);
         Common.showSnackBar(context, "Correctly added to My Games!");
       }
     });

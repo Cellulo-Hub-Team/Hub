@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 
 import '../account/profile_home.dart';
 import '../api/facebook_api.dart';
-import '../api/firebase_api.dart';
+import '../api/flutterfire_api.dart';
+import '../api/firedart_api.dart';
 import '../main.dart';
+import 'common.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({Key? key}) : super(key: key);
@@ -15,8 +17,8 @@ class WelcomeScreen extends StatefulWidget {
 class _WelcomeScreenState extends State<WelcomeScreen> {
 
   Future<Widget> _getStartingScreen() async {
-    if (!FirebaseApi.isLoggedIn() && !(await FacebookApi.isLoggedIn())) {
-      FirebaseApi.buildAllGamesList();
+    if (!(Common.isDesktop ? FiredartApi.isLoggedIn() : FlutterfireApi.isLoggedIn()) && !(await FacebookApi.isLoggedIn())) {
+      Common.isDesktop ? FiredartApi.buildAllGamesList() : FlutterfireApi.buildAllGamesList();
       return const ProfileHome();
     } else {
       _buildLists();
@@ -25,8 +27,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   }
 
   _buildLists() async {
-    await FirebaseApi.buildAllGamesList();
-    FirebaseApi.buildUserGamesList();
+    await Common.isDesktop ? FiredartApi.buildAllGamesList() : FlutterfireApi.buildAllGamesList();
+    Common.isDesktop ? FiredartApi.buildUserGamesList() : FlutterfireApi.buildUserGamesList();
   }
 
   @override

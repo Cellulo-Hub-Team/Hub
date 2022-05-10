@@ -1,8 +1,9 @@
+import 'package:cellulo_hub/api/firedart_api.dart';
 import 'package:cellulo_hub/custom_widgets/custom_scaffold.dart';
 import 'package:cellulo_hub/main/shop.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
-import '../api/firebase_api.dart';
+import '../api/flutterfire_api.dart';
 import '../game/game_panel_list.dart';
 import 'common.dart';
 import '../custom_widgets/custom_colors.dart';
@@ -33,7 +34,7 @@ class _SearchResultState extends State<SearchResult> with TickerProviderStateMix
         );
       } else {
         _game.isInLibrary = true;
-        await FirebaseApi.addToUserLibrary(_game);
+        await Common.isDesktop ? FiredartApi.addToUserLibrary(_game) : FlutterfireApi.addToUserLibrary(_game);
         Common.showSnackBar(context, "Correctly added to My Games!");
       }
     });

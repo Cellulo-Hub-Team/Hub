@@ -7,7 +7,8 @@ import 'package:cellulo_hub/main/shop.dart';
 import 'package:device_apps/device_apps.dart';
 import 'package:flutter/material.dart';
 
-import '../api/firebase_api.dart';
+import '../api/flutterfire_api.dart';
+import '../api/firedart_api.dart';
 import 'common.dart';
 import '../custom_widgets/custom_colors.dart';
 import '../game/game.dart';
@@ -25,11 +26,12 @@ class _MyGamesState extends State<MyGames> with TickerProviderStateMixin {
   //Installs the game on the device
   _onPressedInstall(Game _game) {
     setState(() {
-      if (_game.isInstalled) {
-        DeviceApps.uninstallApp(FirebaseApi.createPackageName(_game));
+      /*if (_game.isInstalled) {
+        DeviceApps.uninstallApp(Flutterfire.createPackageName(_game));
       } else {
-        FirebaseApi.downloadFile(_game);
-      }
+        Flutterfire.downloadFile(_game);
+      }*/
+      //TODO restore
       _game.isInstalled = !_game.isInstalled;
     });
   }
@@ -37,9 +39,9 @@ class _MyGamesState extends State<MyGames> with TickerProviderStateMixin {
   //Launches the installed game or the web game if no game can be installed on this platform
   _onPressedLaunch(Game _game) {
     if (!_game.isInstalled) {
-      FirebaseApi.launchWebApp(_game);
+      Common.isDesktop ? FiredartApi.launchWebApp(_game) : FlutterfireApi.launchWebApp(_game);
     } else {
-      FirebaseApi.launchApp(_game);
+      Common.isDesktop ? FiredartApi.launchApp(_game) : FlutterfireApi.launchApp(_game);
     }
   }
 

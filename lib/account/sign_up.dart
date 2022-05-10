@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 
-import '../api/firebase_api.dart';
+import '../api/flutterfire_api.dart';
 import '../custom_widgets/custom_elevated_button.dart';
 import '../custom_widgets/custom_scaffold.dart';
 import '../main/common.dart';
@@ -121,7 +121,7 @@ class _SignUpState extends State<SignUp> {
   }
 
   Future<void> addUserAndClear() async{
-    await FirebaseApi.signUp(
+    await FlutterfireApi.signUp(
         emailController.text, passwordController.text);
     FocusScope.of(context).unfocus();
     Common.showSnackBar(context, "New user correctly added !");

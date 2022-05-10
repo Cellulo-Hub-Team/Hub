@@ -1,10 +1,11 @@
+import 'package:cellulo_hub/api/firedart_api.dart';
 import 'package:cellulo_hub/custom_widgets/custom_elevated_button.dart';
 import 'package:cellulo_hub/custom_widgets/custom_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
 import '../api/facebook_api.dart';
-import '../api/firebase_api.dart';
+import '../api/flutterfire_api.dart';
 import '../main.dart';
 import '../custom_widgets/custom_colors.dart';
 import '../main/common.dart';
@@ -20,18 +21,29 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
 
   _signOut() async {
-    if (FirebaseApi.auth.currentUser != null) {
-      await FirebaseApi.auth.signOut();
-    } else if (FacebookApi.loggedWithFacebook) {
-      await FacebookApi.logout();
-      FacebookApi.loggedWithFacebook = false;
+    if (Common.isDesktop){
+      if (FiredartApi.auth.isSignedIn) {
+        FiredartApi.auth.signOut();
+      } else if (FacebookApi.loggedWithFacebook) {
+        await FacebookApi.logout();
+        FacebookApi.loggedWithFacebook = false;
+      }
     }
+    else{
+      if (FlutterfireApi.auth.currentUser != null) {
+        await FlutterfireApi.auth.signOut();
+      } else if (FacebookApi.loggedWithFacebook) {
+        await FacebookApi.logout();
+        FacebookApi.loggedWithFacebook = false;
+      }
+    }
+
     Common.goToTarget(context, const ProfileHome(), false, Activity.Profile);
   }
 
   Future<String> _getCurrentAuth() async {
-    if (FirebaseApi.isLoggedIn()) {
-      return (FirebaseApi.getUser()!.email)!;
+    if (FlutterfireApi.isLoggedIn()) {
+      return (FlutterfireApi.getUser()!.email)!;
     } else if (FacebookApi.loggedWithFacebook) {
       Map<String, dynamic> userData =
           await FacebookApi.auth.getUserData(fields: "name");

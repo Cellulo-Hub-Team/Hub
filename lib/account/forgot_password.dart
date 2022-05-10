@@ -2,7 +2,7 @@ import 'package:cellulo_hub/custom_widgets/custom_elevated_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 
-import '../api/firebase_api.dart';
+import '../api/flutterfire_api.dart';
 import '../custom_widgets/custom_colors.dart';
 import '../custom_widgets/custom_scaffold.dart';
 import '../main/common.dart';
@@ -52,7 +52,7 @@ class _ForgotState extends State<Forgot> {
           CustomElevatedButton(
               label: "Reset Password",
               onPressed: () {
-                FirebaseApi.auth
+                FlutterfireApi.auth
                     .sendPasswordResetEmail(email: _emailController.text);
               }),
           Spacer(flex: 5),

@@ -15,46 +15,40 @@ import '../game/game.dart';
 //TODO: Trouver un moyen clean de faire une ref static/ Exceptions/ Link à firebase storage quand on aura les jeux
 
 
-class FirebaseApi {
-  static firebase_storage.FirebaseStorage storage =
-      firebase_storage.FirebaseStorage.instance;
-  static firebase_storage.Reference ref =
-  firebase_storage.FirebaseStorage.instance.ref().child('/Games/');
+class FlutterfireApi {
+  static firebase_storage.FirebaseStorage storage = firebase_storage.FirebaseStorage.instance;
+  static firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance.ref().child('/Games/');
   static Future<Directory> appDocDir = getApplicationDocumentsDirectory();
   static FirebaseAuth auth = FirebaseAuth.instance;
   static FirebaseFirestore firestore = FirebaseFirestore.instance;
-  static CollectionReference games =
-  FirebaseFirestore.instance.collection('games');
-  static CollectionReference userGames =
-  FirebaseFirestore.instance.collection('owns');
+  static CollectionReference games = FirebaseFirestore.instance.collection('games');
+  static CollectionReference userGames = FirebaseFirestore.instance.collection('owns');
 
   static Future<void> buildAllGamesList() async {
     QuerySnapshot querySnapshot = await games.get();
     final allData = querySnapshot.docs.map((doc) => doc).toList();
     for (var game in allData) {
-      String backgroundUrl = await ref.child(game.get("Background Image")).getDownloadURL();
-      String? androidUrl = game.get("Android build") == ""
+      String? androidUrl = game["Android Build"] == ""
           ? null
-          : game.get("Android build");
-      String? linuxUrl = game.get("Linux build") == ""
+          : game["Android Build"];
+      String? linuxUrl = game["Linux Build"] == ""
           ? null
-          : await ref.child(game.get("Linux build")).getDownloadURL();
-      String? webUrl = game.get("Web Link") == ""
+          : game["Linux Build"];
+      String? webUrl = game["Web Link"] == ""
           ? null
-          : game.get("Web Link");
-      Random source = Random();
+          : game["Web Link"];
 
       Game _toAdd = Game(
           game.id,
-          backgroundUrl,
-          game.get("Game Description"),
+          game["Background Image"],
+          game["Game Description"],
           androidUrl,
           linuxUrl,
           webUrl,
-          source.nextDouble(),
-          source.nextDouble(),
-          source.nextDouble(),
-          game.get("Company Name"));
+          game["Physical Percentage"],
+          game["Cognitive Percentage"],
+          game["Social Percentage"],
+          game["Company Name"]);
       _toAdd.isInstalled = await gameIsInstalled(_toAdd);
       Common.allGamesList.add(_toAdd);
     }
@@ -145,7 +139,7 @@ class FirebaseApi {
   }
 
   ///Basic Email+password signUp (found on FirebaseAuth doc)
-  static Future<void>       signUp(String email, String password) async {
+  static Future<void> signUp(String email, String password) async {
     try {
       UserCredential userCredential = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: password);
@@ -214,39 +208,36 @@ class FirebaseApi {
 
   ///Create a new game with
   static Future<void> createNewGame(
-      String companyName,
       String gameName,
+      String companyName,
       String gameDescription,
-      firebase_storage.Reference? webZip,
-      firebase_storage.Reference? linuxZip,
-      firebase_storage.Reference? apkName,
-      firebase_storage.Reference? backgroundImage,
-      String webLink) async {
-    String webZipPath = webZip == null
-        ? ''
-        : webZip.fullPath.substring(6, webZip.fullPath.length);
-    String linuxZipPath = linuxZip == null
-        ? ''
-        : linuxZip.fullPath.substring(6, linuxZip.fullPath.length);
-    String apkNamePath = apkName == null
-        ? ''
-        : apkName.fullPath.substring(6, apkName.fullPath.length);
-    String backgroundImagePath = backgroundImage == null
-        ? ''
-        : backgroundImage.fullPath
-        .substring(6, backgroundImage.fullPath.length);
+      String gameInstructions,
+      String webBuild,
+      String webLink,
+      String linuxBuild,
+      String androidBuild,
+      String backgroundImage,
+      int physicalPercentage,
+      int cognitivePercentage,
+      int socialPercentage,
+      int celluloCount) async {
     return games
         .doc(gameName)
         .set({
       'Company Name': companyName,
       'Game Description': gameDescription,
-      'Web Build': webZipPath,
+      'Game Instructions': gameInstructions,
+      'Web Build': webBuild,
       'Web Link': webLink,
-      'Linux Build': linuxZipPath,
-      'Android Build': apkNamePath,
-      'Background Image': backgroundImagePath
+      'Linux Build': linuxBuild,
+      'Android Build': androidBuild,
+      'Background Image': backgroundImage,
+      'Physical Percentage': physicalPercentage,
+      'Cognitive Percentage': cognitivePercentage,
+      'Social Percentage': socialPercentage,
+      'Cellulo Count': celluloCount
     })
-        .then((value) => print("Game Added"))
+        .then((value) => print("Game added"))
         .catchError((error) => print("Failed to add game: $error"));
   }
 

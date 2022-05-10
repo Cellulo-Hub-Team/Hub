@@ -29,8 +29,10 @@ class Common{
 
   //Safe version of platform detection methods
   static bool get isLinux => !kIsWeb && Platform.isLinux;
+  static bool get isWindows => !kIsWeb && Platform.isWindows;
   static bool get isAndroid => !kIsWeb && Platform.isAndroid;
   static bool get isWeb => kIsWeb;
+  static bool get isDesktop => isLinux || isWindows;
 
   //Closes all expanded panels
   static resetOpenPanels() {

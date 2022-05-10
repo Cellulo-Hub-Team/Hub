@@ -8,7 +8,7 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 
-import '../api/firebase_api.dart';
+import '../api/flutterfire_api.dart';
 import '../firebase_options.dart';
 import '../custom_widgets/custom_colors.dart';
 import '../custom_widgets/style.dart';
@@ -35,12 +35,13 @@ class MyCustomFormState extends State<MyCustomForm> {
   // Create a global key that uniquely identifies the Form widget
   // and allows validation of the form.
   final _formKey = GlobalKey<FormState>();
-  final apkController = TextEditingController();
+  final androidBuildController = TextEditingController();
   final gameNameController = TextEditingController();
   final companyNameController = TextEditingController();
   final gameDescriptionController = TextEditingController();
-  final linuxController = TextEditingController();
-  final webController = TextEditingController();
+  final gameInstructionsController = TextEditingController();
+  final linuxBuildController = TextEditingController();
+  final webBuildController = TextEditingController();
   final backgroundImageController = TextEditingController();
   final webLinkController = TextEditingController();
   final PrimitiveWrapper _physicalPercentage = PrimitiveWrapper(0);
@@ -65,15 +66,14 @@ class MyCustomFormState extends State<MyCustomForm> {
 
   @override
   void dispose() {
-    // Clean up the controller when the widget is removed from the
-    // widget tree.
+    // Clean up the controller when the widget is removed from the widget tree
     backgroundImageController.dispose();
-    apkController.dispose();
+    androidBuildController.dispose();
     gameNameController.dispose();
     companyNameController.dispose();
     gameDescriptionController.dispose();
-    linuxController.dispose();
-    webController.dispose();
+    linuxBuildController.dispose();
+    webBuildController.dispose();
     webLinkController.dispose();
     super.dispose();
   }
@@ -92,40 +92,57 @@ class MyCustomFormState extends State<MyCustomForm> {
   }
 
   ///Submit the form
-  _submitFiles() {
-    String gameDescription = (gameDescriptionController.text);
-    String companyName = (companyNameController.text);
-    String gameName = (gameNameController.text);
-
-    fs.Reference? webRef = _isNull(webController)
+  _submitFiles() async {
+    String gameName = gameNameController.text;
+    fs.Reference? webBuildRef = _isNull(webBuildController)
         ? null
-        : FirebaseApi.ref.child(gameName).child(webController.text);
-    fs.Reference? linuxRef = _isNull(linuxController)
+        : FlutterfireApi.ref.child(gameName).child(webBuildController.text);
+    fs.Reference? linuxBuildRef = _isNull(linuxBuildController)
         ? null
-        : FirebaseApi.ref.child(gameName).child(linuxController.text);
-    fs.Reference? apkRef = _isNull(apkController)
+        : FlutterfireApi.ref.child(gameName).child(linuxBuildController.text);
+    fs.Reference? androidBuildRef = _isNull(androidBuildController)
         ? null
-        : FirebaseApi.ref.child(gameName).child(apkController.text);
+        : FlutterfireApi.ref.child(gameName).child(androidBuildController.text);
     fs.Reference? imageRef = _isNull(backgroundImageController)
         ? null
-        : FirebaseApi.ref.child(gameName).child(backgroundImageController.text);
+        : FlutterfireApi.ref.child(gameName).child(backgroundImageController.text);
     String webLink = _isNull(webLinkController) ? '' : webLinkController.text;
 
-    FirebaseApi.uploadFile(_file1, webRef);
-    FirebaseApi.uploadFile(_file2, linuxRef);
-    FirebaseApi.uploadFile(_file3, apkRef);
-    FirebaseApi.uploadFile(_file4, imageRef);
+    FlutterfireApi.uploadFile(_file1, webBuildRef);
+    FlutterfireApi.uploadFile(_file2, linuxBuildRef);
+    FlutterfireApi.uploadFile(_file3, androidBuildRef);
+    FlutterfireApi.uploadFile(_file4, imageRef);
 
-    FirebaseApi.createNewGame(companyName, gameName, gameDescription, webRef,
-        linuxRef, apkRef, imageRef, webLink);
+    String? linuxBuild = await linuxBuildRef?.getDownloadURL();
+    String? androidBuild = await androidBuildRef?.getDownloadURL();
+    String? webBuild = await webBuildRef?.getDownloadURL();
+    String? image = await imageRef?.getDownloadURL();
+
+
+    print(gameName);
+    print(image);
+    FlutterfireApi.createNewGame(
+        gameName,
+        companyNameController.text,
+        gameDescriptionController.text,
+        gameInstructionsController.text,
+        webBuild ?? "",
+        webLink,
+        linuxBuild ?? "",
+        androidBuild ?? "",
+        image ?? "",
+        _physicalPercentage.value,
+        _cognitivePercentage.value,
+        _socialPercentage.value,
+        _celluloCount.value);
   }
 
   //TODO Refaire la fonction ?
   _searchFiles(TextEditingController controller) async {
     FilePickerResult? result;
     int fileNumber;
-    if (controller == linuxController || controller == webController) {
-      if (controller == webController) {
+    if (controller == linuxBuildController || controller == webBuildController) {
+      if (controller == webBuildController) {
         fileNumber = 1;
       } else {
         fileNumber = 2;
@@ -134,7 +151,7 @@ class MyCustomFormState extends State<MyCustomForm> {
         type: FileType.custom,
         allowedExtensions: ['zip', 'gz'],
       );
-    } else if (controller == apkController) {
+    } else if (controller == androidBuildController) {
       fileNumber = 3;
       result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
@@ -221,7 +238,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                       ),
                       TextFormField(
                         decoration: const InputDecoration(
-                          hintText: 'Enter the game name',
+                          hintText: 'Enter the game description',
                           labelText: 'Game description',
                         ),
                         controller: gameDescriptionController,
@@ -234,18 +251,31 @@ class MyCustomFormState extends State<MyCustomForm> {
                       ),
                       TextFormField(
                         decoration: const InputDecoration(
+                          hintText: 'Enter the game instructions (how to play)',
+                          labelText: 'Game Instructions (how to play)',
+                        ),
+                        controller: gameInstructionsController,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter some text';
+                          }
+                          return null;
+                        },
+                      ),
+                      TextFormField(
+                        decoration: const InputDecoration(
                           hintText: 'Enter a web build zip',
                           labelText: 'Web build',
                         ),
-                        controller: webController,
+                        controller: webBuildController,
                         validator: (value) {
                           if (!_checkAtLeastOne(
-                              webController, linuxController, apkController)) {
+                              webBuildController, linuxBuildController, androidBuildController)) {
                             return 'Please enter at least one build';
                           }
                           return null;
                         },
-                        onTap: () => {_searchFiles(webController)},
+                        onTap: () => {_searchFiles(webBuildController)},
                       ),
                       TextFormField(
                           decoration: const InputDecoration(
@@ -253,27 +283,21 @@ class MyCustomFormState extends State<MyCustomForm> {
                             labelText: 'Web link',
                           ),
                           controller: webLinkController
-                          /* validator: (value) {
-                  if (!_checkAtLeastOne(webController, linuxController, apkController)) {
-                    return 'Please enter at least one build';
-                  }
-                  return null;
-                },*/
                           ),
                       TextFormField(
                         decoration: const InputDecoration(
                           hintText: 'Enter a linux build zip',
                           labelText: 'Linux build',
                         ),
-                        controller: linuxController,
+                        controller: linuxBuildController,
                         validator: (value) {
                           if (!_checkAtLeastOne(
-                              webController, linuxController, apkController)) {
+                              webBuildController, linuxBuildController, androidBuildController)) {
                             return 'Please enter at least one build';
                           }
                           return null;
                         },
-                        onTap: () => {_searchFiles(linuxController)},
+                        onTap: () => {_searchFiles(linuxBuildController)},
                       ),
                       TextFormField(
                         decoration: const InputDecoration(
@@ -281,15 +305,15 @@ class MyCustomFormState extends State<MyCustomForm> {
                           labelText: 'Android build',
                         ),
                         enableInteractiveSelection: false,
-                        controller: apkController,
+                        controller: androidBuildController,
                         validator: (value) {
                           if (!_checkAtLeastOne(
-                              webController, linuxController, apkController)) {
+                              webBuildController, linuxBuildController, androidBuildController)) {
                             return 'Please enter at least one build';
                           }
                           return null;
                         },
-                        onTap: () => {_searchFiles(apkController)},
+                        onTap: () => {_searchFiles(androidBuildController)},
                       ),
                       TextFormField(
                         decoration: const InputDecoration(
