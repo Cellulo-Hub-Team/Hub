@@ -213,7 +213,9 @@ class FlutterfireApi {
   ///Create a new game with
   static Future<void> createNewGame(
       String gameName,
+      String gameNameUnity,
       String companyName,
+      String companyNameUnity,
       String gameDescription,
       String gameInstructions,
       String webBuild,
@@ -229,7 +231,9 @@ class FlutterfireApi {
     return games
         .doc(gameName)
         .set({
+      'Game Name Unity': gameNameUnity,
       'Company Name': companyName,
+      'Company Name Unity': companyNameUnity,
       'Game Description': gameDescription,
       'Game Instructions': gameInstructions,
       'Web Build': webBuild,

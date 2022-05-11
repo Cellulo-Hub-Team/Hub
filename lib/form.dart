@@ -37,7 +37,9 @@ class MyCustomFormState extends State<MyCustomForm> {
   final _formKey = GlobalKey<FormState>();
   final androidBuildController = TextEditingController();
   final gameNameController = TextEditingController();
+  final gameNameUnityController = TextEditingController();
   final companyNameController = TextEditingController();
+  final companyNameUnityController = TextEditingController();
   final gameDescriptionController = TextEditingController();
   final gameInstructionsController = TextEditingController();
   final linuxBuildController = TextEditingController();
@@ -56,37 +58,12 @@ class MyCustomFormState extends State<MyCustomForm> {
   Uint8List _file5 = Uint8List(0);
   ImageProvider? _previewBackgroundImage;
 
-  @override
-  void initState() {
-    gameNameController.addListener(() {
-      setState(() {
-        gameNameController.text;
-      });
-    });
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    // Clean up the controller when the widget is removed from the widget tree
-    backgroundImageController.dispose();
-    androidBuildController.dispose();
-    gameNameController.dispose();
-    companyNameController.dispose();
-    gameDescriptionController.dispose();
-    linuxBuildController.dispose();
-    windowsBuildController.dispose();
-    webBuildController.dispose();
-    webLinkController.dispose();
-    super.dispose();
-  }
-
   ///Check if there is at least one build for the game
-  bool _checkAtLeastOne(TextEditingController web,
-      TextEditingController linux,
-      TextEditingController apk,
-      TextEditingController windows) {
-    return !(_isNull(web) && _isNull(linux) && _isNull(apk) && _isNull(windows));
+  bool _checkAtLeastOne() {
+    return !(_isNull(webBuildController)
+        && _isNull(linuxBuildController)
+        && _isNull(androidBuildController)
+        && _isNull(windowsBuildController));
   }
 
   ///Check if the given controller is null
@@ -128,12 +105,11 @@ class MyCustomFormState extends State<MyCustomForm> {
     String? webBuild = await webBuildRef?.getDownloadURL();
     String? image = await imageRef?.getDownloadURL();
 
-
-    print(gameName);
-    print(image);
     FlutterfireApi.createNewGame(
         gameName,
+        gameNameUnityController.text,
         companyNameController.text,
+        companyNameUnityController.text,
         gameDescriptionController.text,
         gameInstructionsController.text,
         webBuild ?? "",
@@ -164,7 +140,7 @@ class MyCustomFormState extends State<MyCustomForm> {
       }
       result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
-        allowedExtensions: ['zip', 'gz'],
+        allowedExtensions: ['zip'],
       );
     } else if (controller == androidBuildController) {
       fileNumber = 4;
@@ -212,6 +188,31 @@ class MyCustomFormState extends State<MyCustomForm> {
   }
 
   @override
+  void initState() {
+    gameNameController.addListener(() {
+      setState(() {
+        gameNameController.text;
+      });
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is removed from the widget tree
+    backgroundImageController.dispose();
+    androidBuildController.dispose();
+    gameNameController.dispose();
+    companyNameController.dispose();
+    gameDescriptionController.dispose();
+    linuxBuildController.dispose();
+    windowsBuildController.dispose();
+    webBuildController.dispose();
+    webLinkController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     // Build a Form widget using the _formKey created above.
     return MaterialApp(
@@ -225,141 +226,24 @@ class MyCustomFormState extends State<MyCustomForm> {
                 child: Padding(
                   padding: const EdgeInsets.all(10),
                   child: Column(
-                    //crossAxisAlignment: CrossAxisAlignment.center,
-                    //mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      TextFormField(
-                        decoration: const InputDecoration(
-                          hintText: 'Enter the game company name',
-                          labelText: 'Game company name',
-                        ),
-                        controller: companyNameController,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter some text';
-                          }
-                          return null;
-                        },
-                      ),
-                      TextFormField(
-                        decoration: const InputDecoration(
-                          hintText: 'Enter the game name',
-                          labelText: 'Game name',
-                        ),
-                        controller: gameNameController,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter some text';
-                          }
-                          return null;
-                        },
-                      ),
-                      TextFormField(
-                        decoration: const InputDecoration(
-                          hintText: 'Enter the game description',
-                          labelText: 'Game description',
-                        ),
-                        controller: gameDescriptionController,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter some text';
-                          }
-                          return null;
-                        },
-                      ),
-                      TextFormField(
-                        decoration: const InputDecoration(
-                          hintText: 'Enter the game instructions (how to play)',
-                          labelText: 'Game Instructions (how to play)',
-                        ),
-                        controller: gameInstructionsController,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter some text';
-                          }
-                          return null;
-                        },
-                      ),
-                      TextFormField(
-                        decoration: const InputDecoration(
-                          hintText: 'Enter a web build zip',
-                          labelText: 'Web build',
-                        ),
-                        controller: webBuildController,
-                        validator: (value) {
-                          if (!_checkAtLeastOne(
-                              webBuildController,
-                              linuxBuildController,
-                              androidBuildController,
-                              windowsBuildController)) {
-                            return 'Please enter at least one build';
-                          }
-                          return null;
-                        },
-                        onTap: () => {_searchFiles(webBuildController)},
-                      ),
+                      _requiredField('Game name', 'Enter the game name', gameNameController),
+                      _requiredField('Game name in Unity', 'Enter the game name as used in Unity', gameNameUnityController),
+                      _requiredField('Company name', 'Enter the company name', companyNameController),
+                      _requiredField('Company name in Unity', 'Enter the company name as used in Unity', companyNameUnityController),
+                      _requiredField('Game description', 'Enter the game description', gameDescriptionController),
+                      _requiredField('Game instructions (how to play)', 'Enter the game instructions (how to play)', gameInstructionsController),
+                      _fileField('Web build', 'Enter a web build zip', webBuildController),
                       TextFormField(
                           decoration: const InputDecoration(
                             hintText: 'Enter a web link',
                             labelText: 'Web link',
                           ),
                           controller: webLinkController
-                          ),
-                      TextFormField(
-                        decoration: const InputDecoration(
-                          hintText: 'Enter a linux build zip',
-                          labelText: 'Linux build',
-                        ),
-                        controller: linuxBuildController,
-                        validator: (value) {
-                          if (!_checkAtLeastOne(
-                              webBuildController,
-                              linuxBuildController,
-                              androidBuildController,
-                              windowsBuildController)) {
-                            return 'Please enter at least one build';
-                          }
-                          return null;
-                        },
-                        onTap: () => {_searchFiles(linuxBuildController)},
                       ),
-                      TextFormField(
-                        decoration: const InputDecoration(
-                          hintText: 'Enter a windows build zip',
-                          labelText: 'Windows build',
-                        ),
-                        controller: windowsBuildController,
-                        validator: (value) {
-                          if (!_checkAtLeastOne(
-                              webBuildController,
-                              linuxBuildController,
-                              androidBuildController,
-                              windowsBuildController)) {
-                            return 'Please enter at least one build';
-                          }
-                          return null;
-                        },
-                        onTap: () => {_searchFiles(windowsBuildController)},
-                      ),
-                      TextFormField(
-                        decoration: const InputDecoration(
-                          hintText: 'Enter an apk build',
-                          labelText: 'Android build',
-                        ),
-                        enableInteractiveSelection: false,
-                        controller: androidBuildController,
-                        validator: (value) {
-                          if (!_checkAtLeastOne(
-                              webBuildController,
-                              linuxBuildController,
-                              androidBuildController,
-                              windowsBuildController)) {
-                            return 'Please enter at least one build';
-                          }
-                          return null;
-                        },
-                        onTap: () => {_searchFiles(androidBuildController)},
-                      ),
+                      _fileField('Linux build', 'Enter a linux build zip', linuxBuildController),
+                      _fileField('Windows build', 'Enter a windows build zip', windowsBuildController),
+                      _fileField('Android build', 'Enter an apk build', androidBuildController),
                       TextFormField(
                         decoration: const InputDecoration(
                           hintText: 'Enter a background image',
@@ -414,6 +298,39 @@ class MyCustomFormState extends State<MyCustomForm> {
                   ),
                 )),
           )),
+    );
+  }
+
+  Widget _requiredField(String label, String hint, TextEditingController controller){
+    return TextFormField(
+      decoration: InputDecoration(
+        hintText: hint,
+        labelText: label,
+      ),
+      controller: controller,
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Please enter some text';
+        }
+        return null;
+      },
+    );
+  }
+
+  Widget _fileField(String label, String hint, TextEditingController controller){
+    return TextFormField(
+      decoration:  InputDecoration(
+        hintText: hint,
+        labelText: label,
+      ),
+      controller: controller,
+      validator: (value) {
+        if (!_checkAtLeastOne()) {
+          return 'Please enter at least one build';
+        }
+        return null;
+      },
+      onTap: () => {_searchFiles(controller)},
     );
   }
 
