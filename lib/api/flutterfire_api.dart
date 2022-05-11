@@ -59,15 +59,11 @@ class FlutterfireApi {
     }
   }
 
+  //Creates the local list of games the player owns
   static Future<void> buildUserGamesList() async {
     QuerySnapshot querySnapshot = await userGames.get();
     final allData = querySnapshot.docs.toList();
     User? user = auth.currentUser;
-    //Reset current user games list
-    for (var localGame in Common.allGamesList) {
-      localGame.isInLibrary = false;
-    }
-    //Create new user games list
     for (var game in allData) {
       if (game.get("User Uid") == user?.uid) {
         for (var localGame in Common.allGamesList) {
@@ -79,10 +75,14 @@ class FlutterfireApi {
     }
   }
 
+
+  //Checks whether the game is currently installed on this device
   static Future<bool> gameIsInstalled(Game game) {
     return DeviceApps.isAppInstalled(createPackageName(game));
   }
 
+
+  //Add game to user library on the database
   static Future<void> addToUserLibrary(Game game) async {
     User? user = auth.currentUser;
     return userGames
@@ -93,6 +93,7 @@ class FlutterfireApi {
             (error) => print("Failed to add game to user library: $error"));
   }
 
+  //Launches url corresponding to the web version of the game
   static void launchWebApp(Game game) async {
     String? url = game.webUrl;
     if (await canLaunch(url!)) {

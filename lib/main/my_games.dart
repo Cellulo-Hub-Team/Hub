@@ -30,7 +30,7 @@ class _MyGamesState extends State<MyGames> with TickerProviderStateMixin {
       //TODO add iOS and MacOS
       if (Common.isDesktop){
         if (_game.isInstalled) {
-          print("Uninstall game"); //TODO
+          ShellScripts.uninstallGameWindows(_game);
         } else {
           ShellScripts.installGameWindows(_game);
         }

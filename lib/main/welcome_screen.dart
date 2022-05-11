@@ -19,8 +19,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   //Build local games lists and get to login screen or main menu depending if user is logged in or not
   Future<Widget> _getStartingScreen() async {
     if (Common.isDesktop){
-      await FiredartApi.buildAllGamesList();
       if (FiredartApi.isLoggedIn()){
+        await FiredartApi.buildAllGamesList();
         FiredartApi.buildUserGamesList();
         return const MainMenu();
       }

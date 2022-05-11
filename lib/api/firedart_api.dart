@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:cellulo_hub/api/shell_scripts.dart';
+import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:open_file/open_file.dart';
 import 'package:device_apps/device_apps.dart';
@@ -43,24 +44,19 @@ class FiredartApi {
         game["Social Percentage"],
         game["Cellulo Count"],
       );
-      _toAdd.isInstalled = await gameIsInstalled(_toAdd);
+      _toAdd.isInstalled = await ShellScripts.isInstalledGameWindows(_toAdd);
       Common.allGamesList.add(_toAdd);
       print("Firedart: " + _toAdd.name);
     }
   }
 
-  //Creates local list of all games available in the shop
+  //Creates the local list of games the player owns
   static Future<void> buildUserGamesList() async {
     var allGamesFuture = await owns.get();
     final allGames = allGamesFuture.toList();
-    var user = getUser();
-    //Reset current user games list
-    for (var localGame in Common.allGamesList) {
-      localGame.isInLibrary = false;
-    }
-    //Create new user games list
+    var user = await auth.getUser();
     for (var game in allGames) {
-      if (game["User Uid"] == user) {
+      if (game["User Uid"] == user.id) {
         for (var localGame in Common.allGamesList) {
           if (localGame.name == game["Game Uid"]) {
             localGame.isInLibrary = true;
@@ -70,20 +66,19 @@ class FiredartApi {
     }
   }
 
-  static Future<bool> gameIsInstalled(Game game) {
-    return Future<bool>.value(true); //TODO
-  }
-
+  //Add game to user library on the database
   static Future<void> addToUserLibrary(Game game) async {
-    var user = getUser();
+    var user = await auth.getUser();
     return owns
-        .document('test')
-        .set({'Game Uid': game.name, 'User Uid': user?.uid})
+        .document(UniqueKey().toString())
+        .set({'Game Uid': game.name, 'User Uid': user.id})
         .then((value) => print("Game added to user library"))
         .catchError(
             (error) => print("Failed to add game to user library: $error"));
   }
 
+
+  //Launches url corresponding to the web version of the game
   static void launchWebApp(Game game) async {
     String? url = game.webUrl;
     if (await canLaunch(url!)) {
@@ -92,45 +87,6 @@ class FiredartApi {
       throw 'Could not launch $url';
     }
   }
-  /*
-  ///Download the game (game) appropriate to the OS
-  static Future<void> downloadFile(Game game) async {
-    //Directory appDocDir = await getApplicationDocumentsDirectory();
-    String path = (await appDocDir)
-        .path; //get the path to the application (data/user/0/...)
-    File downloadToFile;
-
-    if (Common.isAndroid) {
-      downloadToFile = File(
-          '$path/${game.name.toLowerCase()}.apk'); //declare where the apk with be store (in the Application Documents right now)
-    } else if (Common.isLinux) {
-      downloadToFile =
-          File((await getDownloadsDirectory())!.path); //to download directory
-    } else if (Common.isWeb) {
-      downloadToFile = File('');
-      return;
-    } else {
-      downloadToFile = File('');
-    }
-    firebase_storage.DownloadTask task = ref.child(game.androidBuild ?? "Wrong path").writeToFile(downloadToFile);
-    task.snapshotEvents.listen((firebase_storage.TaskSnapshot snapshot) {
-      print('Task state: ${snapshot.state}');
-      print(
-          'Progress: ${(snapshot.bytesTransferred / snapshot.totalBytes) * 100} %');
-    });
-
-    try {
-      await task; //download from FirebaseStorage and write into the right file
-    } on Exception catch (e) {
-      //TODO exceptions
-      print(e);
-    }
-
-    //TODO Check if 0 is returned then set game.isInstalled to true
-    OpenFile.open(
-        '$path/${game.name.toLowerCase()}.apk'); //open the apk = message to install it
-  }
-  */
 
   ///Basic Email+password signUp (found on FirebaseAuth doc)
   static Future<void> signUp(String email, String password) async {
@@ -146,6 +102,7 @@ class FiredartApi {
     try {
       await FirebaseAuth.instance.signIn(email, password);
       //Now that user is logged in, we can build the list of games he owns
+      await buildAllGamesList();
       buildUserGamesList();
     } on Exception catch (e) {
       //TODO exceptions
