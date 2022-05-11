@@ -34,7 +34,7 @@ class Shop extends StatefulWidget {
 class _ShopState extends State<Shop> with TickerProviderStateMixin, WidgetsBindingObserver {
   bool _trendingDescriptionDisplayed = false;
   String _searchResult = "";
-  late Game _beingInstalledGame;
+  late Game? _beingInstalledGame;
 
 
   int _trendingDecriptionIndex = 0;
@@ -60,9 +60,11 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin, WidgetsBindi
           game.socialPercentage >= game.physicalPercentage)
       .toList();
 
+  final List<Game> _trendingGames = List.from(Common.allGamesList)..sort((a,b) => b.downloads.compareTo(a.downloads));
+
+
   ///Function called when pressing Add to My Games button
-  _onPressedPrimary(Game _game) {
-    setState(() async {
+  _onPressedPrimary(Game _game) async {
       if (_game.isInLibrary) {
         Common.goToTarget(context, MyGames(), false, Activity.MyGames);
       } else {
@@ -73,8 +75,8 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin, WidgetsBindi
         Common.showSnackBar(context, "Correctly added to My Games!");
         _beingInstalledGame = _game;
         await FlutterfireApi.downloadFile(_game);
+        await FirebaseApi.incrementDownloads(_game);
       }
-    });
   }
 
   ///Function called when pressing search icon
@@ -125,6 +127,8 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin, WidgetsBindi
 
   @override
   void initState() {
+    print(_trendingGames);
+
     CustomColors.currentColor = CustomColors.blueColor.shade900;
     WidgetsBinding.instance?.addObserver(this);
     Common.percentageController =
@@ -145,11 +149,10 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin, WidgetsBindi
   @override
   Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
     super.didChangeAppLifecycleState(state);
-
-    if (state == AppLifecycleState.resumed) {
-      if (await DeviceApps.isAppInstalled(FlutterfireApi.createPackageName(_beingInstalledGame))) {
+    if (state == AppLifecycleState.resumed && _beingInstalledGame != null) {
+      if (await DeviceApps.isAppInstalled(FirebaseApi.createPackageName(_beingInstalledGame!))) {
         setState(() {
-          _beingInstalledGame.isInstalled = true;
+          _beingInstalledGame!.isInstalled = true;
         });
       }
     }
@@ -270,7 +273,7 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin, WidgetsBindi
           itemSize: 300,
           dynamicItemSize: true,
           onReachEnd: () {},
-          itemCount: Common.allGamesList.length,
+          itemCount: 3,
           onItemFocus: (int _index) => {
             setState(() {
               if (_trendingDescriptionDisplayed) {
@@ -294,7 +297,7 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin, WidgetsBindi
           child: TextButton(
             onPressed: () => _onPressedTrending(index),
             child: Text(
-              Common.allGamesList[index].name,
+              _trendingGames[index].name,
               textAlign: TextAlign.center,
               style: Style.bannerStyle(),
             ),
@@ -303,7 +306,7 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin, WidgetsBindi
               borderRadius: BorderRadius.circular(50),
               image: DecorationImage(
                   image:
-                      Image.network(Common.allGamesList[index].backgroundImage)
+                      Image.network(_trendingGames[index].backgroundImage)
                           .image,
                   fit: BoxFit.fitHeight),
               boxShadow: [
@@ -319,7 +322,7 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin, WidgetsBindi
   }
 
   Widget _trendingDescription() {
-    Game _game = Common.allGamesList[_trendingDecriptionIndex];
+    Game _game = _trendingGames[_trendingDecriptionIndex];
     return MeasureSize(
         onChange: (size) {
           setState(() {

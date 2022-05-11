@@ -15,7 +15,7 @@ enum Activity {
   Progress
 }
 
-class Common{
+class Common {
   //The variable storing the current screen we are in
   static Activity currentScreen = Activity.Menu;
 
@@ -32,6 +32,7 @@ class Common{
   static bool get isLinux => !kIsWeb && Platform.isLinux;
   static bool get isWindows => !kIsWeb && Platform.isWindows;
   static bool get isAndroid => !kIsWeb && Platform.isAndroid;
+
   static bool get isWeb => kIsWeb;
   static bool get isDesktop => isLinux || isWindows;
 
@@ -63,7 +64,8 @@ class Common{
   }
 
   ///Navigate to new screen
-  static goToTarget(BuildContext _context, Widget _target, bool _resetPanels, Activity _screen) {
+  static goToTarget(BuildContext _context, Widget _target, bool _resetPanels,
+      Activity _screen) {
     Common.currentScreen = _screen;
     if (_resetPanels) {
       Common.resetOpenPanels();
@@ -75,10 +77,21 @@ class Common{
   }
 
   ///Open the file at the given path only on Android
-  static openFile(String path){
-    if(isAndroid){
+  static openFile(String path) {
+    if (isAndroid) {
       OpenFile.open(path);
     }
   }
 
+  static Future<bool> isConnected() async{
+    try {
+      final result = await InternetAddress.lookup('example.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        return true;
+      }
+    } on SocketException catch (_) {
+      return false;
+    }
+    return false;
+  }
 }

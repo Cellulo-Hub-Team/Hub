@@ -19,6 +19,7 @@ class Game {
   int cognitivePercentage = 0;
   int socialPercentage = 0;
   int celluloCount = 0;
+  int downloads = 0;
 
   Game(
       this.name,
@@ -36,7 +37,7 @@ class Game {
       this.cognitivePercentage,
       this.socialPercentage,
       this.celluloCount,
-      );
+      this.downloads);
 
   @override
   String toString() {

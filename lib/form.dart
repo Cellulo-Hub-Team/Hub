@@ -285,7 +285,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                           Colors.grey.shade200,
                           _celluloCount,
                           Icons.hexagon,
-                          4),
+                          8),
                       const SizedBox(height: 20),
                       ElevatedButton(
                         onPressed: () {

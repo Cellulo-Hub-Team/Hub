@@ -28,6 +28,14 @@ class FlutterfireApi {
       FirebaseFirestore.instance.collection('games');
   static CollectionReference userGames =
       FirebaseFirestore.instance.collection('owns');
+  static String companyName = 'Company Name',
+      gameDescription = 'Game Description',
+      webBuild =  'Web Build',
+      webLink = 'Web Link',
+      linuxBuild = 'Linux Build',
+      androidBuild = 'Android Build',
+      backgroundImage = 'Background Image',
+      downloads = 'Downloads';
 
   /// Build the list of all games stored on Firebase
   static Future<void> buildAllGamesList() async {
@@ -44,7 +52,7 @@ class FlutterfireApi {
         game["Game Name Unity"],
         game["Company Name"],
         game["Company Name Unity"],
-        game["Game Description"],
+        game[gameDescription],
         game["Game Instructions"],
         game["Background Image"],
         androidUrl,
@@ -55,6 +63,7 @@ class FlutterfireApi {
         game["Cognitive Percentage"],
         game["Social Percentage"],
         game["Cellulo Count"],
+        game["Downloads"]
       );
       _toAdd.isInstalled = await gameIsInstalled(_toAdd);
       Common.allGamesList.add(_toAdd);
@@ -78,12 +87,10 @@ class FlutterfireApi {
     }
   }
 
-
   //Checks whether the game is currently installed on this device
   static Future<bool> gameIsInstalled(Game game) {
     return DeviceApps.isAppInstalled(createPackageName(game));
   }
-
 
   //Add game to user library on the database
   static Future<void> addToUserLibrary(Game game) async {
@@ -120,7 +127,6 @@ class FlutterfireApi {
       }
 
       downloadToFile = File(
-        //TODO Changer ça pour que ça prenne la valeur du field apk dans le form
           '$path/$apkName'); //declare where the apk with be store (in the Application Documents right now)
     } else if (Common.isLinux) {
       downloadToFile =
@@ -142,7 +148,6 @@ class FlutterfireApi {
     try {
       await task; //download from FirebaseStorage and write into the right file
     } on firebase_core.FirebaseException catch (e) {
-      //TODO exceptions
       if (e.code == 'permission-denied') {
         print('User does not have permission to upload to this reference.');
       }
@@ -178,17 +183,16 @@ class FlutterfireApi {
   }
 
   ///Basic Email+password signIn (found on FirebaseAuth doc)
-  static Future<void> signIn(String email, String password) async {
+  static Future<void> signIn(String email, String password, BuildContext context) async {
     try {
       UserCredential userCredential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
       buildUserGamesList();
     } on FirebaseAuthException catch (e) {
-      //TODO exceptions
       if (e.code == 'user-not-found') {
-        print('No user found for that email.');
+        Common.showSnackBar(context, 'No user found for that email.');
       } else if (e.code == 'wrong-password') {
-        print('Wrong password provided for that user.');
+        Common.showSnackBar(context, 'Wrong password provided for that user.');
       }
     }
   }
@@ -203,18 +207,12 @@ class FlutterfireApi {
       if (_isInstalled) {
         DeviceApps.openApp(_packageName);
       } else {
-
-        OpenFile.open('${appDocDir.path}/${game.name.toLowerCase()}.apk');
+        OpenFile.open('${appDocDir.path}/${game.androidBuild?.split('/').last}.apk');
       }
     }
   }
 
   ///Generate the name of the package according to the game company and an optional name
-  /*static String createPackageName(Game game, [String? name]) {
-    return name == null
-        ? ('com.${game.company}.${game.name}'.toLowerCase().replaceAll(' ', ''))
-        : ('com.${game.company}.$name'.toLowerCase());
-  }*/
   static String createPackageName(Game game) {
         return ('com.${game.companyName}.${game.name}'.toLowerCase().replaceAll(' ', ''));
   }
@@ -256,7 +254,7 @@ class FlutterfireApi {
         .doc(gameName)
         .set({
           'Game Name Unity': gameNameUnity,
-          'Company Name': companyName,
+          companyName: companyName,
           'Company Name Unity': companyNameUnity,
           'Game Description': gameDescription,
           'Game Instructions': gameInstructions,
@@ -269,7 +267,8 @@ class FlutterfireApi {
           'Physical Percentage': physicalPercentage,
           'Cognitive Percentage': cognitivePercentage,
           'Social Percentage': socialPercentage,
-          'Cellulo Count': celluloCount
+          'Cellulo Count': celluloCount,
+          downloads: 0
         })
         .then((value) => print("Game added"))
         .catchError((error) => print("Failed to add game: $error"));
@@ -301,6 +300,14 @@ class FlutterfireApi {
   static User? getUser() {
     return auth.currentUser;
   }
+
+  ///Add a download to a game
+  static incrementDownloads(Game game) async{
+    await games.doc(game.name).update({downloads: game.downloads + 1});
+    game.downloads++;
+  }
+
+
 
 /*static void getGames() async {
     QuerySnapshot<Object?> gameList = await games.get();

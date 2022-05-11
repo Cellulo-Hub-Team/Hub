@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:math';
 
 import 'package:cellulo_hub/api/shell_scripts.dart';
@@ -49,10 +50,17 @@ class _MyGamesState extends State<MyGames>
         }
       }
       else if (Common.isAndroid){
+        _beingInstalledGame = _game;
         if (_game.isInstalled) {
-          DeviceApps.uninstallApp(FlutterfireApi.createPackageName(_game));
-        } else {
-          FlutterfireApi.downloadFile(_game);
+          DeviceApps.uninstallApp(FirebaseApi.createPackageName(_game));
+        }
+        else {
+          if(await Common.isConnected()){
+            await FirebaseApi.downloadFile(_game);
+          }
+          else{
+            Common.showSnackBar(context, 'Please connect the device to the Internet');
+          }
         }
       }
       _game.isInstalled = !_game.isInstalled;
@@ -69,7 +77,7 @@ class _MyGamesState extends State<MyGames>
   }
 
   @override
-  void initState() {
+  void initState(){
     CustomColors.currentColor = CustomColors.greenColor.shade900;
     WidgetsBinding.instance?.addObserver(this);
 
