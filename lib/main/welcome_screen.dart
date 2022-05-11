@@ -17,7 +17,8 @@ class WelcomeScreen extends StatefulWidget {
 class _WelcomeScreenState extends State<WelcomeScreen> {
 
   Future<Widget> _getStartingScreen() async {
-    if (!(Common.isDesktop ? FiredartApi.isLoggedIn() : FlutterfireApi.isLoggedIn()) && !(await FacebookApi.isLoggedIn())) {
+    //TODO restore Facebook
+    if (!(Common.isDesktop ? FiredartApi.isLoggedIn() : FlutterfireApi.isLoggedIn()) /* && !(await FacebookApi.isLoggedIn())*/) {
       Common.isDesktop ? FiredartApi.buildAllGamesList() : FlutterfireApi.buildAllGamesList();
       return const ProfileHome();
     } else {

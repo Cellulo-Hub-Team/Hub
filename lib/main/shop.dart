@@ -147,7 +147,7 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
                 width: 1000,
                 alignment: Alignment.center,
                 child: NestedScrollView(
-                  physics: Common.isWeb
+                  physics: Common.isWeb || Common.isWindows
                       ? const ClampingScrollPhysics()
                       : const NeverScrollableScrollPhysics(),
                   headerSliverBuilder: (context, value) {

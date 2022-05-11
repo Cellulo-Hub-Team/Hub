@@ -21,7 +21,6 @@ class FiredartApi {
     var allGamesFuture = await games.get();
     final allGames = allGamesFuture.toList();
     for (var game in allGames) {
-      print(game.id);
       String? androidUrl = game["Android Build"] == ""
           ? null
           : game["Android Build"];
@@ -45,6 +44,7 @@ class FiredartApi {
           game["Company Name"]);
       _toAdd.isInstalled = await gameIsInstalled(_toAdd);
       Common.allGamesList.add(_toAdd);
+      print(_toAdd.backgroundImage);
     }
   }
 
@@ -175,7 +175,7 @@ class FiredartApi {
 
   ///Check if a user is logged in
   static bool isLoggedIn() {
-    return auth.getUser() != null;
+    return auth.isSignedIn;
   }
 
   ///Get the current user, can be null
