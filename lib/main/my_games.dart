@@ -40,7 +40,7 @@ class _MyGamesState extends State<MyGames>
 
   //Installs the game on the device
   _onPressedInstall(Game _game) {
-    setState(() {
+    setState(() async {
       //TODO add iOS and MacOS
       if (Common.isDesktop){
         if (_game.isInstalled) {
@@ -52,11 +52,11 @@ class _MyGamesState extends State<MyGames>
       else if (Common.isAndroid){
         _beingInstalledGame = _game;
         if (_game.isInstalled) {
-          DeviceApps.uninstallApp(FirebaseApi.createPackageName(_game));
+          DeviceApps.uninstallApp(FlutterfireApi.createPackageName(_game));
         }
         else {
           if(await Common.isConnected()){
-            await FirebaseApi.downloadFile(_game);
+            await FlutterfireApi.downloadFile(_game);
           }
           else{
             Common.showSnackBar(context, 'Please connect the device to the Internet');

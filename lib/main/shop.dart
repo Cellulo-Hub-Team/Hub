@@ -75,7 +75,7 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin, WidgetsBindi
         Common.showSnackBar(context, "Correctly added to My Games!");
         _beingInstalledGame = _game;
         await FlutterfireApi.downloadFile(_game);
-        await FirebaseApi.incrementDownloads(_game);
+        await FlutterfireApi.incrementDownloads(_game);
       }
   }
 
@@ -150,7 +150,7 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin, WidgetsBindi
   Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
     super.didChangeAppLifecycleState(state);
     if (state == AppLifecycleState.resumed && _beingInstalledGame != null) {
-      if (await DeviceApps.isAppInstalled(FirebaseApi.createPackageName(_beingInstalledGame!))) {
+      if (await DeviceApps.isAppInstalled(FlutterfireApi.createPackageName(_beingInstalledGame!))) {
         setState(() {
           _beingInstalledGame!.isInstalled = true;
         });

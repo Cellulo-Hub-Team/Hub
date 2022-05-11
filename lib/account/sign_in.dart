@@ -34,14 +34,14 @@ class _SignInState extends State<SignIn> {
   //Sign in using email and password based on what platform the user is using
   _onPressed() async {
     if (Common.isDesktop){
-      await FiredartApi.signIn(_emailController.text, _passwordController.text, context);
+      await FiredartApi.signIn(_emailController.text, _passwordController.text);
       if (FiredartApi.isLoggedIn()) {
         Navigator.push(context,
             MaterialPageRoute(builder: (context) => const MainMenu()));
       }
     }
     else{
-      await FlutterfireApi.signIn(_emailController.text, _passwordController.text);
+      await FlutterfireApi.signIn(_emailController.text, _passwordController.text, context);
       if (FlutterfireApi.isLoggedIn()) {
         Navigator.push(context,
             MaterialPageRoute(builder: (context) => const MainMenu()));

@@ -43,6 +43,7 @@ class FiredartApi {
         game["Cognitive Percentage"],
         game["Social Percentage"],
         game["Cellulo Count"],
+        game["Downloads"],
       );
       _toAdd.isInstalled = await ShellScripts.isInstalledGameWindows(_toAdd);
       Common.allGamesList.add(_toAdd);
