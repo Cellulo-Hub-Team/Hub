@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:cellulo_hub/custom_widgets/colored_app_bar.dart';
 import 'package:cellulo_hub/main.dart';
 import 'package:cellulo_hub/main/search_result.dart';
-import 'package:cellulo_hub/main/style.dart';
 import 'package:device_apps/device_apps.dart';
 import 'package:cellulo_hub/custom_widgets/style.dart';
 import 'package:flutter/material.dart';
@@ -73,7 +72,7 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin, WidgetsBindi
         await Common.isDesktop ? FiredartApi.addToUserLibrary(_game) : FlutterfireApi.addToUserLibrary(_game);
         Common.showSnackBar(context, "Correctly added to My Games!");
         _beingInstalledGame = _game;
-        await FirebaseApi.downloadFile(_game);
+        await FlutterfireApi.downloadFile(_game);
       }
     });
   }
@@ -148,7 +147,7 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin, WidgetsBindi
     super.didChangeAppLifecycleState(state);
 
     if (state == AppLifecycleState.resumed) {
-      if (await DeviceApps.isAppInstalled(FirebaseApi.createPackageName(_beingInstalledGame))) {
+      if (await DeviceApps.isAppInstalled(FlutterfireApi.createPackageName(_beingInstalledGame))) {
         setState(() {
           _beingInstalledGame.isInstalled = true;
         });

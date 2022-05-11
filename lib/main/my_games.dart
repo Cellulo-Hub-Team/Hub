@@ -35,6 +35,8 @@ class MyGames extends StatefulWidget {
 class _MyGamesState extends State<MyGames>
     with TickerProviderStateMixin, WidgetsBindingObserver {
 
+  late Game? _beingInstalledGame;
+
   //Installs the game on the device
   _onPressedInstall(Game _game) {
     setState(() {
@@ -90,14 +92,14 @@ class _MyGamesState extends State<MyGames>
     super.didChangeAppLifecycleState(state);
 
     if (state == AppLifecycleState.resumed && _beingInstalledGame != null) {
-      if (await DeviceApps.isAppInstalled(FirebaseApi.createPackageName(_beingInstalledGame))) {
+      if (await DeviceApps.isAppInstalled(FlutterfireApi.createPackageName(_beingInstalledGame!))) {
         setState(() {
-        _beingInstalledGame.isInstalled = true;
+        _beingInstalledGame!.isInstalled = true;
       });
       }
       else{
         setState(() {
-          _beingInstalledGame.isInstalled = false;
+          _beingInstalledGame!.isInstalled = false;
         });
       }
     }

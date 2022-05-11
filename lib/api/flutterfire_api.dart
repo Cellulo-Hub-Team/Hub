@@ -216,7 +216,7 @@ class FlutterfireApi {
         : ('com.${game.company}.$name'.toLowerCase());
   }*/
   static String createPackageName(Game game) {
-        return ('com.${game.company}.${game.name}'.toLowerCase().replaceAll(' ', ''));
+        return ('com.${game.companyName}.${game.name}'.toLowerCase().replaceAll(' ', ''));
   }
 
 

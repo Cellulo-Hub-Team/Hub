@@ -28,7 +28,7 @@ class _SignUpState extends State<SignUp> {
       await FiredartApi.signUp(emailController.text, passwordController.text);
     }
     else{
-      await FlutterfireApi.signUp(emailController.text, passwordController.text);
+      await FlutterfireApi.signUp(emailController.text, passwordController.text, context);
     }
     FocusScope.of(context).unfocus();
     Common.showSnackBar(context, "New user correctly added !");
