@@ -14,63 +14,64 @@ import '../game/game.dart';
 
 //TODO: Trouver un moyen clean de faire une ref static/ Exceptions/ Link à firebase storage quand on aura les jeux
 
-
 class FlutterfireApi {
-  static firebase_storage.FirebaseStorage storage = firebase_storage.FirebaseStorage.instance;
-  static firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance.ref().child('/Games/');
+  static firebase_storage.FirebaseStorage storage =
+      firebase_storage.FirebaseStorage.instance;
+  static firebase_storage.Reference ref =
+      firebase_storage.FirebaseStorage.instance.ref().child('/Games/');
   static Future<Directory> appDocDir = getApplicationDocumentsDirectory();
   static FirebaseAuth auth = FirebaseAuth.instance;
   static FirebaseFirestore firestore = FirebaseFirestore.instance;
-  static CollectionReference games = FirebaseFirestore.instance.collection('games');
-  static CollectionReference userGames = FirebaseFirestore.instance.collection('owns');
+  static CollectionReference games =
+      FirebaseFirestore.instance.collection('games');
+  static CollectionReference userGames =
+      FirebaseFirestore.instance.collection('owns');
 
   static Future<void> buildAllGamesList() async {
     QuerySnapshot querySnapshot = await games.get();
-    final allData = querySnapshot.docs.map((doc) => doc).toList();
+    final allData = querySnapshot.docs.toList();
     for (var game in allData) {
-      String? androidUrl = game["Android Build"] == ""
-          ? null
-          : game["Android Build"];
-      String? linuxUrl = game["Linux Build"] == ""
-          ? null
-          : game["Linux Build"];
-      String? windowsUrl = game["Windows Build"] == ""
-          ? null
-          : game["Windows Build"];
-      String? webUrl = game["Web Link"] == ""
-          ? null
-          : game["Web Link"];
+      String? androidUrl = game["Android Build"] == "" ? null : game["Android Build"];
+      String? linuxUrl = game["Linux Build"] == "" ? null : game["Linux Build"];
+      String? windowsUrl = game["Windows Build"] == "" ? null : game["Windows Build"];
+      String? webUrl = game["Web Link"] == "" ? null : game["Web Link"];
 
       Game _toAdd = Game(
-          game.id,
-          game["Background Image"],
-          game["Game Description"],
-          androidUrl,
-          linuxUrl,
-          windowsUrl,
-          webUrl,
-          game["Physical Percentage"],
-          game["Cognitive Percentage"],
-          game["Social Percentage"],
-          game["Company Name"]);
+        game.id,
+        game["Game Name Unity"],
+        game["Company Name"],
+        game["Company Name Unity"],
+        game["Game Description"],
+        game["Game Instructions"],
+        game["Background Image"],
+        androidUrl,
+        linuxUrl,
+        windowsUrl,
+        webUrl,
+        game["Physical Percentage"],
+        game["Cognitive Percentage"],
+        game["Social Percentage"],
+        game["Cellulo Count"],
+      );
       _toAdd.isInstalled = await gameIsInstalled(_toAdd);
       Common.allGamesList.add(_toAdd);
+      print("Flutterfire: " + _toAdd.name);
     }
   }
 
   static Future<void> buildUserGamesList() async {
     QuerySnapshot querySnapshot = await userGames.get();
-    final allData = querySnapshot.docs.map((doc) => doc).toList();
+    final allData = querySnapshot.docs.toList();
     User? user = auth.currentUser;
     //Reset current user games list
-    for (var localGame in Common.allGamesList){
+    for (var localGame in Common.allGamesList) {
       localGame.isInLibrary = false;
     }
     //Create new user games list
-    for (var game in allData){
-      if (game.get("User Uid") == user?.uid){
-        for (var localGame in Common.allGamesList){
-          if (localGame.name == game.get("Game Uid")){
+    for (var game in allData) {
+      if (game.get("User Uid") == user?.uid) {
+        for (var localGame in Common.allGamesList) {
+          if (localGame.name == game.get("Game Uid")) {
             localGame.isInLibrary = true;
           }
         }
@@ -120,7 +121,9 @@ class FlutterfireApi {
     } else {
       downloadToFile = File('');
     }
-    firebase_storage.DownloadTask task = ref.child(game.androidBuild ?? "Wrong path").writeToFile(downloadToFile);
+    firebase_storage.DownloadTask task = ref
+        .child(game.androidBuild ?? "Wrong path")
+        .writeToFile(downloadToFile);
     task.snapshotEvents.listen((firebase_storage.TaskSnapshot snapshot) {
       print('Task state: ${snapshot.state}');
       print(
@@ -192,8 +195,10 @@ class FlutterfireApi {
   ///Generate the name of the package according to the game company and an optional name
   static String createPackageName(Game game, [String? name]) {
     return name == null
-        ? ('com.${game.company}.${game.name}'.toLowerCase().replaceAll(' ', ''))
-        : ('com.${game.company}.$name'.toLowerCase());
+        ? ('com.${game.companyName}.${game.name}'
+            .toLowerCase()
+            .replaceAll(' ', ''))
+        : ('com.${game.companyName}.$name'.toLowerCase());
   }
 
   ///Upload the a Uint8List to the Firebase storage given the name of the file
@@ -231,22 +236,22 @@ class FlutterfireApi {
     return games
         .doc(gameName)
         .set({
-      'Game Name Unity': gameNameUnity,
-      'Company Name': companyName,
-      'Company Name Unity': companyNameUnity,
-      'Game Description': gameDescription,
-      'Game Instructions': gameInstructions,
-      'Web Build': webBuild,
-      'Web Link': webLink,
-      'Linux Build': linuxBuild,
-      'Windows Build': windowsBuild,
-      'Android Build': androidBuild,
-      'Background Image': backgroundImage,
-      'Physical Percentage': physicalPercentage,
-      'Cognitive Percentage': cognitivePercentage,
-      'Social Percentage': socialPercentage,
-      'Cellulo Count': celluloCount
-    })
+          'Game Name Unity': gameNameUnity,
+          'Company Name': companyName,
+          'Company Name Unity': companyNameUnity,
+          'Game Description': gameDescription,
+          'Game Instructions': gameInstructions,
+          'Web Build': webBuild,
+          'Web Link': webLink,
+          'Linux Build': linuxBuild,
+          'Windows Build': windowsBuild,
+          'Android Build': androidBuild,
+          'Background Image': backgroundImage,
+          'Physical Percentage': physicalPercentage,
+          'Cognitive Percentage': cognitivePercentage,
+          'Social Percentage': socialPercentage,
+          'Cellulo Count': celluloCount
+        })
         .then((value) => print("Game added"))
         .catchError((error) => print("Failed to add game: $error"));
   }

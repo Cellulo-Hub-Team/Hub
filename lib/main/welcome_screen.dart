@@ -16,27 +16,31 @@ class WelcomeScreen extends StatefulWidget {
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
 
+  //Build local games lists and get to login screen or main menu depending if user is logged in or not
   Future<Widget> _getStartingScreen() async {
-    //TODO restore Facebook
-    if (!(Common.isDesktop ? FiredartApi.isLoggedIn() : FlutterfireApi.isLoggedIn()) /* && !(await FacebookApi.isLoggedIn())*/) {
-      Common.isDesktop ? FiredartApi.buildAllGamesList() : FlutterfireApi.buildAllGamesList();
+    if (Common.isDesktop){
+      await FiredartApi.buildAllGamesList();
+      if (FiredartApi.isLoggedIn()){
+        FiredartApi.buildUserGamesList();
+        return const MainMenu();
+      }
       return const ProfileHome();
-    } else {
-      _buildLists();
-      return const MainMenu();
     }
-  }
-
-  _buildLists() async {
-    await Common.isDesktop ? FiredartApi.buildAllGamesList() : FlutterfireApi.buildAllGamesList();
-    Common.isDesktop ? FiredartApi.buildUserGamesList() : FlutterfireApi.buildUserGamesList();
+    else{
+      await FlutterfireApi.buildAllGamesList();
+      if (FlutterfireApi.isLoggedIn() || await FacebookApi.isLoggedIn()){
+        FlutterfireApi.buildUserGamesList();
+        return const MainMenu();
+      }
+      return const ProfileHome();
+    }
   }
 
   @override
   void initState() {
     super.initState();
     Future.delayed(
-        const Duration(seconds: 0),
+        const Duration(seconds: 1),//TODO use 3 for final release
             () => {
                 Navigator.push(
           context,

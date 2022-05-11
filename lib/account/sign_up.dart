@@ -1,3 +1,4 @@
+import 'package:cellulo_hub/api/firedart_api.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 
@@ -20,6 +21,21 @@ class _SignUpState extends State<SignUp> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmationController = TextEditingController();
+
+  //Register new user to the database and clear input fields
+  Future<void> addUserAndClear() async{
+    if (Common.isDesktop){
+      await FiredartApi.signUp(emailController.text, passwordController.text);
+    }
+    else{
+      await FlutterfireApi.signUp(emailController.text, passwordController.text);
+    }
+    FocusScope.of(context).unfocus();
+    Common.showSnackBar(context, "New user correctly added !");
+    emailController.clear();
+    passwordController.clear();
+    confirmationController.clear();
+  }
 
   @override
   void dispose() {
@@ -47,7 +63,7 @@ class _SignUpState extends State<SignUp> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Spacer(flex: 5),
+            const Spacer(flex: 5),
             TextFormField(
               keyboardType: TextInputType.emailAddress,
               decoration: const InputDecoration(
@@ -104,7 +120,7 @@ class _SignUpState extends State<SignUp> {
                 return null;
               },
             ),
-            Spacer(),
+            const Spacer(),
             CustomElevatedButton(
                   label: "Submit",
                   onPressed: () {
@@ -113,20 +129,10 @@ class _SignUpState extends State<SignUp> {
                       addUserAndClear();
                     }
                   }),
-            Spacer(flex: 5),
+            const Spacer(flex: 5),
           ],
         ),
       ),
     );
-  }
-
-  Future<void> addUserAndClear() async{
-    await FlutterfireApi.signUp(
-        emailController.text, passwordController.text);
-    FocusScope.of(context).unfocus();
-    Common.showSnackBar(context, "New user correctly added !");
-    emailController.clear();
-    passwordController.clear();
-    confirmationController.clear();
   }
 }

@@ -13,6 +13,8 @@ import 'firebase_options.dart';
 import 'custom_widgets/custom_colors.dart';
 import 'custom_widgets/style.dart';
 
+
+//TODO add Unity plugin download link
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(

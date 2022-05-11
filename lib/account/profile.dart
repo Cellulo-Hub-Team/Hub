@@ -20,36 +20,42 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
 
+  //Disconnect user from the database
   _signOut() async {
     if (Common.isDesktop){
-      if (FiredartApi.auth.isSignedIn) {
+      if (FiredartApi.isLoggedIn()) {
         FiredartApi.auth.signOut();
-      } else if (FacebookApi.loggedWithFacebook) {
-        await FacebookApi.logout();
-        FacebookApi.loggedWithFacebook = false;
       }
     }
     else{
-      if (FlutterfireApi.auth.currentUser != null) {
+      if (FlutterfireApi.isLoggedIn()) {
         await FlutterfireApi.auth.signOut();
       } else if (FacebookApi.loggedWithFacebook) {
         await FacebookApi.logout();
         FacebookApi.loggedWithFacebook = false;
       }
     }
-
     Common.goToTarget(context, const ProfileHome(), false, Activity.Profile);
   }
 
+  //Get user name or email depending on availability on the current platform
   Future<String> _getCurrentAuth() async {
-    if (FlutterfireApi.isLoggedIn()) {
-      return (FlutterfireApi.getUser()!.email)!;
-    } else if (FacebookApi.loggedWithFacebook) {
-      Map<String, dynamic> userData =
-          await FacebookApi.auth.getUserData(fields: "name");
-      return userData["name"];
+    if (Common.isDesktop){
+      if (FiredartApi.isLoggedIn()) {
+        var user = await FiredartApi.auth.getUser();
+        return user.email!;
+      }
+      return 'No User';
     }
-    return 'No User';
+    else {
+      if (FlutterfireApi.isLoggedIn()) {
+        return (FlutterfireApi.getUser()!.email)!;
+      } else if (FacebookApi.loggedWithFacebook) {
+        Map<String, dynamic> userData = await FacebookApi.auth.getUserData(fields: "name");
+        return userData["name"];
+      }
+      return 'No User';
+    }
   }
 
   @override
@@ -65,7 +71,7 @@ class _ProfileState extends State<Profile> {
         leadingIcon: Icons.home,
         leadingName: "Menu",
         leadingScreen: Activity.Menu,
-        leadingTarget: MainMenu(),
+        leadingTarget: const MainMenu(),
         hasFloating: false,
         body: Center(child: Column(
           children: [

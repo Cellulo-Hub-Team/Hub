@@ -37,20 +37,8 @@ class Achievement {
 }
 
 void main() async {
-  /*var path =
-      "C:/Users/antoi/AppData/LocalLow/DefaultCompany/Achievements/achievements.json";
-  File(path)
-      .openRead()
-      .transform(utf8.decoder)
-      .transform(new LineSplitter())
-      .forEach((l) {
-    Map<String, dynamic> achievementMap = jsonDecode(l);
-    var achievement = Achievement.fromJson(achievementMap);
-
-    print(achievement.label);
-  });*/
-
   WidgetsFlutterBinding.ensureInitialized();
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );

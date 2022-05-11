@@ -19,31 +19,29 @@ class ProfileHome extends StatefulWidget {
 
 class _ProfileHomeState extends State<ProfileHome> {
 
-  //TODO Ne pas afficher si Linux
   ///Launch the facebook authentication page
-  _onPressedFacebook() async{
-    if(await FacebookApi.isLoggedIn()){
+  _onPressedFacebook() async {
+    if (await FacebookApi.isLoggedIn()) {
       FacebookApi.loggedWithFacebook = true;
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => const MainMenu()));
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => const MainMenu()));
       AccessToken? token = await FacebookApi.auth.accessToken;
       print(token!.userId);
-      final snackBar = Common.showSnackBar(context, "You're already logged in with facebook");
+      final snackBar = Common.showSnackBar(
+          context, "You're already logged in with facebook");
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
       Future.delayed(const Duration(seconds: 6),
-              () => ScaffoldMessenger.of(context).hideCurrentSnackBar());
-    }
-    else {
+          () => ScaffoldMessenger.of(context).hideCurrentSnackBar());
+    } else {
       final LoginResult result = await FacebookAuth.instance
-          .login(); // by default we request the email and the public profile
+          .login(); // By default we request the email and the public profile
       if (result.status == LoginStatus.success) {
-        // you are logged
+        // You are logged in
         final AccessToken accessToken = result.accessToken!;
         FacebookApi.loggedWithFacebook = true;
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const MainMenu()));
-      } else {
-      }
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => const MainMenu()));
+      } else {}
     }
   }
 
@@ -63,22 +61,26 @@ class _ProfileHomeState extends State<ProfileHome> {
         label: "Login",
         icon: Ionicons.md_key,
         color: CustomColors.currentColor,
-        onPressed: () => Common.goToTarget(context, const SignIn(), true, Common.currentScreen),
+        onPressed: () => Common.goToTarget(
+            context, const SignIn(), true, Common.currentScreen),
       ),
       const Spacer(),
       CustomMenuButton(
         label: "Sign Up",
         icon: Entypo.shop,
         color: CustomColors.currentColor,
-        onPressed: () => Common.goToTarget(context, const SignUp(), true, Common.currentScreen),
+        onPressed: () => Common.goToTarget(
+            context, const SignUp(), true, Common.currentScreen),
       ),
-      const Spacer(),
-      CustomMenuButton(
-        label: "Login with Facebook",
-        icon: Entypo.facebook,
-        color: CustomColors.currentColor,
-        onPressed: () => _onPressedFacebook(),
-      ),
+      Common.isDesktop ? Container() : const Spacer(),
+      Common.isDesktop
+          ? Container()
+          : CustomMenuButton(
+              label: "Login with Facebook",
+              icon: Entypo.facebook,
+              color: CustomColors.currentColor,
+              onPressed: () => _onPressedFacebook(),
+            ),
       const Spacer(flex: 2),
     ])));
   }

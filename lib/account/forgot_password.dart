@@ -8,14 +8,14 @@ import '../custom_widgets/custom_scaffold.dart';
 import '../main/common.dart';
 import 'profile_home.dart';
 
-class Forgot extends StatefulWidget {
-  const Forgot({Key? key}) : super(key: key);
+class ForgotPassword extends StatefulWidget {
+  const ForgotPassword({Key? key}) : super(key: key);
 
   @override
-  State<Forgot> createState() => _ForgotState();
+  State<ForgotPassword> createState() => _ForgotPasswordState();
 }
 
-class _ForgotState extends State<Forgot> {
+class _ForgotPasswordState extends State<ForgotPassword> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
@@ -39,7 +39,7 @@ class _ForgotState extends State<Forgot> {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Spacer(flex: 5),
+          const Spacer(flex: 5),
           TextField(
             controller: _emailController,
             keyboardType: TextInputType.emailAddress,
@@ -48,14 +48,14 @@ class _ForgotState extends State<Forgot> {
               prefixIcon: Icon(Icons.mail, color: Colors.black),
             ),
           ),
-          Spacer(),
+          const Spacer(),
           CustomElevatedButton(
               label: "Reset Password",
               onPressed: () {
                 FlutterfireApi.auth
                     .sendPasswordResetEmail(email: _emailController.text);
               }),
-          Spacer(flex: 5),
+          const Spacer(flex: 5),
         ],
       ),
     );

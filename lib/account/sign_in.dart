@@ -27,27 +27,27 @@ class _SignInState extends State<SignIn> {
   _onPressedForgot() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const Forgot()),
+      MaterialPageRoute(builder: (context) => const ForgotPassword()),
     );
   }
 
-  _onPressedFlutterfire () async {
-    // Validate returns true if the form is valid, or false otherwise.
-    await FlutterfireApi.signIn(
-        _emailController.text, _passwordController.text);
-    if (FlutterfireApi.isLoggedIn()) {
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => const MainMenu()));
+  //Sign in using email and password based on what platform the user is using
+  _onPressed() async {
+    if (Common.isDesktop){
+      await FiredartApi.signIn(_emailController.text, _passwordController.text);
+      if (FiredartApi.isLoggedIn()) {
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const MainMenu()));
+      }
     }
-  }
+    else{
+      await FlutterfireApi.signIn(_emailController.text, _passwordController.text);
+      if (FlutterfireApi.isLoggedIn()) {
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const MainMenu()));
+      }
+    }
 
-  _onPressedFiredart () async {
-    // Validate returns true if the form is valid, or false otherwise.
-    await FiredartApi.signIn(_emailController.text, _passwordController.text);
-    if (FiredartApi.isLoggedIn()) {
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => const MainMenu()));
-    }
   }
 
   @override
@@ -103,7 +103,7 @@ class _SignInState extends State<SignIn> {
           Spacer(),
           CustomElevatedButton(
               label: "Log In",
-              onPressed: Common.isDesktop ? _onPressedFiredart : _onPressedFlutterfire),
+              onPressed: _onPressed),
           Spacer(flex: 5)
         ],
       )),

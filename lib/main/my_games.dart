@@ -61,7 +61,6 @@ class _MyGamesState extends State<MyGames> with TickerProviderStateMixin {
     Common.percentageController = AnimationController(duration: const Duration(seconds: 1), vsync: this);
     Common.percentageController.reset();
     Common.percentageController.forward();
-    FiredartApi.buildAllGamesList();
     super.initState();
   }
 

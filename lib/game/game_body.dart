@@ -39,7 +39,7 @@ class _GameBodyState extends State<GameBody> {
         children: [
           Padding(
               padding: const EdgeInsets.all(15), //apply padding to all four sides
-              child: Text("A game by: " + widget.game.company, style: Style.descriptionStyle())),
+              child: Text("A game by: " + widget.game.companyName, style: Style.descriptionStyle())),
           Padding(
               padding: const EdgeInsets.all(15), //apply padding to all four sides
               child: Text(widget.game.description, style: Style.descriptionStyle())),

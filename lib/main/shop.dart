@@ -103,7 +103,9 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
     setState(() {
       if (_trendingDescriptionDisplayed && _index == _trendingDecriptionIndex) {
         _trendingController.reverse();
-        _trendingDescriptionDisplayed = !_trendingDescriptionDisplayed;
+        Future.delayed(
+            const Duration(milliseconds: 300),
+                () => _trendingDescriptionDisplayed = !_trendingDescriptionDisplayed);
       } else if (!_trendingDescriptionDisplayed) {
         Common.percentageController.reset();
         Common.percentageController.forward();
@@ -159,15 +161,16 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
                                 backgroundColor: Common.darkTheme ? CustomColors.blackColor.shade900 : Colors.white,
                                 automaticallyImplyLeading: false,
                                 leading: null,
-                                collapsedHeight: 410,
+                                collapsedHeight: 420,
                                 expandedHeight: (_trendingController
                                             .drive(
                                                 CurveTween(curve: Curves.ease))
                                             .value *
                                         (myChildSize.height + 30)) +
-                                    410,
+                                    420,
                                 flexibleSpace: FlexibleSpaceBar(
                                     background: Column(children: [
+                                      const SizedBox(height: 10),
                                       Text("Trending", style: Style.titleStyle()),
                                   _trendingWidget(),
                                   _trendingDescriptionDisplayed

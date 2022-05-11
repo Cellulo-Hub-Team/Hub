@@ -10,7 +10,6 @@ import '../game/game.dart';
 
 //TODO: Trouver un moyen clean de faire une ref static/ Exceptions/ Link à firebase storage quand on aura les jeux
 
-
 class FiredartApi {
   static Future<Directory> appDocDir = getApplicationDocumentsDirectory();
   static FirebaseAuth auth = FirebaseAuth.instance;
@@ -22,37 +21,33 @@ class FiredartApi {
     var allGamesFuture = await games.get();
     final allGames = allGamesFuture.toList();
     for (var game in allGames) {
-      String? androidUrl = game["Android Build"] == ""
-          ? null
-          : game["Android Build"];
-      String? linuxUrl = game["Linux Build"] == ""
-          ? null
-          : game["Linux Build"];
-      String? windowsUrl = game["Windows Build"] == ""
-          ? null
-          : game["Windows Build"];
-      String? webUrl = game["Web Link"] == ""
-          ? null
-          : game["Web Link"];
+      String? androidUrl = game["Android Build"] == "" ? null : game["Android Build"];
+      String? linuxUrl = game["Linux Build"] == "" ? null : game["Linux Build"];
+      String? windowsUrl = game["Windows Build"] == "" ? null : game["Windows Build"];
+      String? webUrl = game["Web Link"] == "" ? null : game["Web Link"];
 
       Game _toAdd = Game(
-          game.id,
-          game["Background Image"],
-          game["Game Description"],
-          androidUrl,
-          linuxUrl,
-          windowsUrl,
-          webUrl,
-          game["Physical Percentage"],
-          game["Cognitive Percentage"],
-          game["Social Percentage"],
-          game["Company Name"]);
+        game.id,
+        game["Game Name Unity"],
+        game["Company Name"],
+        game["Company Name Unity"],
+        game["Game Description"],
+        game["Game Instructions"],
+        game["Background Image"],
+        androidUrl,
+        linuxUrl,
+        windowsUrl,
+        webUrl,
+        game["Physical Percentage"],
+        game["Cognitive Percentage"],
+        game["Social Percentage"],
+        game["Cellulo Count"],
+      );
       _toAdd.isInstalled = await gameIsInstalled(_toAdd);
       Common.allGamesList.add(_toAdd);
-      print(_toAdd.backgroundImage);
+      print("Firedart: " + _toAdd.name);
     }
   }
-
 
   //Creates local list of all games available in the shop
   static Future<void> buildUserGamesList() async {
@@ -60,14 +55,14 @@ class FiredartApi {
     final allGames = allGamesFuture.toList();
     var user = getUser();
     //Reset current user games list
-    for (var localGame in Common.allGamesList){
+    for (var localGame in Common.allGamesList) {
       localGame.isInLibrary = false;
     }
     //Create new user games list
-    for (var game in allGames){
-      if (game["User Uid"] == user){
-        for (var localGame in Common.allGamesList){
-          if (localGame.name == game["Game Uid"]){
+    for (var game in allGames) {
+      if (game["User Uid"] == user) {
+        for (var localGame in Common.allGamesList) {
+          if (localGame.name == game["Game Uid"]) {
             localGame.isInLibrary = true;
           }
         }
@@ -76,12 +71,13 @@ class FiredartApi {
   }
 
   static Future<bool> gameIsInstalled(Game game) {
-    return Future<bool>.value(true);//TODO
+    return Future<bool>.value(true); //TODO
   }
 
   static Future<void> addToUserLibrary(Game game) async {
     var user = getUser();
-    return owns.document('test')
+    return owns
+        .document('test')
         .set({'Game Uid': game.name, 'User Uid': user?.uid})
         .then((value) => print("Game added to user library"))
         .catchError(
@@ -137,7 +133,7 @@ class FiredartApi {
   */
 
   ///Basic Email+password signUp (found on FirebaseAuth doc)
-  static Future<void>       signUp(String email, String password) async {
+  static Future<void> signUp(String email, String password) async {
     try {
       await FirebaseAuth.instance.signUp(email, password);
     } on Exception catch (e) {
@@ -149,6 +145,7 @@ class FiredartApi {
   static Future<void> signIn(String email, String password) async {
     try {
       await FirebaseAuth.instance.signIn(email, password);
+      //Now that user is logged in, we can build the list of games he owns
       buildUserGamesList();
     } on Exception catch (e) {
       //TODO exceptions
@@ -159,20 +156,9 @@ class FiredartApi {
   ///Launches game (game)
   static void launchApp(Game game) async {
     if (game.isInstalled) {
-      if (Common.isWindows){
+      if (Common.isWindows) {
         ShellScripts.launchGameWindows(game);
-      }
-      else if (Common.isAndroid){
-        Directory appDocDir = await getApplicationDocumentsDirectory();
-        String _packageName = createPackageName(game);
-        bool _isInstalled = await DeviceApps.isAppInstalled(_packageName);
-
-        if (_isInstalled) {
-          DeviceApps.openApp(_packageName);
-        } else {
-          OpenFile.open('${appDocDir.path}/${game.name.toLowerCase()}.apk');
-        }
-      }
+      } //TODO Linux and Mac
 
     }
   }
@@ -180,8 +166,10 @@ class FiredartApi {
   ///Generate the name of the package according to the game company and an optional name
   static String createPackageName(Game game, [String? name]) {
     return name == null
-        ? ('com.${game.company}.${game.name}'.toLowerCase().replaceAll(' ', ''))
-        : ('com.${game.company}.$name'.toLowerCase());
+        ? ('com.${game.companyName}.${game.name}'
+            .toLowerCase()
+            .replaceAll(' ', ''))
+        : ('com.${game.companyName}.$name'.toLowerCase());
   }
 
   ///Check if a user is logged in
