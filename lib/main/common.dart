@@ -1,6 +1,7 @@
 import 'package:cellulo_hub/custom_widgets/style.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:open_file/open_file.dart';
 
 import '../custom_widgets/custom_colors.dart';
 import '../game/game.dart';
@@ -34,14 +35,14 @@ class Common{
   static bool get isWeb => kIsWeb;
   static bool get isDesktop => isLinux || isWindows;
 
-  //Closes all expanded panels
+  ///Closes all expanded panels
   static resetOpenPanels() {
     for (var localGame in allGamesList) {
       localGame.isExpanded = false;
     }
   }
 
-  //Returns true if build exists for the current platform (web only returns false)
+  ///Returns true if build exists for the current platform (web only returns false)
   static bool canBeInstalledOnThisPlatform(Game _game) {
     if (isAndroid && _game.androidBuild != null) return true;
     if (isLinux && _game.linuxBuild != null) return true;
@@ -49,7 +50,7 @@ class Common{
     return false;
   }
 
-  //Display pop-up at the bottom of the screen
+  ///Display pop-up at the bottom of the screen
   static showSnackBar(BuildContext _context, String _text) {
     final snackBar = SnackBar(
       backgroundColor: CustomColors.currentColor,
@@ -61,7 +62,7 @@ class Common{
             () => ScaffoldMessenger.of(_context).hideCurrentSnackBar());
   }
 
-  //Navigate to new screen
+  ///Navigate to new screen
   static goToTarget(BuildContext _context, Widget _target, bool _resetPanels, Activity _screen) {
     Common.currentScreen = _screen;
     if (_resetPanels) {
@@ -71,6 +72,13 @@ class Common{
       _context,
       MaterialPageRoute(builder: (context) => _target),
     );
+  }
+
+  ///Open the file at the given path only on Android
+  static openFile(String path){
+    if(isAndroid){
+      OpenFile.open(path);
+    }
   }
 
 }

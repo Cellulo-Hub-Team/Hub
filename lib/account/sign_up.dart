@@ -45,9 +45,6 @@ class _SignUpState extends State<SignUp> {
     super.dispose();
   }
 
-  // Clean up the controller when the widget is removed from the
-  // widget tree.
-
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(

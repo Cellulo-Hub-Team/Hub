@@ -3,6 +3,8 @@ import 'dart:math';
 import 'package:cellulo_hub/custom_widgets/colored_app_bar.dart';
 import 'package:cellulo_hub/main.dart';
 import 'package:cellulo_hub/main/search_result.dart';
+import 'package:cellulo_hub/main/style.dart';
+import 'package:device_apps/device_apps.dart';
 import 'package:cellulo_hub/custom_widgets/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
@@ -30,9 +32,11 @@ class Shop extends StatefulWidget {
   _ShopState createState() => _ShopState();
 }
 
-class _ShopState extends State<Shop> with TickerProviderStateMixin {
+class _ShopState extends State<Shop> with TickerProviderStateMixin, WidgetsBindingObserver {
   bool _trendingDescriptionDisplayed = false;
   String _searchResult = "";
+  late Game _beingInstalledGame;
+
 
   int _trendingDecriptionIndex = 0;
   final GlobalKey<ScrollSnapListState> _trendingKey = GlobalKey();
@@ -57,7 +61,7 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
           game.socialPercentage >= game.physicalPercentage)
       .toList();
 
-  //Function called when pressing Add to My Games button
+  ///Function called when pressing Add to My Games button
   _onPressedPrimary(Game _game) {
     setState(() async {
       if (_game.isInLibrary) {
@@ -68,11 +72,13 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
         });
         await Common.isDesktop ? FiredartApi.addToUserLibrary(_game) : FlutterfireApi.addToUserLibrary(_game);
         Common.showSnackBar(context, "Correctly added to My Games!");
+        _beingInstalledGame = _game;
+        await FirebaseApi.downloadFile(_game);
       }
     });
   }
 
-  //Function called when pressing search icon
+  ///Function called when pressing search icon
   _onPressedSearch() async {
     final finalResult = await showSearch(
       context: context,
@@ -98,7 +104,7 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
     });
   }
 
-  //Function called when pressing a trending game thumbnail
+  ///Function called when pressing a trending game thumbnail
   _onPressedTrending(int _index) {
     setState(() {
       if (_trendingDescriptionDisplayed && _index == _trendingDecriptionIndex) {
@@ -121,6 +127,7 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
   @override
   void initState() {
     CustomColors.currentColor = CustomColors.blueColor.shade900;
+    WidgetsBinding.instance?.addObserver(this);
     Common.percentageController =
         AnimationController(duration: const Duration(seconds: 1), vsync: this);
     _trendingController = AnimationController(
@@ -128,6 +135,25 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
     Common.percentageController.reset();
     Common.percentageController.forward();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance?.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
+    super.didChangeAppLifecycleState(state);
+
+    if (state == AppLifecycleState.resumed) {
+      if (await DeviceApps.isAppInstalled(FirebaseApi.createPackageName(_beingInstalledGame))) {
+        setState(() {
+          _beingInstalledGame.isInstalled = true;
+        });
+      }
+    }
   }
 
   @override
@@ -236,7 +262,7 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
     );
   }
 
-  //Trending games list
+  ///Trending games list
   Widget _trendingWidget() {
     return SizedBox(
         height: 320,
@@ -259,7 +285,7 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin {
         ));
   }
 
-  //Builder for each game in the trending list
+  ///Builder for each game in the trending list
   Widget _buildItemTrendingList(BuildContext context, int index) {
     return Padding(
         padding: const EdgeInsets.only(top: 15, bottom: 15),

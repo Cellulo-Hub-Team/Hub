@@ -2,7 +2,6 @@ import 'package:cellulo_hub/api/firedart_api.dart';
 import 'package:cellulo_hub/custom_widgets/custom_elevated_button.dart';
 import 'package:cellulo_hub/custom_widgets/custom_scaffold.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
 import '../api/facebook_api.dart';
 import '../api/flutterfire_api.dart';
@@ -48,13 +47,13 @@ class _ProfileState extends State<Profile> {
       return 'No User';
     }
     else {
-      if (FlutterfireApi.isLoggedIn()) {
-        return (FlutterfireApi.getUser()!.email)!;
+      if (FirebaseApi.isLoggedIn()) {
+        return (FirebaseApi.getUser()!.email)!;
       } else if (FacebookApi.loggedWithFacebook) {
-        Map<String, dynamic> userData = await FacebookApi.auth.getUserData(fields: "name");
-        return userData["name"];
-      }
-      return 'No User';
+        Map<String, dynamic> userData =
+            await FacebookApi.auth.getUserData(fields: 'name,friends');
+        print(userData['friends']);
+        return userData['name'];
     }
   }
 

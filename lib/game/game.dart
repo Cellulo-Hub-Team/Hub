@@ -37,4 +37,9 @@ class Game {
       this.socialPercentage,
       this.celluloCount,
       );
+
+  @override
+  String toString() {
+    return "Game name: $name";
+  }
 }
