@@ -227,7 +227,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                 key: _formKey,
                 child: Padding(
                   padding: const EdgeInsets.all(10),
-                  child: Column(
+                  child: Column(//TODO max width of 1000
                     children: <Widget>[
                       _requiredField('Game name', 'Enter the game name', gameNameController),
                       _requiredField('Game name in Unity', 'Enter the game name as used in Unity', gameNameUnityController),

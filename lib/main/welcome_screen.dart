@@ -21,7 +21,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     if (Common.isDesktop){
       if (FiredartApi.isLoggedIn()){
         await FiredartApi.buildAllGamesList();
-        FiredartApi.buildUserGamesList();
+        await FiredartApi.buildUserGamesList();
         return const MainMenu();
       }
       return const ProfileHome();
@@ -29,7 +29,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     else{
       await FlutterfireApi.buildAllGamesList();
       if (FlutterfireApi.isLoggedIn() || await FacebookApi.isLoggedIn()){
-        FlutterfireApi.buildUserGamesList();
+        await FlutterfireApi.buildUserGamesList();
         return const MainMenu();
       }
       return const ProfileHome();

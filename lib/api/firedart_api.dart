@@ -114,15 +114,14 @@ class FiredartApi {
   }
 
   ///Basic Email+password signIn (found on FirebaseAuth doc)
-  static Future<void> signIn(String email, String password) async {
+  static Future<void> signIn(String email, String password, BuildContext context) async {
     try {
       await FirebaseAuth.instance.signIn(email, password);
       //Now that user is logged in, we can build the list of games he owns
       await buildAllGamesList();
-      buildUserGamesList();
+      await buildUserGamesList();
     } on Exception catch (e) {
-      //TODO exceptions
-      print(e.toString());
+      Common.showSnackBar(context, 'Wrong username or password.');
     }
   }
 

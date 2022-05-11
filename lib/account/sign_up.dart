@@ -56,7 +56,7 @@ class _SignUpState extends State<SignUp> {
     hasFloating: false,
     body: Form(
         key: _formKey,
-        child: Column(
+        child: Column(//TODO max width of 1000
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[

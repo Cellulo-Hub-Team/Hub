@@ -34,7 +34,7 @@ class _SignInState extends State<SignIn> {
   //Sign in using email and password based on what platform the user is using
   _onPressed() async {
     if (Common.isDesktop){
-      await FiredartApi.signIn(_emailController.text, _passwordController.text);
+      await FiredartApi.signIn(_emailController.text, _passwordController.text, context);
       if (FiredartApi.isLoggedIn()) {
         Navigator.push(context,
             MaterialPageRoute(builder: (context) => const MainMenu()));
@@ -72,11 +72,11 @@ class _SignInState extends State<SignIn> {
       leadingScreen: Activity.Profile,
       leadingTarget: const ProfileHome(),
       hasFloating: false,
-      body: Center(child: Column(
+      body: Center(child: Column( //TODO max width of 1000
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Spacer(flex: 5),
+          const Spacer(flex: 5),
           TextField(
             controller: _emailController,
             keyboardType: TextInputType.emailAddress,
@@ -100,11 +100,11 @@ class _SignInState extends State<SignIn> {
               style: TextStyle(color: Colors.blue),
             ),
           ),
-          Spacer(),
+          const Spacer(),
           CustomElevatedButton(
               label: "Log In",
               onPressed: _onPressed),
-          Spacer(flex: 5)
+          const Spacer(flex: 5)
         ],
       )),
     );

@@ -41,7 +41,7 @@ class _ProfileHomeState extends State<ProfileHome> {
         FacebookApi.loggedWithFacebook = true;
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => const MainMenu()));
-      } else {}
+      } else { }//TODO
     }
   }
 

@@ -195,7 +195,7 @@ class FlutterfireApi {
     try {
       UserCredential userCredential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
-      buildUserGamesList();
+      await buildUserGamesList();
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         Common.showSnackBar(context, 'No user found for that email.');

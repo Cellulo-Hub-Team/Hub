@@ -1,3 +1,4 @@
+import 'package:cellulo_hub/api/firedart_api.dart';
 import 'package:cellulo_hub/custom_widgets/custom_elevated_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
@@ -35,7 +36,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
       leadingScreen: Activity.Profile,
       leadingTarget: const ProfileHome(),
       hasFloating: false,
-      body: Column(
+      body: Column(//TODO max width of 1000
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -52,8 +53,9 @@ class _ForgotPasswordState extends State<ForgotPassword> {
           CustomElevatedButton(
               label: "Reset Password",
               onPressed: () {
-                FlutterfireApi.auth
-                    .sendPasswordResetEmail(email: _emailController.text);
+                Common.isDesktop
+                    ? FiredartApi.auth.resetPassword(_emailController.text)
+                    : FlutterfireApi.auth.sendPasswordResetEmail(email: _emailController.text);
               }),
           const Spacer(flex: 5),
         ],
