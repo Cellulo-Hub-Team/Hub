@@ -48,7 +48,7 @@ class _ProfileState extends State<Profile> {
     }
     else {
       if (FlutterfireApi.isLoggedIn()) {
-        return (FlutterfireApi.getUser()!.email)!;
+        return (FlutterfireApi.auth.currentUser!.email)!;
       } else if (FacebookApi.loggedWithFacebook) {
         Map<String, dynamic> userData = await FacebookApi.auth.getUserData(fields: 'name,friends');
         print(userData['friends']);

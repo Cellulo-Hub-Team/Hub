@@ -128,19 +128,12 @@ class FlutterfireApi {
         .path; //get the path to the application (data/user/0/...)
     File downloadToFile;
 
-    if (Common.isAndroid) {
+    if (Common.isAndroid) {//TODO iOs version
       if(await File('$path/$apkName').exists()) {
         Common.openFile('$path/$apkName');
         return;
       }
-
-      downloadToFile = File(
-          '$path/$apkName'); //declare where the apk with be store (in the Application Documents right now)
-    } else if (Common.isLinux) {
-      downloadToFile =
-          File((await getDownloadsDirectory())!.path); //to download directory
-    } else if (Common.isWeb) {
-      return;
+      downloadToFile = File('$path/$apkName'); //declare where the apk with be store (in the Application Documents right now)
     } else {
       downloadToFile = File('');
     }
@@ -149,8 +142,7 @@ class FlutterfireApi {
         .writeToFile(downloadToFile);
     task.snapshotEvents.listen((firebase_storage.TaskSnapshot snapshot) {
       print('Task state: ${snapshot.state}');
-      print(
-          'Progress: ${(snapshot.bytesTransferred / snapshot.totalBytes) * 100} %');
+      print('Progress: ${(snapshot.bytesTransferred / snapshot.totalBytes) * 100} %');
     });
 
     try {
@@ -302,11 +294,6 @@ class FlutterfireApi {
   ///Check if a user is logged in
   static bool isLoggedIn() {
     return auth.currentUser != null;
-  }
-
-  ///Get the current user, can be null
-  static User? getUser() {
-    return auth.currentUser;
   }
 
   ///Add a download to a game

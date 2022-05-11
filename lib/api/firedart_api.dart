@@ -61,7 +61,7 @@ class FiredartApi {
           game[celluloCount],
           game[downloads]
       );
-      _toAdd.isInstalled = await ShellScripts.isInstalledGameWindows(_toAdd);
+      _toAdd.isInstalled = await ShellScripts.isInstalledWindows(_toAdd);
       Common.allGamesList.add(_toAdd);
     }
   }
@@ -91,17 +91,6 @@ class FiredartApi {
         .then((value) => print("Game added to user library"))
         .catchError(
             (error) => print("Failed to add game to user library: $error"));
-  }
-
-
-  //Launches url corresponding to the web version of the game
-  static void launchWebApp(Game game) async {
-    String? url = game.webUrl;
-    if (await canLaunch(url!)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
-    }
   }
 
   ///Basic Email+password signUp (found on FirebaseAuth doc)
@@ -149,18 +138,10 @@ class FiredartApi {
     return auth.isSignedIn;
   }
 
-  ///Get the current user, can be null
-  static getUser() {
-    return auth.getUser();
+  ///Add a download to a game
+  static incrementDownloads(Game game) async{
+    await games.document(game.name).update({downloads: game.downloads + 1});
+    game.downloads++;
   }
 
-/*static void getGames() async {
-    QuerySnapshot<Object?> gameList = await games.get();
-    final allData = gameList.docs.map((doc) => doc.data()).toList();
-    gameList.docs.forEach((element) {
-      element
-      .
-    })
-    print(allData);
-  }*/
 }

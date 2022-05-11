@@ -46,7 +46,7 @@ class _MyGamesState extends State<MyGames>
         if (_game.isInstalled) {
           ShellScripts.uninstallGameWindows(_game);
         } else {
-          ShellScripts.installGameWindows(_game);
+          ShellScripts.installGame(_game);
         }
       }
       else if (Common.isAndroid){
@@ -70,7 +70,7 @@ class _MyGamesState extends State<MyGames>
   ///Launches the installed game or the web game if no game can be installed on this platform
   _onPressedLaunch(Game _game) {
     if (!_game.isInstalled) {
-      Common.isDesktop ? FiredartApi.launchWebApp(_game) : FlutterfireApi.launchWebApp(_game);
+      FlutterfireApi.launchWebApp(_game);
     } else {
       Common.isDesktop ? FiredartApi.launchApp(_game) : FlutterfireApi.launchApp(_game);
     }
@@ -81,8 +81,6 @@ class _MyGamesState extends State<MyGames>
     CustomColors.currentColor = CustomColors.greenColor.shade900;
     WidgetsBinding.instance?.addObserver(this);
 
-    Common.percentageController =
-        AnimationController(duration: const Duration(seconds: 1), vsync: this);
     Common.percentageController = AnimationController(duration: const Duration(seconds: 1), vsync: this);
     Common.percentageController.reset();
     Common.percentageController.forward();

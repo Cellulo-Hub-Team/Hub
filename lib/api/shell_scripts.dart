@@ -25,7 +25,7 @@ class ShellScripts{
   }
 
   //Checks whether the game is on the hard drive on Windows
-  static Future<bool> isInstalledGameWindows(Game _game) async{
+  static Future<bool> isInstalledWindows(Game _game) async{
     var shell = Shell();
     shell.cd('');
     await shell.run('if not exist CelluloGames md CelluloGames');

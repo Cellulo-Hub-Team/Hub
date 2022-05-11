@@ -66,16 +66,18 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin, WidgetsBindi
   ///Function called when pressing Add to My Games button
   _onPressedPrimary(Game _game) async {
       if (_game.isInLibrary) {
-        Common.goToTarget(context, MyGames(), false, Activity.MyGames);
+        Common.goToTarget(context, const MyGames(), false, Activity.MyGames);
       } else {
         setState(() {
           _game.isInLibrary = true;
         });
-        await Common.isDesktop ? FiredartApi.addToUserLibrary(_game) : FlutterfireApi.addToUserLibrary(_game);
+        Common.isDesktop ? await FiredartApi.addToUserLibrary(_game) : await FlutterfireApi.addToUserLibrary(_game);
         Common.showSnackBar(context, "Correctly added to My Games!");
         _beingInstalledGame = _game;
-        await FlutterfireApi.downloadFile(_game);
-        await FlutterfireApi.incrementDownloads(_game);
+        if (Common.isAndroid){
+          await FlutterfireApi.downloadFile(_game);
+        }
+        Common.isDesktop ? await FiredartApi.incrementDownloads(_game) : await FlutterfireApi.incrementDownloads(_game);
       }
   }
 
