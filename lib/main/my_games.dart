@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:math';
 
 import 'package:cellulo_hub/custom_widgets/custom_scaffold.dart';
@@ -33,7 +34,7 @@ class MyGames extends StatefulWidget {
 class _MyGamesState extends State<MyGames>
     with TickerProviderStateMixin, WidgetsBindingObserver {
 
-  late Game _beingInstalledGame;
+  late Game? _beingInstalledGame;
 
   ///Installs the game on the device
   _onPressedInstall(Game _game) async {
@@ -42,7 +43,12 @@ class _MyGamesState extends State<MyGames>
       DeviceApps.uninstallApp(FirebaseApi.createPackageName(_game));
     }
     else {
-      await FirebaseApi.downloadFile(_game);
+      if(await Common.isConnected()){
+        await FirebaseApi.downloadFile(_game);
+      }
+      else{
+        Common.showSnackBar(context, 'Please connect the device to the Internet');
+      }
     }
   }
 
@@ -56,7 +62,7 @@ class _MyGamesState extends State<MyGames>
   }
 
   @override
-  void initState() {
+  void initState(){
     CustomColors.currentColor = CustomColors.greenColor.shade900;
     WidgetsBinding.instance?.addObserver(this);
 
@@ -79,14 +85,14 @@ class _MyGamesState extends State<MyGames>
     super.didChangeAppLifecycleState(state);
 
     if (state == AppLifecycleState.resumed && _beingInstalledGame != null) {
-      if (await DeviceApps.isAppInstalled(FirebaseApi.createPackageName(_beingInstalledGame))) {
+      if (await DeviceApps.isAppInstalled(FirebaseApi.createPackageName(_beingInstalledGame!))) {
         setState(() {
-        _beingInstalledGame.isInstalled = true;
-      });
+          _beingInstalledGame!.isInstalled = true;
+        });
       }
       else{
         setState(() {
-          _beingInstalledGame.isInstalled = false;
+          _beingInstalledGame!.isInstalled = false;
         });
       }
     }

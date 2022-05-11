@@ -14,8 +14,6 @@ import '../main/common.dart';
 import '../game/game.dart';
 import '../main/my_games.dart';
 
-//TODO: Trouver un moyen clean de faire une ref static/ Exceptions/ Link à firebase storage quand on aura les jeux
-
 
 class FirebaseApi {
   static firebase_storage.FirebaseStorage storage =
@@ -29,35 +27,44 @@ class FirebaseApi {
   FirebaseFirestore.instance.collection('games');
   static CollectionReference userGames =
   FirebaseFirestore.instance.collection('owns');
+  static String companyName = 'Company Name',
+      gameDescription = 'Game Description',
+      webBuild =  'Web Build',
+      webLink = 'Web Link',
+      linuxBuild = 'Linux Build',
+      androidBuild = 'Android Build',
+      backgroundImage = 'Background Image',
+      downloads = 'Downloads';
 
   /// Build the list of all games stored on Firebase
   static Future<void> buildAllGamesList() async {
     QuerySnapshot querySnapshot = await games.get();
     final allData = querySnapshot.docs.map((doc) => doc).toList();
     for (var game in allData) {
-      String backgroundUrl = await ref.child(game.get("Background Image")).getDownloadURL();
-      String? androidUrl = game.get("Android build") == ""
+      String backgroundUrl = await ref.child(game.get(backgroundImage)).getDownloadURL();
+      String? androidUrl = game.get(androidBuild) == ""
           ? null
-          : game.get("Android build");
-      String? linuxUrl = game.get("Linux build") == ""
+          : game.get(androidBuild);
+      String? linuxUrl = game.get(linuxBuild) == ""
           ? null
-          : await ref.child(game.get("Linux build")).getDownloadURL();
-      String? webUrl = game.get("Web Link") == ""
+          : await ref.child(game.get(linuxBuild)).getDownloadURL();
+      String? webUrl = game.get(webLink) == ""
           ? null
-          : game.get("Web Link");
+          : game.get(webLink);
       Random source = Random();
 
       Game _toAdd = Game(
           game.id,
           backgroundUrl,
-          game.get("Game Description"),
+          game.get(gameDescription),
           androidUrl,
           linuxUrl,
           webUrl,
           source.nextDouble(),
           source.nextDouble(),
           source.nextDouble(),
-          game.get("Company Name"));
+          game.get(companyName),
+          game.get(downloads));
       if(_toAdd.androidBuild != null){
         _toAdd.isInstalled = await gameIsInstalled(_toAdd);
       }
@@ -65,7 +72,7 @@ class FirebaseApi {
     }
   }
 
-  ///
+  ///Build the list of all game for the current user
   static Future<void> buildUserGamesList() async {
     QuerySnapshot querySnapshot = await userGames.get();
     final allData = querySnapshot.docs.map((doc) => doc).toList();
@@ -86,10 +93,12 @@ class FirebaseApi {
     }
   }
 
+  ///Check if a game is installed on the device
   static Future<bool> gameIsInstalled(Game game) {
     return DeviceApps.isAppInstalled(createPackageName(game));
   }
 
+  ///Add the game to the current user library
   static Future<void> addToUserLibrary(Game game) async {
     User? user = auth.currentUser;
     return userGames
@@ -100,6 +109,7 @@ class FirebaseApi {
             (error) => print("Failed to add game to user library: $error"));
   }
 
+  ///
   static void launchWebApp(Game game) async {
     String? url = game.webUrl;
     if (await canLaunch(url!)) {
@@ -123,7 +133,6 @@ class FirebaseApi {
       }
 
       downloadToFile = File(
-        //TODO Changer ça pour que ça prenne la valeur du field apk dans le form
           '$path/$apkName'); //declare where the apk with be store (in the Application Documents right now)
     } else if (Common.isLinux) {
       downloadToFile =
@@ -143,7 +152,6 @@ class FirebaseApi {
     try {
       await task; //download from FirebaseStorage and write into the right file
     } on firebase_core.FirebaseException catch (e) {
-      //TODO exceptions
       if (e.code == 'permission-denied') {
         print('User does not have permission to upload to this reference.');
       }
@@ -178,17 +186,16 @@ class FirebaseApi {
   }
 
   ///Basic Email+password signIn (found on FirebaseAuth doc)
-  static Future<void> signIn(String email, String password) async {
+  static Future<void> signIn(String email, String password, BuildContext context) async {
     try {
       UserCredential userCredential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
       buildUserGamesList();
     } on FirebaseAuthException catch (e) {
-      //TODO exceptions
       if (e.code == 'user-not-found') {
-        print('No user found for that email.');
+        Common.showSnackBar(context, 'No user found for that email.');
       } else if (e.code == 'wrong-password') {
-        print('Wrong password provided for that user.');
+        Common.showSnackBar(context, 'Wrong password provided for that user.');
       }
     }
   }
@@ -203,18 +210,12 @@ class FirebaseApi {
       if (_isInstalled) {
         DeviceApps.openApp(_packageName);
       } else {
-
-        OpenFile.open('${appDocDir.path}/${game.name.toLowerCase()}.apk');
+        OpenFile.open('${appDocDir.path}/${game.androidBuild?.split('/').last}.apk');
       }
     }
   }
 
   ///Generate the name of the package according to the game company and an optional name
-  /*static String createPackageName(Game game, [String? name]) {
-    return name == null
-        ? ('com.${game.company}.${game.name}'.toLowerCase().replaceAll(' ', ''))
-        : ('com.${game.company}.$name'.toLowerCase());
-  }*/
   static String createPackageName(Game game) {
         return ('com.${game.company}.${game.name}'.toLowerCase().replaceAll(' ', ''));
   }
@@ -260,13 +261,14 @@ class FirebaseApi {
     return games
         .doc(gameName)
         .set({
-      'Company Name': companyName,
-      'Game Description': gameDescription,
-      'Web Build': webZipPath,
-      'Web Link': webLink,
-      'Linux Build': linuxZipPath,
-      'Android Build': apkNamePath,
-      'Background Image': backgroundImagePath
+      FirebaseApi.companyName: companyName,
+      FirebaseApi.gameDescription: gameDescription,
+      FirebaseApi.webBuild: webZipPath,
+      FirebaseApi.webLink: webLink,
+      FirebaseApi.linuxBuild: linuxZipPath,
+      FirebaseApi.androidBuild: apkNamePath,
+      FirebaseApi.backgroundImage: backgroundImagePath,
+      downloads: 0
     })
         .then((value) => print("Game Added"))
         .catchError((error) => print("Failed to add game: $error"));
@@ -298,6 +300,14 @@ class FirebaseApi {
   static User? getUser() {
     return auth.currentUser;
   }
+
+  ///Add a download to a game
+  static incrementDownloads(Game game) async{
+    await games.doc(game.name).update({downloads: game.downloads + 1});
+    game.downloads++;
+  }
+
+
 
 /*static void getGames() async {
     QuerySnapshot<Object?> gameList = await games.get();

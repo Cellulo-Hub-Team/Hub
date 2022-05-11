@@ -22,6 +22,7 @@ class Game {
   double cognitivePercentage = 0;
   double socialPercentage = 0;
   String company = "";
+  int downloads = 0;
 
   Game(
       this.name,
@@ -33,7 +34,8 @@ class Game {
       this.physicalPercentage,
       this.cognitivePercentage,
       this.socialPercentage,
-      this.company);
+      this.company,
+      this.downloads);
 
   @override
   String toString() {
