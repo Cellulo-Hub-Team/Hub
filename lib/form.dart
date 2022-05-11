@@ -377,7 +377,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                   ))),
           decoration: BoxDecoration(
             image: DecorationImage(
-                image: _previewBackgroundImage ?? Image.asset('graphics/logo_chili.png').image,
+                image: _previewBackgroundImage ?? Image.asset('graphics/empty_image.png').image,
                 fit: BoxFit.fitWidth),
           ),
         )
