@@ -28,13 +28,22 @@ class FlutterfireApi {
       FirebaseFirestore.instance.collection('games');
   static CollectionReference userGames =
       FirebaseFirestore.instance.collection('owns');
-  static String companyName = 'Company Name',
+  static const String gameName = 'Game Name',
+      gameNameUnity = 'Game Name Unity',
+      companyName = 'Company Name',
+      companyNameUnity = 'Company Name Unity',
       gameDescription = 'Game Description',
+      gameInstructions = 'Game Instructions',
       webBuild =  'Web Build',
       webLink = 'Web Link',
       linuxBuild = 'Linux Build',
       androidBuild = 'Android Build',
+      windowsBuild = 'Windows Build',
       backgroundImage = 'Background Image',
+      physicalPercentage = 'Physical Percentage',
+      cognitivePercentage = 'Cognitive Percentage',
+      socialPercentage = 'Social Percentage',
+      celluloCount = 'Cellulo Count',
       downloads = 'Downloads';
 
   /// Build the list of all games stored on Firebase
@@ -49,25 +58,24 @@ class FlutterfireApi {
 
       Game _toAdd = Game(
         game.id,
-        game["Game Name Unity"],
-        game["Company Name"],
-        game["Company Name Unity"],
+        game[gameNameUnity],
+        game[companyName],
+        game[companyNameUnity],
         game[gameDescription],
-        game["Game Instructions"],
-        game["Background Image"],
+        game[gameInstructions],
+        game[backgroundImage],
         androidUrl,
         linuxUrl,
         windowsUrl,
         webUrl,
-        game["Physical Percentage"],
-        game["Cognitive Percentage"],
-        game["Social Percentage"],
-        game["Cellulo Count"],
-        game["Downloads"]
+        game[physicalPercentage],
+        game[cognitivePercentage],
+        game[socialPercentage],
+        game[celluloCount],
+        game[downloads]
       );
       _toAdd.isInstalled = await gameIsInstalled(_toAdd);
       Common.allGamesList.add(_toAdd);
-      print("Flutterfire: " + _toAdd.name);
     }
   }
 
@@ -232,42 +240,42 @@ class FlutterfireApi {
     }
   }
 
-  ///Create a new game with
+  ///Create a new game in the database with the given parameters
   static Future<void> createNewGame(
-      String gameName,
-      String gameNameUnity,
-      String companyName,
-      String companyNameUnity,
-      String gameDescription,
-      String gameInstructions,
-      String webBuild,
-      String webLink,
-      String linuxBuild,
-      String windowsBuild,
-      String androidBuild,
-      String backgroundImage,
-      int physicalPercentage,
-      int cognitivePercentage,
-      int socialPercentage,
-      int celluloCount) async {
+      String _gameName,
+      String _gameNameUnity,
+      String _companyName,
+      String _companyNameUnity,
+      String _gameDescription,
+      String _gameInstructions,
+      String _webBuild,
+      String _webLink,
+      String _linuxBuild,
+      String _windowsBuild,
+      String _androidBuild,
+      String _backgroundImage,
+      int _physicalPercentage,
+      int _cognitivePercentage,
+      int _socialPercentage,
+      int _celluloCount) async {
     return games
-        .doc(gameName)
+        .doc(_gameName)
         .set({
-          'Game Name Unity': gameNameUnity,
-          companyName: companyName,
-          'Company Name Unity': companyNameUnity,
-          'Game Description': gameDescription,
-          'Game Instructions': gameInstructions,
-          'Web Build': webBuild,
-          'Web Link': webLink,
-          'Linux Build': linuxBuild,
-          'Windows Build': windowsBuild,
-          'Android Build': androidBuild,
-          'Background Image': backgroundImage,
-          'Physical Percentage': physicalPercentage,
-          'Cognitive Percentage': cognitivePercentage,
-          'Social Percentage': socialPercentage,
-          'Cellulo Count': celluloCount,
+          gameName: _gameNameUnity,
+          companyName: _companyName,
+          companyNameUnity: _companyNameUnity,
+          gameDescription: _gameDescription,
+          gameInstructions: _gameInstructions,
+          webBuild: _webBuild,
+          webLink: _webLink,
+          linuxBuild: _linuxBuild,
+          windowsBuild: _windowsBuild,
+          androidBuild: _androidBuild,
+          backgroundImage: _backgroundImage,
+          physicalPercentage: _physicalPercentage,
+          cognitivePercentage: _cognitivePercentage,
+          socialPercentage: _socialPercentage,
+          celluloCount: _celluloCount,
           downloads: 0
         })
         .then((value) => print("Game added"))

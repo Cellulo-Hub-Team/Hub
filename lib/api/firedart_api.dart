@@ -16,6 +16,22 @@ class FiredartApi {
   static FirebaseAuth auth = FirebaseAuth.instance;
   static CollectionReference games = Firestore.instance.collection('games');
   static CollectionReference owns = Firestore.instance.collection('owns');
+  static const String nameUnity = 'Game Name Unity',
+      companyName = 'Company Name',
+      companyNameUnity = 'Company Name Unity',
+      gameDescription = 'Game Description',
+      gameInstructions = 'Game Instructions',
+      webBuild =  'Web Build',
+      webLink = 'Web Link',
+      linuxBuild = 'Linux Build',
+      androidBuild = 'Android Build',
+      windowsBuild = 'Windows Build',
+      backgroundImage = 'Background Image',
+      physicalPercentage = 'Physical Percentage',
+      cognitivePercentage = 'Cognitive Percentage',
+      socialPercentage = 'Social Percentage',
+      celluloCount = 'Cellulo Count',
+      downloads = 'Downloads';
 
   //Creates local list of all games available in the shop
   static Future<void> buildAllGamesList() async {
@@ -28,26 +44,25 @@ class FiredartApi {
       String? webUrl = game["Web Link"] == "" ? null : game["Web Link"];
 
       Game _toAdd = Game(
-        game.id,
-        game["Game Name Unity"],
-        game["Company Name"],
-        game["Company Name Unity"],
-        game["Game Description"],
-        game["Game Instructions"],
-        game["Background Image"],
-        androidUrl,
-        linuxUrl,
-        windowsUrl,
-        webUrl,
-        game["Physical Percentage"],
-        game["Cognitive Percentage"],
-        game["Social Percentage"],
-        game["Cellulo Count"],
-        game["Downloads"],
+          game.id,
+          game[nameUnity],
+          game[companyName],
+          game[companyNameUnity],
+          game[gameDescription],
+          game[gameInstructions],
+          game[backgroundImage],
+          androidUrl,
+          linuxUrl,
+          windowsUrl,
+          webUrl,
+          game[physicalPercentage],
+          game[cognitivePercentage],
+          game[socialPercentage],
+          game[celluloCount],
+          game[downloads]
       );
       _toAdd.isInstalled = await ShellScripts.isInstalledGameWindows(_toAdd);
       Common.allGamesList.add(_toAdd);
-      print("Firedart: " + _toAdd.name);
     }
   }
 
