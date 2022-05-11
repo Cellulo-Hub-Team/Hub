@@ -45,6 +45,7 @@ class Common{
   static bool canBeInstalledOnThisPlatform(Game _game) {
     if (isAndroid && _game.androidBuild != null) return true;
     if (isLinux && _game.linuxBuild != null) return true;
+    if (isWindows && _game.windowsBuild != null) return true;
     return false;
   }
 

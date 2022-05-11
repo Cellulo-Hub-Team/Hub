@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:cellulo_hub/api/shell_scripts.dart';
 import 'package:cellulo_hub/custom_widgets/custom_scaffold.dart';
 import 'package:cellulo_hub/game/game_panel_list.dart';
 import 'package:cellulo_hub/main.dart';
@@ -26,12 +27,21 @@ class _MyGamesState extends State<MyGames> with TickerProviderStateMixin {
   //Installs the game on the device
   _onPressedInstall(Game _game) {
     setState(() {
-      /*if (_game.isInstalled) {
-        DeviceApps.uninstallApp(Flutterfire.createPackageName(_game));
-      } else {
-        Flutterfire.downloadFile(_game);
-      }*/
-      //TODO restore
+      //TODO add iOS and MacOS
+      if (Common.isDesktop){
+        if (_game.isInstalled) {
+          print("Uninstall game"); //TODO
+        } else {
+          ShellScripts.installGameWindows(_game);
+        }
+      }
+      else if (Common.isAndroid){
+        if (_game.isInstalled) {
+          DeviceApps.uninstallApp(FlutterfireApi.createPackageName(_game));
+        } else {
+          FlutterfireApi.downloadFile(_game);
+        }
+      }
       _game.isInstalled = !_game.isInstalled;
     });
   }

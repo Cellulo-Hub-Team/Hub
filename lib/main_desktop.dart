@@ -1,12 +1,10 @@
-import 'dart:convert';
-import 'dart:io';
-
+import 'package:process_run/shell.dart';
+import 'package:process_run/which.dart';
 import 'package:firedart/firedart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'account/sign_in.dart';
 import 'account/profile.dart';
 import 'custom_widgets/custom_menu_button.dart';
 import 'custom_widgets/custom_icon_button.dart';
@@ -37,19 +35,6 @@ class Achievement {
 }
 
 void main() async {
-  /*var path =
-      "C:/Users/antoi/AppData/LocalLow/DefaultCompany/Achievements/achievements.json";
-  File(path)
-      .openRead()
-      .transform(utf8.decoder)
-      .transform(new LineSplitter())
-      .forEach((l) {
-    Map<String, dynamic> achievementMap = jsonDecode(l);
-    var achievement = Achievement.fromJson(achievementMap);
-
-    print(achievement.label);
-  });*/
-
   WidgetsFlutterBinding.ensureInitialized();
 
   FirebaseAuth.initialize('AIzaSyB-rpiGCDAUXScHzmUXAhaIuSTJ5cP7SwE', VolatileStore());

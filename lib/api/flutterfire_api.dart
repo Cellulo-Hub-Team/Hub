@@ -34,6 +34,9 @@ class FlutterfireApi {
       String? linuxUrl = game["Linux Build"] == ""
           ? null
           : game["Linux Build"];
+      String? windowsUrl = game["Windows Build"] == ""
+          ? null
+          : game["Windows Build"];
       String? webUrl = game["Web Link"] == ""
           ? null
           : game["Web Link"];
@@ -44,6 +47,7 @@ class FlutterfireApi {
           game["Game Description"],
           androidUrl,
           linuxUrl,
+          windowsUrl,
           webUrl,
           game["Physical Percentage"],
           game["Cognitive Percentage"],
@@ -215,6 +219,7 @@ class FlutterfireApi {
       String webBuild,
       String webLink,
       String linuxBuild,
+      String windowsBuild,
       String androidBuild,
       String backgroundImage,
       int physicalPercentage,
@@ -230,6 +235,7 @@ class FlutterfireApi {
       'Web Build': webBuild,
       'Web Link': webLink,
       'Linux Build': linuxBuild,
+      'Windows Build': windowsBuild,
       'Android Build': androidBuild,
       'Background Image': backgroundImage,
       'Physical Percentage': physicalPercentage,

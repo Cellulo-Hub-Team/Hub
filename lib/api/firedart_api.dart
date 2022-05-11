@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cellulo_hub/api/shell_scripts.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:open_file/open_file.dart';
 import 'package:device_apps/device_apps.dart';
@@ -27,6 +28,9 @@ class FiredartApi {
       String? linuxUrl = game["Linux Build"] == ""
           ? null
           : game["Linux Build"];
+      String? windowsUrl = game["Windows Build"] == ""
+          ? null
+          : game["Windows Build"];
       String? webUrl = game["Web Link"] == ""
           ? null
           : game["Web Link"];
@@ -37,6 +41,7 @@ class FiredartApi {
           game["Game Description"],
           androidUrl,
           linuxUrl,
+          windowsUrl,
           webUrl,
           game["Physical Percentage"],
           game["Cognitive Percentage"],
@@ -71,7 +76,7 @@ class FiredartApi {
   }
 
   static Future<bool> gameIsInstalled(Game game) {
-    return DeviceApps.isAppInstalled(createPackageName(game));
+    return Future<bool>.value(true);//TODO
   }
 
   static Future<void> addToUserLibrary(Game game) async {
@@ -154,15 +159,21 @@ class FiredartApi {
   ///Launches game (game)
   static void launchApp(Game game) async {
     if (game.isInstalled) {
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String _packageName = createPackageName(game);
-      bool _isInstalled = await DeviceApps.isAppInstalled(_packageName);
-
-      if (_isInstalled) {
-        DeviceApps.openApp(_packageName);
-      } else {
-        OpenFile.open('${appDocDir.path}/${game.name.toLowerCase()}.apk');
+      if (Common.isWindows){
+        ShellScripts.launchGameWindows(game);
       }
+      else if (Common.isAndroid){
+        Directory appDocDir = await getApplicationDocumentsDirectory();
+        String _packageName = createPackageName(game);
+        bool _isInstalled = await DeviceApps.isAppInstalled(_packageName);
+
+        if (_isInstalled) {
+          DeviceApps.openApp(_packageName);
+        } else {
+          OpenFile.open('${appDocDir.path}/${game.name.toLowerCase()}.apk');
+        }
+      }
+
     }
   }
 

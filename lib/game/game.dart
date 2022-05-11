@@ -17,6 +17,7 @@ class Game {
   bool isExpanded = false;
   String? androidBuild;
   String? linuxBuild;
+  String? windowsBuild;
   String? webUrl;
   int physicalPercentage = 0;
   int cognitivePercentage = 0;
@@ -29,6 +30,7 @@ class Game {
       this.description,
       this.androidBuild,
       this.linuxBuild,
+      this.windowsBuild,
       this.webUrl,
       this.physicalPercentage,
       this.cognitivePercentage,
