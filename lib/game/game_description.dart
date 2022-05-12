@@ -129,12 +129,14 @@ class _GameDescriptionState extends State<GameDescription> with TickerProviderSt
                   style: Style.descriptionStyle())),
           Padding(
               padding:
+              const EdgeInsets.all(15), //apply padding to all four sides
+              child: Text(widget.game.celluloCount.toString() + " cellulos required.",
+                  style: Style.descriptionStyle())),
+          Padding(
+              padding:
                   const EdgeInsets.all(15), //apply padding to all four sides
               child: Text(
-                  "Turn on the robot by putting your fingers on the 6 touch sensors at the same "
-                  "time for around 3 seconds. After it’s turned on, the LEDs will light up.\n"
-                  "Turn off the robot by pressing three non-adjacent touch sensors at the same "
-                  "time for around 3 seconds. After it’s turned on, the LEDs will turn off.\n",
+                  widget.game.instructions,
                   style: Style.descriptionStyle()))
         ]));
   }

@@ -1,9 +1,10 @@
+import 'package:cellulo_hub/api/firedart_api.dart';
 import 'package:cellulo_hub/custom_widgets/custom_elevated_button.dart';
 import 'package:cellulo_hub/custom_widgets/custom_scaffold.dart';
 import 'package:flutter/material.dart';
 
 import '../api/facebook_api.dart';
-import '../api/firebase_api.dart';
+import '../api/flutterfire_api.dart';
 import '../main.dart';
 import '../custom_widgets/custom_colors.dart';
 import '../main/common.dart';
@@ -18,24 +19,41 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
 
+  //Disconnect user from the database
   _signOut() async {
-    if (FirebaseApi.auth.currentUser != null) {
-      await FirebaseApi.auth.signOut();
-    } else if (FacebookApi.loggedWithFacebook) {
-      await FacebookApi.logout();
-      FacebookApi.loggedWithFacebook = false;
+    if (Common.isDesktop){
+      if (FiredartApi.isLoggedIn()) {
+        FiredartApi.auth.signOut();
+      }
+    }
+    else{
+      if (FlutterfireApi.isLoggedIn()) {
+        await FlutterfireApi.auth.signOut();
+      } else if (FacebookApi.loggedWithFacebook) {
+        await FacebookApi.logout();
+        FacebookApi.loggedWithFacebook = false;
+      }
     }
     Common.goToTarget(context, const ProfileHome(), false, Activity.Profile);
   }
 
+  //Get user name or email depending on availability on the current platform
   Future<String> _getCurrentAuth() async {
-    if (FirebaseApi.isLoggedIn()) {
-      return (FirebaseApi.getUser()!.email)!;
-    } else if (FacebookApi.loggedWithFacebook) {
-      Map<String, dynamic> userData =
-          await FacebookApi.auth.getUserData(fields: 'name,friends');
-      print(userData['friends']);
-      return userData['name'];
+    if (Common.isDesktop){
+      if (FiredartApi.isLoggedIn()) {
+        var user = await FiredartApi.auth.getUser();
+        return user.email!;
+      }
+      return 'No User';
+    }
+    else {
+      if (FlutterfireApi.isLoggedIn()) {
+        return (FlutterfireApi.auth.currentUser!.email)!;
+      } else if (FacebookApi.loggedWithFacebook) {
+        Map<String, dynamic> userData = await FacebookApi.auth.getUserData(fields: 'name,friends');
+        print(userData['friends']);
+        return userData['name'];
+      }
     }
     return 'No User';
   }

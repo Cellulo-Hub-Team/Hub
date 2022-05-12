@@ -1,7 +1,8 @@
+import 'package:cellulo_hub/api/firedart_api.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 
-import '../api/firebase_api.dart';
+import '../api/flutterfire_api.dart';
 import '../custom_widgets/custom_elevated_button.dart';
 import '../custom_widgets/custom_scaffold.dart';
 import '../main/common.dart';
@@ -20,6 +21,21 @@ class _SignUpState extends State<SignUp> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmationController = TextEditingController();
+
+  //Register new user to the database and clear input fields
+  Future<void> addUserAndClear() async{
+    if (Common.isDesktop){
+      await FiredartApi.signUp(emailController.text, passwordController.text);
+    }
+    else{
+      await FlutterfireApi.signUp(emailController.text, passwordController.text, context);
+    }
+    FocusScope.of(context).unfocus();
+    Common.showSnackBar(context, "New user correctly added !");
+    emailController.clear();
+    passwordController.clear();
+    confirmationController.clear();
+  }
 
   @override
   void dispose() {
@@ -40,11 +56,11 @@ class _SignUpState extends State<SignUp> {
     hasFloating: false,
     body: Form(
         key: _formKey,
-        child: Column(
+        child: Column(//TODO max width of 1000
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Spacer(flex: 5),
+            const Spacer(flex: 5),
             TextFormField(
               keyboardType: TextInputType.emailAddress,
               decoration: const InputDecoration(
@@ -101,7 +117,7 @@ class _SignUpState extends State<SignUp> {
                 return null;
               },
             ),
-            Spacer(),
+            const Spacer(),
             CustomElevatedButton(
                   label: "Submit",
                   onPressed: () {
@@ -110,23 +126,10 @@ class _SignUpState extends State<SignUp> {
                       addUserAndClear();
                     }
                   }),
-            Spacer(flex: 5),
+            const Spacer(flex: 5),
           ],
         ),
       ),
     );
-  }
-
-  /// Add user to the Database, close the keyboard and clear the form fields
-  Future<void> addUserAndClear() async{
-    int result = await FirebaseApi.signUp(
-        emailController.text, passwordController.text, context);
-    FocusScope.of(context).unfocus();
-    if(result == 0){
-      Common.showSnackBar(context, "New user correctly added !");
-      emailController.clear();
-      passwordController.clear();
-      confirmationController.clear();
-    }
   }
 }
