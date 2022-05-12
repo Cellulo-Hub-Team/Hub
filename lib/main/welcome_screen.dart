@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 
 import '../account/profile_home.dart';
 import '../api/facebook_api.dart';
-import '../api/firebase_api.dart';
+import '../api/flutterfire_api.dart';
+import '../api/firedart_api.dart';
 import '../main.dart';
+import 'common.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({Key? key}) : super(key: key);
@@ -14,28 +16,31 @@ class WelcomeScreen extends StatefulWidget {
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
 
-  /// Determine which screen to display first
+  //Build local games lists and get to login screen or main menu depending if user is logged in or not
   Future<Widget> _getStartingScreen() async {
-    if (!FirebaseApi.isLoggedIn() && !(await FacebookApi.isLoggedIn())) {
-      FirebaseApi.buildAllGamesList();
+    if (Common.isDesktop){
+      if (FiredartApi.isLoggedIn()){
+        await FiredartApi.buildAllGamesList();
+        await FiredartApi.buildUserGamesList();
+        return const MainMenu();
+      }
       return const ProfileHome();
-    } else {
-      _buildLists();
-      return const MainMenu();
     }
-  }
-
-  /// Build the list of all games and the user games
-  _buildLists() async {
-    await FirebaseApi.buildAllGamesList();
-    FirebaseApi.buildUserGamesList();
+    else{
+      await FlutterfireApi.buildAllGamesList();
+      if (FlutterfireApi.isLoggedIn() || await FacebookApi.isLoggedIn()){
+        await FlutterfireApi.buildUserGamesList();
+        return const MainMenu();
+      }
+      return const ProfileHome();
+    }
   }
 
   @override
   void initState() {
     super.initState();
     Future.delayed(
-        const Duration(seconds: 0),
+        const Duration(seconds: 1),//TODO use 3 for final release
             () => {
                 Navigator.push(
           context,

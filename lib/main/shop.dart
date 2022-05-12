@@ -9,7 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:scroll_snap_list/scroll_snap_list.dart';
 
-import '../api/firebase_api.dart';
+import '../api/flutterfire_api.dart';
+import '../api/firedart_api.dart';
 import '../custom_widgets/custom_delegate.dart';
 import '../custom_widgets/custom_scaffold.dart';
 import '../game/game_body.dart';
@@ -65,16 +66,18 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin, WidgetsBindi
   ///Function called when pressing Add to My Games button
   _onPressedPrimary(Game _game) async {
       if (_game.isInLibrary) {
-        Common.goToTarget(context, MyGames(), false, Activity.MyGames);
+        Common.goToTarget(context, const MyGames(), false, Activity.MyGames);
       } else {
         setState(() {
           _game.isInLibrary = true;
         });
-        _beingInstalledGame = _game;
-        await FirebaseApi.addToUserLibrary(_game);
+        Common.isDesktop ? await FiredartApi.addToUserLibrary(_game) : await FlutterfireApi.addToUserLibrary(_game);
         Common.showSnackBar(context, "Correctly added to My Games!");
-        await FirebaseApi.incrementDownloads(_game);
-        await FirebaseApi.downloadFile(_game);
+        _beingInstalledGame = _game;
+        if (Common.isAndroid){
+          await FlutterfireApi.downloadFile(_game);
+        }
+        Common.isDesktop ? await FiredartApi.incrementDownloads(_game) : await FlutterfireApi.incrementDownloads(_game);
       }
   }
 
@@ -109,7 +112,9 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin, WidgetsBindi
     setState(() {
       if (_trendingDescriptionDisplayed && _index == _trendingDecriptionIndex) {
         _trendingController.reverse();
-        _trendingDescriptionDisplayed = !_trendingDescriptionDisplayed;
+        Future.delayed(
+            const Duration(milliseconds: 300),
+                () => _trendingDescriptionDisplayed = !_trendingDescriptionDisplayed);
       } else if (!_trendingDescriptionDisplayed) {
         Common.percentageController.reset();
         Common.percentageController.forward();
@@ -147,7 +152,7 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin, WidgetsBindi
   Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
     super.didChangeAppLifecycleState(state);
     if (state == AppLifecycleState.resumed && _beingInstalledGame != null) {
-      if (await DeviceApps.isAppInstalled(FirebaseApi.createPackageName(_beingInstalledGame!))) {
+      if (await DeviceApps.isAppInstalled(FlutterfireApi.createPackageName(_beingInstalledGame!))) {
         setState(() {
           _beingInstalledGame!.isInstalled = true;
         });
@@ -174,7 +179,7 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin, WidgetsBindi
                 width: 1000,
                 alignment: Alignment.center,
                 child: NestedScrollView(
-                  physics: Common.isWeb
+                  physics: Common.isWeb || Common.isWindows
                       ? const ClampingScrollPhysics()
                       : const NeverScrollableScrollPhysics(),
                   headerSliverBuilder: (context, value) {
@@ -186,15 +191,16 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin, WidgetsBindi
                                 backgroundColor: Common.darkTheme ? CustomColors.blackColor.shade900 : Colors.white,
                                 automaticallyImplyLeading: false,
                                 leading: null,
-                                collapsedHeight: 410,
+                                collapsedHeight: 420,
                                 expandedHeight: (_trendingController
                                             .drive(
                                                 CurveTween(curve: Curves.ease))
                                             .value *
                                         (myChildSize.height + 30)) +
-                                    410,
+                                    420,
                                 flexibleSpace: FlexibleSpaceBar(
                                     background: Column(children: [
+                                      const SizedBox(height: 10),
                                       Text("Trending", style: Style.titleStyle()),
                                   _trendingWidget(),
                                   _trendingDescriptionDisplayed

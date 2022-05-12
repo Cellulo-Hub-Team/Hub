@@ -1,40 +1,42 @@
-import 'dart:math';
-
-import 'package:cellulo_hub/custom_widgets/style.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:percent_indicator/circular_percent_indicator.dart';
-
-import '../main/common.dart';
-
 class Game {
   String name = "";
-  String backgroundImage = "";
+  String unityName = "";
+  String companyName = "";
+  String unityCompanyName = "";
   String description = "";
+  String instructions = "";
   bool isInstalled = false;
   bool isInLibrary = false;
   bool isExpanded = false;
   String? androidBuild;
   String? linuxBuild;
+  String? windowsBuild;
   String? webUrl;
-  double physicalPercentage = 0;
-  double cognitivePercentage = 0;
-  double socialPercentage = 0;
-  String company = "";
+  String? iOSBuild;
+  String? macOSBuild;
+  String backgroundImage = "";
+  int physicalPercentage = 0;
+  int cognitivePercentage = 0;
+  int socialPercentage = 0;
+  int celluloCount = 0;
   int downloads = 0;
 
   Game(
       this.name,
-      this.backgroundImage,
+      this.unityName,
+      this.companyName,
+      this.unityCompanyName,
       this.description,
+      this.instructions,
+      this.backgroundImage,
       this.androidBuild,
       this.linuxBuild,
+      this.windowsBuild,
       this.webUrl,
       this.physicalPercentage,
       this.cognitivePercentage,
       this.socialPercentage,
-      this.company,
+      this.celluloCount,
       this.downloads);
 
   @override
