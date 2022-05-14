@@ -31,7 +31,8 @@ class FiredartApi {
       cognitivePercentage = 'Cognitive Percentage',
       socialPercentage = 'Social Percentage',
       celluloCount = 'Cellulo Count',
-      downloads = 'Downloads';
+      downloads = 'Downloads',
+      apk = 'apkName';
 
   //Creates local list of all games available in the shop
   static Future<void> buildAllGamesList() async {
@@ -59,7 +60,8 @@ class FiredartApi {
           game[cognitivePercentage],
           game[socialPercentage],
           game[celluloCount],
-          game[downloads]
+          game[downloads],
+          game[apk]
       );
       _toAdd.isInstalled = await ShellScripts.isInstalledWindows(_toAdd);
       Common.allGamesList.add(_toAdd);

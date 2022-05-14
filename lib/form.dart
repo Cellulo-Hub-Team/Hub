@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart' as fs;
 import 'package:flutter_icons/flutter_icons.dart';
@@ -21,7 +22,6 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(const MyCustomForm());
-  //FirebaseApi.getGames();
 }
 
 // Create a Form widget.
@@ -101,11 +101,26 @@ class MyCustomFormState extends State<MyCustomForm> {
     FlutterfireApi.uploadFile(_file4, androidBuildRef);
     FlutterfireApi.uploadFile(_file5, imageRef);
 
-    String? linuxBuild = await linuxBuildRef?.getDownloadURL();
-    String? androidBuild = await androidBuildRef?.getDownloadURL();
-    String? windowsBuild = await windowsBuildRef?.getDownloadURL();
-    String? webBuild = await webBuildRef?.getDownloadURL();
-    String? image = await imageRef?.getDownloadURL();
+    fs.Reference bucketRef = FirebaseStorage.instance.ref();
+    String? linuxBuild = (linuxBuildRef == null)
+     ? null
+     : await bucketRef.child(linuxBuildRef.fullPath).getDownloadURL();
+
+    String? androidBuild = (androidBuildRef == null)
+        ? null
+        : await bucketRef.child(androidBuildRef.fullPath).getDownloadURL();
+
+    String? windowsBuild = (windowsBuildRef == null)
+        ? null
+        : await bucketRef.child(windowsBuildRef.fullPath).getDownloadURL();
+
+    String? webBuild = (webBuildRef == null)
+        ? null
+        : await bucketRef.child(webBuildRef.fullPath).getDownloadURL();
+
+    String? image = (imageRef == null)
+        ? null
+        : await bucketRef.child(imageRef.fullPath).getDownloadURL();
 
     FlutterfireApi.createNewGame(
         gameName,
@@ -123,7 +138,8 @@ class MyCustomFormState extends State<MyCustomForm> {
         _physicalPercentage.value,
         _cognitivePercentage.value,
         _socialPercentage.value,
-        _celluloCount.value);
+        _celluloCount.value,
+        androidBuildController.text);
   }
 
   //TODO Refaire la fonction ?
@@ -176,9 +192,9 @@ class MyCustomFormState extends State<MyCustomForm> {
         }
         if (fileNumber == 5) {
           _file5 = result.files.single.bytes!;
+          _previewBackgroundImage = Image.memory(result.files.single.bytes!).image;
         }
-        _previewBackgroundImage = Image.memory(result.files.single.bytes!).image;
-        controller.text = "Selected file: " + result.files.single.name;
+        controller.text = result.files.single.name;
       } catch (e) {
         print(e);
       }

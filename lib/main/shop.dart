@@ -129,8 +129,6 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin, WidgetsBindi
 
   @override
   void initState() {
-    print(_trendingGames);
-
     CustomColors.currentColor = CustomColors.blueColor.shade900;
     WidgetsBinding.instance?.addObserver(this);
     Common.percentageController =
