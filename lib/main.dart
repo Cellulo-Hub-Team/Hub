@@ -68,13 +68,11 @@ class MyApp extends StatelessWidget {
               debugShowCheckedModeBanner: false,
               theme: ThemeData(
                   textTheme: GoogleFonts.comfortaaTextTheme(),
-                  brightness: Brightness.light,
-                  accentColor: Colors.white),
+                  brightness: Brightness.light),
               darkTheme: ThemeData(
                   textTheme: GoogleFonts.comfortaaTextTheme(),
                   scaffoldBackgroundColor: CustomColors.blackColor.shade900,
-                  brightness: Brightness.dark,
-                  accentColor: Colors.white),
+                  brightness: Brightness.light),
               themeMode: currentMode,
               home: const WelcomeScreen());
         });

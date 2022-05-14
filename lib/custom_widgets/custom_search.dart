@@ -10,6 +10,7 @@ class CustomSearch extends SearchDelegate<String> {
 
   CustomSearch({required this.allGames});
 
+  /*
   @override
   ThemeData appBarTheme(BuildContext context) {
     return ThemeData(
@@ -36,6 +37,7 @@ class CustomSearch extends SearchDelegate<String> {
       ),
     );
   }
+  */
 
   @override
   List<Widget>? buildActions(BuildContext context) {
