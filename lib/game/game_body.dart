@@ -96,7 +96,7 @@ class _GameBodyState extends State<GameBody> {
                           false,
                           Common.currentScreen
                       )) : Container(),
-                  Spacer(),
+                  const Spacer(),
                 ],
               ))
         ],

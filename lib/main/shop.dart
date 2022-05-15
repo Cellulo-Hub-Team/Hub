@@ -7,13 +7,16 @@ import 'package:device_apps/device_apps.dart';
 import 'package:cellulo_hub/custom_widgets/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:scroll_snap_list/scroll_snap_list.dart';
 
 import '../api/flutterfire_api.dart';
 import '../api/firedart_api.dart';
 import '../custom_widgets/custom_delegate.dart';
+import '../custom_widgets/custom_elevated_button.dart';
 import '../custom_widgets/custom_scaffold.dart';
 import '../game/game_body.dart';
+import '../game/game_description.dart';
 import '../game/game_panel_list.dart';
 import 'common.dart';
 import '../custom_widgets/custom_colors.dart';
@@ -165,7 +168,7 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin, WidgetsBindi
       leadingIcon: Icons.home,
       leadingName: "Menu",
       leadingScreen: Activity.Menu,
-      leadingTarget: MainMenu(),
+      leadingTarget: const MainMenu(),
       hasFloating: true,
       floatingIcon: Icons.search,
       floatingLabel: "Search",
@@ -189,7 +192,7 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin, WidgetsBindi
                                 backgroundColor: Common.darkTheme ? CustomColors.blackColor.shade900 : Colors.white,
                                 automaticallyImplyLeading: false,
                                 leading: null,
-                                collapsedHeight: 420,
+                                collapsedHeight: 420, // Check for web and desktop
                                 expandedHeight: (_trendingController
                                             .drive(
                                                 CurveTween(curve: Curves.ease))
@@ -202,10 +205,10 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin, WidgetsBindi
                                       Text("Trending", style: Style.titleStyle()),
                                   _trendingWidget(),
                                   _trendingDescriptionDisplayed
-                                      ? _trendingDescription()
+                                      ? (Common.isDesktop || Common.isWeb ? _trendingDescriptionDesktop() : _trendingDescription())
                                       : Container(),
                                       Padding(
-                                          padding: EdgeInsets.only(left: 100, right: 100, top: 10, bottom: 10),
+                                          padding: const EdgeInsets.only(left: 100, right: 100, top: 10, bottom: 10),
                                         child: Container(height: 2, color: Colors.grey.shade200, child: Container()),
                                       ),
                                       Text("Search all games", style: Style.titleStyle()),
@@ -335,5 +338,83 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin, WidgetsBindi
           isDescription: false,
           onPressedPrimary: () => _onPressedPrimary(_game),
         ));
+  }
+
+  Widget _trendingDescriptionDesktop(){
+    Game _game = _trendingGames[_trendingDecriptionIndex];
+    return MeasureSize(
+        onChange: (size) {
+          setState(() {
+            myChildSize = size;
+          });
+        },
+        child:
+        Container(
+            width: 500,
+            alignment: Alignment.center,
+            child: Column(
+                children: [
+        Padding(
+            padding: const EdgeInsets.all(15), //apply padding to all four sides
+            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Spacer(),
+              _percentageIndicator(_game.physicalPercentage / 100, Colors.deepOrangeAccent, Ionicons.ios_fitness),
+              Spacer(),
+              _percentageIndicator(_game.cognitivePercentage / 100, Colors.lightBlueAccent, MaterialCommunityIcons.brain),
+              Spacer(),
+              _percentageIndicator(_game.socialPercentage / 100, Colors.greenAccent, MaterialIcons.people),
+              Spacer()
+            ])),
+        Padding(
+            padding: const EdgeInsets.all(15), //apply padding to all four sides
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Spacer(flex: 5),
+                CustomElevatedButton(
+                    label: _game.isInLibrary ? "See in library" : "Add to My Games",
+                    onPressed: () => _onPressedPrimary(_game)),
+                const Spacer(),
+                CustomElevatedButton(
+                    label: "See more",
+                    onPressed: () => Common.goToTarget(
+                        context,
+                        GameDescription(
+                          game: _game,
+                          index: 0, //TODO actual index
+                          onPressedPrimary: () => _onPressedPrimary(_game),
+                        ),
+                        false,
+                        Common.currentScreen
+                    )),
+                const Spacer(flex: 5),
+              ],
+            ))
+        ]))
+    );
+
+  }
+
+
+  //Clean up this mess
+  Widget _percentageIndicator(double _percentage, Color _color, IconData _icon) {
+    return AnimatedBuilder(
+      animation: Common.percentageController,
+      builder: (BuildContext context, Widget? child) {
+        return CircularPercentIndicator(
+          circularStrokeCap: CircularStrokeCap.round,
+          radius: 40.0,
+          lineWidth: 5.0,
+          percent: min(Common.percentageController.value, _percentage),
+          center: Icon(
+            _icon,
+            color: _color,
+            size: 30,
+          ),
+          progressColor: _color,
+          backgroundColor: Colors.grey.shade200,
+        );
+      },
+    );
   }
 }
