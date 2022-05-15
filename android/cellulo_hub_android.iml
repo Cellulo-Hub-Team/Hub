@@ -26,11 +26,13 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../../../flutter/bin/cache/artifacts/engine/android-x64/flutter.jar!/" />
+          <root url="jar://C:/Users/flutter/bin/cache/artifacts/engine/android-x64/flutter.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="Dart SDK" level="project" />
+    <orderEntry type="library" name="Dart Packages" level="project" />
   </component>
 </module>

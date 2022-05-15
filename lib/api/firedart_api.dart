@@ -70,6 +70,11 @@ class FiredartApi {
 
   //Creates the local list of games the player owns
   static Future<void> buildUserGamesList() async {
+    //Reset user games list
+    for (var localGame in Common.allGamesList) {
+      localGame.isInLibrary = false;
+    }
+
     var allGamesFuture = await owns.get();
     final allGames = allGamesFuture.toList();
     var user = await auth.getUser();
@@ -81,6 +86,15 @@ class FiredartApi {
           }
         }
       }
+    }
+  }
+
+  ///Remove game from user library
+  static Future<void> removeFromUserLibrary(Game game) async {
+    var user = await auth.getUser();
+    if (auth.isSignedIn) {
+      (await owns.where('Game Uid', isEqualTo: game.name).where('User Uid', isEqualTo: user.id).get()).first.reference.delete();
+      game.isInLibrary = false;
     }
   }
 

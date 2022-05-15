@@ -20,7 +20,7 @@ class ShellScripts{
     var shell2 = shell.cd('CelluloGames');
     await shell2.run('md ${_game.unityName}');
     var shell3 = shell2.cd(_game.unityName);
-    await shell3.run('curl "${_game.windowsBuild}" --output ${_game.unityName}.zip');
+    await shell3.run('curl "${_game.windowsBuild}" --output ${_game.unityName}.zip'); // TODO add loading icon
     await shell3.run('tar -xf ${_game.unityName}.zip');
   }
 
@@ -31,9 +31,6 @@ class ShellScripts{
     await shell.run('if not exist CelluloGames md CelluloGames');
     var shell2 = shell.cd('CelluloGames');
     var result = await shell2.run('if exist ${_game.unityName} echo found');
-    print('-----------');
-    print(result.outText);
-    print('-----------');
     return result.outText.isNotEmpty;
   }
 

@@ -22,31 +22,32 @@ public class CelluloAchievementEditor : Editor
     private IntegerField stepsNumber;
     private CelluloAchievementType type = CelluloAchievementType.Boolean;
 
+    // Override inspector visuals with text fields and buttons
     public override VisualElement CreateInspectorGUI()
     {
-        // Create a new VisualElement to be the root of our inspector UI
+        // Root of our UI
         VisualElement inspector = new VisualElement();
-        
+
+        // Button to refresh achievements from file
         Button refreshButton = new Button(RefreshAchievements);
         refreshButton.Add(new Label("Refresh previous achievements"));
         refreshButton.style.backgroundColor = new Color(.35f, .75f, .35f);
         refreshButton.style.fontSize = 15;
         inspector.Add(refreshButton);
         inspector.Add(new Label(" "));
-        
+
+
+        // Fields to create a new achievement
         Label addTitle = new Label("Create new achievement");
         addTitle.style.fontSize = 20;
         inspector.Add(addTitle);
 
-        // Create a new achievement
         Box newAchievement = new Box();
-        
-        // Input field for achievement name
         newAchievement.Add(new Label("\nEnter achievement name"));
         TextField achievementName = new TextField();
         newAchievement.Add(achievementName);
 
-        
+
         // Toggles for achievement type
         newAchievement.Add(new Label("\nToggle achievement type (select one)"));
         booleanToggle = new Button(() => UpdateToggles(CelluloAchievementType.Boolean));
@@ -63,25 +64,25 @@ public class CelluloAchievementEditor : Editor
         newAchievement.Add(highScoreToggle);
         inspector.Add(newAchievement);
 
-        // Add new achievement to added achievements
+        // Add new achievement to achievements list
         inspector.Add(new Label(" "));
         Button addButton = new Button(
             () => AddAchievement(
-                new CelluloAchievement(achievementName.value, type, stepsNumber.value)));
+                new CelluloAchievement(achievementName.value, type, stepsNumber.value, 0), false));
         addButton.Add(new Label("Add achievement"));
         addButton.style.backgroundColor = new Color(.35f, .35f, .85f);
         addButton.style.fontSize = 15;
         inspector.Add(addButton);
         inspector.Add(new Label(" "));
-        
-        // List all added achievements
+
+        // List of all added achievements
         Label addedTitle = new Label("Achievements added");
         addedTitle.style.fontSize = 20;
         inspector.Add(addedTitle);
         addedAchievementsBox = new Box();
         inspector.Add(addedAchievementsBox);
-        
-        // Confirm added achievements
+
+        // Button to confirm added achievements
         inspector.Add(new Label(" "));
         Button confirmButton = new Button(ConfirmAchievements);
         confirmButton.Add(new Label("Confirm all"));
@@ -89,30 +90,38 @@ public class CelluloAchievementEditor : Editor
         confirmButton.style.fontSize = 15;
         inspector.Add(confirmButton);
         inspector.Add(new Label(" "));
-        
+
         // Return the finished inspector UI
         return inspector;
     }
 
+    // Get previous achievements from file
     private void RefreshAchievements()
     {
+        CelluloAchievementDataManager.achievementsList.Clear();
+        CelluloAchievementDataManager.ReadFile();
         List<CelluloAchievement> temp = CelluloAchievementDataManager.achievementsList;
         for (int i = 0; i < temp.Count; i++)
         {
-            AddAchievement(temp[i]);
+            Debug.Log(temp.Count);
+            AddAchievement(temp[i], true);
         }
     }
 
-    private void AddAchievement(CelluloAchievement achievement)
+    // Add achievement to achievements list and display it in the inspector
+    private void AddAchievement(CelluloAchievement achievement, bool isRefreshing)
     {
-        foreach (var a in CelluloAchievementDataManager.achievementsList)
+        if (!isRefreshing)
         {
-            if (a.GetAchievementLabel() == achievement.GetAchievementLabel())
+            foreach (var a in CelluloAchievementDataManager.achievementsList)
             {
-                return;
+                if (a.GetAchievementLabel() == achievement.GetAchievementLabel())
+                {
+                    return;
+                }
             }
+            CelluloAchievementDataManager.achievementsList.Add(achievement);
         }
-        CelluloAchievementDataManager.achievementsList.Add(achievement);
         Box achievementBox = new Box();
         achievementBox.Add(new Label(achievement.GetAchievementLabel()));
         if (achievement.GetAchievementType() == CelluloAchievementType.Steps)
@@ -124,6 +133,8 @@ public class CelluloAchievementEditor : Editor
         {
             achievementBox.Add(new Label(achievement.GetAchievementTypeString()));
         }
+
+        // Button to delete achievement from achievements list and remove it from the inspector
         Button removeAchievement = new Button(() =>
         {
             addedAchievementsBox.Remove(achievementBox);
@@ -131,7 +142,7 @@ public class CelluloAchievementEditor : Editor
         });
         removeAchievement.Add(new Label("Remove"));
         achievementBox.Add(removeAchievement);
-        
+
         Button delimiter = new Button();
         delimiter.style.height = 3;
         delimiter.SetEnabled(false);
@@ -139,11 +150,13 @@ public class CelluloAchievementEditor : Editor
         addedAchievementsBox.Add(achievementBox);
     }
 
+    // Confirm all added achievements and write them to file
     private void ConfirmAchievements()
     {
         CelluloAchievementDataManager.WriteFile();
     }
 
+    // Select only clicked type and activate number of steps field if needed
     private void UpdateToggles(CelluloAchievementType type)
     {
         Color defaultGrey = new Color(.35f, .35f, .35f);

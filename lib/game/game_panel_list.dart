@@ -11,11 +11,14 @@ class GamePanelList extends StatefulWidget {
   final List<Game> games;
   final Function(Game)? onPressedPrimary;
   final Function(Game)? onPressedSecondary;
+  final Function(Game)? onPressedTertiary;
   const GamePanelList(
       {Key? key,
       required this.games,
       this.onPressedPrimary,
-      this.onPressedSecondary})
+      this.onPressedSecondary,
+      this.onPressedTertiary
+      })
       : super(key: key);
 
   @override
@@ -66,7 +69,9 @@ class _GamePanelListState extends State<GamePanelList> with TickerProviderStateM
                 : () => widget.onPressedPrimary!(_game),
             onPressedSecondary: !_game.isInstalled && _game.webUrl == null
                 ? null
-                : () => widget.onPressedSecondary!(_game)),
+                : () => widget.onPressedSecondary!(_game),
+          onPressedTertiary: () => widget.onPressedTertiary!(_game),
+        ),
         isExpanded: _game.isExpanded,
         canTapOnHeader: true,
         hasIcon: false);
