@@ -222,7 +222,7 @@ class FlutterfireApi {
         DeviceApps.openApp(_packageName);
       } else {
         OpenFile.open(
-            '${appDocDir.path}/${game.androidBuild?.split('/').last}.apk');
+            '${appDocDir.path}/${game.unityName}.apk');
       }
     }
   }
