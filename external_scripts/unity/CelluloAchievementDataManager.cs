@@ -60,15 +60,32 @@ public class CelluloAchievementDataManager : MonoBehaviour
     public static void ReadFile()
     {
         filePath = Application.persistentDataPath + "/achievements.json";
+        string[] fileContents;
 
         // Read developer file if game is played for the first time
-        if (!File.Exists(filePath))
+        if (File.Exists(filePath))
         {
-            filePath = Application.dataPath + "/achievements.json";
+            fileContents = File.ReadAllLines(filePath);
+        }
+        else
+        {
+            fileContents = new[]
+            {
+                "1",
+                "{\"label\":\"a\",\"type\":\"one\",\"steps\":0,\"value\":0}",
+                "0"
+            };
+            /*fileContents = new[]
+            {
+                "number of achievements",
+                "first achievement",
+                "...",
+                "last achievement",
+                "0"
+            };*/
         }
 
         // Read the entire file and save its contents.
-        string[] fileContents = File.ReadAllLines(filePath);
         int count = Int32.Parse(fileContents[0]);
 
         for (int i = 1; i < count + 1; i++)
@@ -84,7 +101,7 @@ public class CelluloAchievementDataManager : MonoBehaviour
                 default: type = CelluloAchievementType.HighScore; break;
             }
             CelluloAchievement achievement =
-                new CelluloAchievement(achievementData.label, type, achievementData.steps);
+                new CelluloAchievement(achievementData.label, type, achievementData.steps, achievementData.value);
             achievementsList.Add(achievement);
         }
 
@@ -124,7 +141,7 @@ class CelluloAchievementData
     public string label = "";
     public string type = "";
     public int steps;
-    private int value;
+    public int value;
     
     public CelluloAchievementData(string label, string type, int steps, int value)
     {

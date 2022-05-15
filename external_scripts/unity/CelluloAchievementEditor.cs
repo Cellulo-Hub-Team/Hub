@@ -68,7 +68,7 @@ public class CelluloAchievementEditor : Editor
         inspector.Add(new Label(" "));
         Button addButton = new Button(
             () => AddAchievement(
-                new CelluloAchievement(achievementName.value, type, stepsNumber.value), false));
+                new CelluloAchievement(achievementName.value, type, stepsNumber.value, 0), false));
         addButton.Add(new Label("Add achievement"));
         addButton.style.backgroundColor = new Color(.35f, .35f, .85f);
         addButton.style.fontSize = 15;
@@ -98,6 +98,7 @@ public class CelluloAchievementEditor : Editor
     // Get previous achievements from file
     private void RefreshAchievements()
     {
+        CelluloAchievementDataManager.achievementsList.Clear();
         CelluloAchievementDataManager.ReadFile();
         List<CelluloAchievement> temp = CelluloAchievementDataManager.achievementsList;
         for (int i = 0; i < temp.Count; i++)

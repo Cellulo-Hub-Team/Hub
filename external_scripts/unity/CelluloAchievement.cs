@@ -15,11 +15,12 @@ public class CelluloAchievement
     private int steps;
     private int value;
 
-    public CelluloAchievement(string label, CelluloAchievementType type, int steps)
+    public CelluloAchievement(string label, CelluloAchievementType type, int steps, int value)
     {
         this.label = label;
         this.type = type;
         this.steps = steps;
+        this.value = value;
     }
 
     public string GetAchievementLabel()
