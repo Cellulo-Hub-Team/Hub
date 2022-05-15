@@ -84,6 +84,15 @@ class FiredartApi {
     }
   }
 
+  ///Remove game from user library
+  static Future<void> removeFromUserLibrary(Game game) async {
+    var user = await auth.getUser();
+    if (auth.isSignedIn) {
+      (await owns.where('Game Uid', isEqualTo: game.name).where('User Uid', isEqualTo: user.id).get()).first.reference.delete();
+      game.isInLibrary = false;
+    }
+  }
+
   //Add game to user library on the database
   static Future<void> addToUserLibrary(Game game) async {
     var user = await auth.getUser();
