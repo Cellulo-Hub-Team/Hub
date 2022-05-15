@@ -34,7 +34,7 @@ class FlutterfireApi {
       companyNameUnity = 'Company Name Unity',
       gameDescription = 'Game Description',
       gameInstructions = 'Game Instructions',
-      webBuild =  'Web Build',
+      webBuild = 'Web Build',
       webLink = 'Web Link',
       linuxBuild = 'Linux Build',
       androidBuild = 'Android Build',
@@ -44,42 +44,45 @@ class FlutterfireApi {
       cognitivePercentage = 'Cognitive Percentage',
       socialPercentage = 'Social Percentage',
       celluloCount = 'Cellulo Count',
-      downloads = 'Downloads';
+      downloads = 'Downloads',
+      apk = 'apkName';
 
   /// Build the list of all games stored on Firebase
   static Future<void> buildAllGamesList() async {
     QuerySnapshot querySnapshot = await games.get();
     final allData = querySnapshot.docs.toList();
     for (var game in allData) {
-      String? androidUrl = game["Android Build"] == "" ? null : game["Android Build"];
+      String? androidUrl =
+          game["Android Build"] == "" ? null : game["Android Build"];
       String? linuxUrl = game["Linux Build"] == "" ? null : game["Linux Build"];
-      String? windowsUrl = game["Windows Build"] == "" ? null : game["Windows Build"];
+      String? windowsUrl =
+          game["Windows Build"] == "" ? null : game["Windows Build"];
       String? webUrl = game["Web Link"] == "" ? null : game["Web Link"];
 
       Game _toAdd = Game(
-        game.id,
-        game[gameNameUnity],
-        game[companyName],
-        game[companyNameUnity],
-        game[gameDescription],
-        game[gameInstructions],
-        game[backgroundImage],
-        androidUrl,
-        linuxUrl,
-        windowsUrl,
-        webUrl,
-        game[physicalPercentage],
-        game[cognitivePercentage],
-        game[socialPercentage],
-        game[celluloCount],
-        game[downloads]
-      );
+          game.id,
+          game[gameNameUnity],
+          game[companyName],
+          game[companyNameUnity],
+          game[gameDescription],
+          game[gameInstructions],
+          game[backgroundImage],
+          androidUrl,
+          linuxUrl,
+          windowsUrl,
+          webUrl,
+          game[physicalPercentage],
+          game[cognitivePercentage],
+          game[socialPercentage],
+          game[celluloCount],
+          game[downloads],
+          game[apk]);
       _toAdd.isInstalled = await gameIsInstalled(_toAdd);
       Common.allGamesList.add(_toAdd);
     }
   }
 
-  //Creates the local list of games the player owns
+  ///Creates the local list of games the player owns
   static Future<void> buildUserGamesList() async {
     QuerySnapshot querySnapshot = await userGames.get();
     final allData = querySnapshot.docs.toList();
@@ -95,12 +98,12 @@ class FlutterfireApi {
     }
   }
 
-  //Checks whether the game is currently installed on this device
+  ///Checks whether the game is currently installed on this device
   static Future<bool> gameIsInstalled(Game game) {
     return DeviceApps.isAppInstalled(createPackageName(game));
   }
 
-  //Add game to user library on the database
+  ///Add game to user library on the database
   static Future<void> addToUserLibrary(Game game) async {
     User? user = auth.currentUser;
     return userGames
@@ -109,6 +112,15 @@ class FlutterfireApi {
         .then((value) => print("Game added to user library"))
         .catchError(
             (error) => print("Failed to add game to user library: $error"));
+  }
+
+  ///Remove game from user library
+  static Future<void> removeFromUserLibrary(Game game) async {
+    User? user = auth.currentUser;
+    if (user != null) {
+      (await userGames.where('Game Uid', isEqualTo: game.name).where('User Uid', isEqualTo: user.uid).get()).docs.first.reference.delete();
+      game.isInLibrary = false;
+    }
   }
 
   //Launches url corresponding to the web version of the game
@@ -123,46 +135,46 @@ class FlutterfireApi {
 
   ///Download the game (game) appropriate to the OS
   static Future<void> downloadFile(Game game) async {
-    String? apkName = game.androidBuild?.split('/').last;
     String path = (await appDocDir)
         .path; //get the path to the application (data/user/0/...)
     File downloadToFile;
 
-    if (Common.isAndroid) {//TODO iOs version
-      if(await File('$path/$apkName').exists()) {
-        Common.openFile('$path/$apkName');
+    if (Common.isAndroid) {
+      //TODO iOs version
+      if (await File('$path/${game.apkName}').exists()) {
+        Common.openFile('$path/${game.apkName}');
         return;
       }
-      downloadToFile = File('$path/$apkName'); //declare where the apk with be store (in the Application Documents right now)
+      downloadToFile = File(
+          '$path/${game.apkName}'); //declare where the apk with be store (in the Application Documents right now)
+      firebase_storage.DownloadTask task = ref
+          .child(game.name)
+          .child(game.apkName)
+          .writeToFile(downloadToFile);
+      task.snapshotEvents.listen((firebase_storage.TaskSnapshot snapshot) {
+        print('Task state: ${snapshot.state}');
+        print(
+            'Progress: ${(snapshot.bytesTransferred / snapshot.totalBytes) * 100} %');
+      });
+      try {
+        await task; //download from FirebaseStorage and write into the right file
+      } on firebase_core.FirebaseException catch (e) {
+        if (e.code == 'permission-denied') {
+          print('User does not have permission to upload to this reference.');
+        }
+        // e.g, e.code == 'canceled'
+      }
+      Common.openFile('$path/${game.apkName}'); //open the apk = message to install it
+
     } else {
       downloadToFile = File('');
-    }
-    firebase_storage.DownloadTask task = ref
-        .child(game.androidBuild ?? "Wrong path")
-        .writeToFile(downloadToFile);
-    task.snapshotEvents.listen((firebase_storage.TaskSnapshot snapshot) {
-      print('Task state: ${snapshot.state}');
-      print('Progress: ${(snapshot.bytesTransferred / snapshot.totalBytes) * 100} %');
-    });
-
-    try {
-      await task; //download from FirebaseStorage and write into the right file
-    } on firebase_core.FirebaseException catch (e) {
-      if (e.code == 'permission-denied') {
-        print('User does not have permission to upload to this reference.');
-      }
-      // e.g, e.code == 'canceled'
-    }
-
-    if(Common.isAndroid){
-      Common.openFile('$path/$apkName'); //open the apk = message to install it
     }
 
   }
 
   ///Basic Email+password signUp (found on FirebaseAuth doc)
-
-  static Future<int> signUp(String email, String password, BuildContext context) async {
+  static Future<int> signUp(
+      String email, String password, BuildContext context) async {
     try {
       UserCredential userCredential = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: password);
@@ -171,7 +183,8 @@ class FlutterfireApi {
         Common.showSnackBar(context, 'The password provided is too weak.');
         return -1;
       } else if (e.code == 'email-already-in-use') {
-        Common.showSnackBar(context, 'The account already exists for that email.');
+        Common.showSnackBar(
+            context, 'The account already exists for that email.');
         print('The account already exists for that email.');
         return -1;
       }
@@ -183,7 +196,8 @@ class FlutterfireApi {
   }
 
   ///Basic Email+password signIn (found on FirebaseAuth doc)
-  static Future<void> signIn(String email, String password, BuildContext context) async {
+  static Future<void> signIn(
+      String email, String password, BuildContext context) async {
     try {
       UserCredential userCredential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
@@ -207,16 +221,18 @@ class FlutterfireApi {
       if (_isInstalled) {
         DeviceApps.openApp(_packageName);
       } else {
-        OpenFile.open('${appDocDir.path}/${game.androidBuild?.split('/').last}.apk');
+        OpenFile.open(
+            '${appDocDir.path}/${game.androidBuild?.split('/').last}.apk');
       }
     }
   }
 
   ///Generate the name of the package according to the game company and an optional name
   static String createPackageName(Game game) {
-        return ('com.${game.companyName}.${game.name}'.toLowerCase().replaceAll(' ', ''));
+    return ('com.${game.unityCompanyName}.${game.unityName}'
+        .toLowerCase()
+        .replaceAll(' ', ''));
   }
-
 
   ///Upload the a Uint8List to the Firebase storage given the name of the file
   static Future<void> uploadFile(
@@ -249,7 +265,8 @@ class FlutterfireApi {
       int _physicalPercentage,
       int _cognitivePercentage,
       int _socialPercentage,
-      int _celluloCount) async {
+      int _celluloCount,
+      String apkName) async {
     return games
         .doc(_gameName)
         .set({
@@ -268,7 +285,8 @@ class FlutterfireApi {
           cognitivePercentage: _cognitivePercentage,
           socialPercentage: _socialPercentage,
           celluloCount: _celluloCount,
-          downloads: 0
+          downloads: 0,
+          apk: apkName
         })
         .then((value) => print("Game added"))
         .catchError((error) => print("Failed to add game: $error"));
@@ -297,12 +315,10 @@ class FlutterfireApi {
   }
 
   ///Add a download to a game
-  static incrementDownloads(Game game) async{
+  static incrementDownloads(Game game) async {
     await games.doc(game.name).update({downloads: game.downloads + 1});
     game.downloads++;
   }
-
-
 
 /*static void getGames() async {
     QuerySnapshot<Object?> gameList = await games.get();

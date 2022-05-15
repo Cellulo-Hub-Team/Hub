@@ -1,19 +1,12 @@
 import 'dart:async';
-import 'dart:io';
-import 'dart:math';
 
 import 'package:cellulo_hub/api/shell_scripts.dart';
 import 'package:cellulo_hub/custom_widgets/custom_scaffold.dart';
 import 'package:cellulo_hub/game/game_panel_list.dart';
 import 'package:cellulo_hub/main.dart';
 import 'package:cellulo_hub/main/shop.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:device_apps/device_apps.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_fgbg/flutter_fgbg.dart';
-import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 
 import '../api/flutterfire_api.dart';
@@ -30,15 +23,15 @@ class MyGames extends StatefulWidget {
   @override
   _MyGamesState createState() => _MyGamesState();
 
-
 }
 
 class _MyGamesState extends State<MyGames>
     with TickerProviderStateMixin, WidgetsBindingObserver {
 
-  late Game? _beingInstalledGame;
+  Game? _beingInstalledGame;
+  List<Game> inLibraryGames = Common.allGamesList.where((game) => game.isInLibrary).toList();
 
-  //Installs the game on the device
+  ///Installs the game on the device
   _onPressedInstall(Game _game) {
     setState(() async {
       //TODO add iOS and MacOS
@@ -73,6 +66,16 @@ class _MyGamesState extends State<MyGames>
       FlutterfireApi.launchWebApp(_game);
     } else {
       Common.isDesktop ? FiredartApi.launchApp(_game) : FlutterfireApi.launchApp(_game);
+    }
+  }
+
+  ///Delete game from my games
+  _onPressedDelete(Game _game) async{
+    if(_game.isInLibrary){
+      await FlutterfireApi.removeFromUserLibrary(_game);
+      setState(() {
+        inLibraryGames = Common.allGamesList.where((game) => game.isInLibrary).toList();
+      });
     }
   }
 
@@ -126,7 +129,7 @@ class _MyGamesState extends State<MyGames>
           Common.goToTarget(context, const Shop(), false, Activity.Shop);
           },
       body: GamePanelList(
-          games: Common.allGamesList.where((game) => game.isInLibrary).toList(),
+          games: inLibraryGames,
           onPressedPrimary: _onPressedInstall,
           onPressedSecondary: _onPressedLaunch)
     );

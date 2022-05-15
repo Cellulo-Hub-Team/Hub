@@ -20,6 +20,7 @@ class Game {
   int socialPercentage = 0;
   int celluloCount = 0;
   int downloads = 0;
+  String apkName = "";
 
   Game(
       this.name,
@@ -37,7 +38,8 @@ class Game {
       this.cognitivePercentage,
       this.socialPercentage,
       this.celluloCount,
-      this.downloads);
+      this.downloads,
+      this.apkName);
 
   @override
   String toString() {
