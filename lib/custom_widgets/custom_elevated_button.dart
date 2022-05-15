@@ -22,7 +22,11 @@ class _CustomElevatedButtonState extends State<CustomElevatedButton> {
       onPressed: widget.onPressed,
       child: Text(widget.label),
       style: ElevatedButton.styleFrom(
-          primary: CustomColors.currentColor),
+          primary: CustomColors.currentColor,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.zero,
+          ),
+      ),
     );
   }
 }
