@@ -69,20 +69,25 @@ public class CelluloAchievementDataManager : MonoBehaviour
         }
         else
         {
+            // Add a \ in front of each " inside {}
             fileContents = new[]
-            {
-                "1",
-                "{\"label\":\"a\",\"type\":\"one\",\"steps\":0,\"value\":0}",
-                "0"
-            };
-            /*fileContents = new[]
             {
                 "number of achievements",
                 "first achievement",
                 "...",
                 "last achievement",
                 "0"
-            };*/
+            };
+            // Example
+            /*
+             *  {
+             *      "3",
+             *      "{\"label\":\"a\",\"type\":\"one\",\"steps\":0,\"value\":0}",
+             *      "{\"label\":\"b\",\"type\":\"multiple\",\"steps\":100,\"value\":0}",
+             *      "{\"label\":\"c\",\"type\":\"high\",\"steps\":0,\"value\":0}",
+             *      "0"
+             *  }
+             */
         }
 
         // Read the entire file and save its contents.
@@ -142,7 +147,7 @@ class CelluloAchievementData
     public string type = "";
     public int steps;
     public int value;
-    
+
     public CelluloAchievementData(string label, string type, int steps, int value)
     {
         this.label = label;
