@@ -7,6 +7,7 @@ public enum CelluloAchievementType
     HighScore
 }
 
+// Base class for all Cellulo achievements
 public class CelluloAchievement
 {
     private string label = "";
