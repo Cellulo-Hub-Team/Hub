@@ -71,7 +71,7 @@ class MyApp extends StatelessWidget {
               darkTheme: ThemeData(
                   textTheme: GoogleFonts.comfortaaTextTheme(),
                   scaffoldBackgroundColor: CustomColors.blackColor.shade900,
-                  brightness: Brightness.dark,
+                  brightness: Brightness.light,
                   accentColor: Colors.white),
               themeMode: currentMode,
               home: const WelcomeScreen());

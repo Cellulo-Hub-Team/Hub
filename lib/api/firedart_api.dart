@@ -70,6 +70,11 @@ class FiredartApi {
 
   //Creates the local list of games the player owns
   static Future<void> buildUserGamesList() async {
+    //Reset user games list
+    for (var localGame in Common.allGamesList) {
+      localGame.isInLibrary = false;
+    }
+
     var allGamesFuture = await owns.get();
     final allGames = allGamesFuture.toList();
     var user = await auth.getUser();

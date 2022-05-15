@@ -76,9 +76,15 @@ class _MyGamesState extends State<MyGames>
     if(_game.isInLibrary){
       if (Common.isDesktop){
         await FiredartApi.removeFromUserLibrary(_game);
+        if (_game.isInstalled) {
+          ShellScripts.uninstallGameWindows(_game);
+        }
       }
       else{
         await FlutterfireApi.removeFromUserLibrary(_game);
+        if (_game.isInstalled) {
+          DeviceApps.uninstallApp(FlutterfireApi.createPackageName(_game));
+        }
       }
       setState(() {
         inLibraryGames = Common.allGamesList.where((game) => game.isInLibrary).toList();

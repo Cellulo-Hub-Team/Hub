@@ -31,9 +31,6 @@ class ShellScripts{
     await shell.run('if not exist CelluloGames md CelluloGames');
     var shell2 = shell.cd('CelluloGames');
     var result = await shell2.run('if exist ${_game.unityName} echo found');
-    print('-----------');
-    print(result.outText);
-    print('-----------');
     return result.outText.isNotEmpty;
   }
 
