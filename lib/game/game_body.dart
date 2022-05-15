@@ -18,12 +18,15 @@ class GameBody extends StatefulWidget {
   final bool isDescription;
   final VoidCallback? onPressedPrimary;
   final VoidCallback? onPressedSecondary;
+  final VoidCallback? onPressedTertiary;
   const GameBody({Key? key,
     required this.game,
     required this.index,
     required this.isDescription,
     this.onPressedPrimary,
-    this.onPressedSecondary}) : super(key: key);
+    this.onPressedSecondary,
+    this.onPressedTertiary
+  }) : super(key: key);
 
   @override
   State<GameBody> createState() => _GameBodyState();
@@ -65,11 +68,19 @@ class _GameBodyState extends State<GameBody> {
                         ? (widget.game.isInstalled ? "Uninstall" : "Install")
                         : (widget.game.isInLibrary ? "See in library" : "Add to My Games"),
                     onPressed: widget.onPressedPrimary),
+
                   Common.currentScreen == Activity.MyGames ? Spacer() : Container(),
                   Common.currentScreen == Activity.MyGames ? CustomElevatedButton(
                     label: "Launch",
                     onPressed: widget.onPressedSecondary,
                   ) : Container(),
+
+                  Common.currentScreen == Activity.MyGames ? Spacer() : Container(),
+                  Common.currentScreen == Activity.MyGames ? CustomElevatedButton(
+                    label: "Remove",
+                    onPressed: widget.onPressedTertiary,
+                  ) : Container(),
+
                   !widget.isDescription ? Spacer() : Container(),
                   !widget.isDescription ? CustomElevatedButton(
                       label: "See more",
@@ -80,6 +91,7 @@ class _GameBodyState extends State<GameBody> {
                             index: widget.index,
                             onPressedPrimary: widget.onPressedPrimary,
                             onPressedSecondary: widget.onPressedSecondary,
+                            onPressedTertiary: widget.onPressedTertiary,
                           ),
                           false,
                           Common.currentScreen

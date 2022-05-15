@@ -56,7 +56,9 @@ class _MyGamesState extends State<MyGames>
           }
         }
       }
-      _game.isInstalled = !_game.isInstalled;
+      setState(() {
+        _game.isInstalled = !_game.isInstalled;
+      });
     });
   }
 
@@ -72,7 +74,12 @@ class _MyGamesState extends State<MyGames>
   ///Delete game from my games
   _onPressedDelete(Game _game) async{
     if(_game.isInLibrary){
-      await FlutterfireApi.removeFromUserLibrary(_game);
+      if (Common.isDesktop){
+        await FiredartApi.removeFromUserLibrary(_game);
+      }
+      else{
+        await FlutterfireApi.removeFromUserLibrary(_game);
+      }
       setState(() {
         inLibraryGames = Common.allGamesList.where((game) => game.isInLibrary).toList();
       });
@@ -131,7 +138,9 @@ class _MyGamesState extends State<MyGames>
       body: GamePanelList(
           games: inLibraryGames,
           onPressedPrimary: _onPressedInstall,
-          onPressedSecondary: _onPressedLaunch)
+          onPressedSecondary: _onPressedLaunch,
+          onPressedTertiary: _onPressedDelete,
+      )
     );
   }
 }
