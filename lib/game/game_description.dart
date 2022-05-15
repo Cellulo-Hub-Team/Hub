@@ -18,11 +18,14 @@ class GameDescription extends StatefulWidget {
   final int index;
   final VoidCallback? onPressedPrimary;
   final VoidCallback? onPressedSecondary;
+  final VoidCallback? onPressedTertiary;
   const GameDescription({Key? key,
     required this.game,
     required this.index,
     this.onPressedPrimary,
-    this.onPressedSecondary})
+    this.onPressedSecondary,
+    this.onPressedTertiary,
+  })
       : super(key: key);
 
   @override
@@ -104,10 +107,12 @@ class _GameDescriptionState extends State<GameDescription> with TickerProviderSt
                   body: TabBarView(
                     children: [
                       GameBody(game: widget.game,
-                          index: widget.index,
-                          isDescription: true,
-                      onPressedPrimary: widget.onPressedPrimary,
-                      onPressedSecondary: widget.onPressedSecondary),
+                        index: widget.index,
+                        isDescription: true,
+                        onPressedPrimary: widget.onPressedPrimary,
+                        onPressedSecondary: widget.onPressedSecondary,
+                        onPressedTertiary: widget.onPressedTertiary,
+                      ),
                       _instructions(),
                       _successes(),
                     ],

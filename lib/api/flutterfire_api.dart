@@ -26,7 +26,7 @@ class FlutterfireApi {
   static FirebaseFirestore firestore = FirebaseFirestore.instance;
   static CollectionReference games =
       FirebaseFirestore.instance.collection('games');
-  static CollectionReference userGames =
+  static CollectionReference owns =
       FirebaseFirestore.instance.collection('owns');
   static const String gameName = 'Game Name',
       gameNameUnity = 'Game Name Unity',
@@ -84,7 +84,12 @@ class FlutterfireApi {
 
   ///Creates the local list of games the player owns
   static Future<void> buildUserGamesList() async {
-    QuerySnapshot querySnapshot = await userGames.get();
+
+    for (var localGame in Common.allGamesList) {
+      localGame.isInLibrary = false;
+    }
+
+    QuerySnapshot querySnapshot = await owns.get();
     final allData = querySnapshot.docs.toList();
     User? user = auth.currentUser;
     for (var game in allData) {
@@ -106,7 +111,7 @@ class FlutterfireApi {
   ///Add game to user library on the database
   static Future<void> addToUserLibrary(Game game) async {
     User? user = auth.currentUser;
-    return userGames
+    return owns
         .doc()
         .set({'Game Uid': game.name, 'User Uid': user?.uid})
         .then((value) => print("Game added to user library"))
@@ -118,7 +123,7 @@ class FlutterfireApi {
   static Future<void> removeFromUserLibrary(Game game) async {
     User? user = auth.currentUser;
     if (user != null) {
-      (await userGames.where('Game Uid', isEqualTo: game.name).where('User Uid', isEqualTo: user.uid).get()).docs.first.reference.delete();
+      (await owns.where('Game Uid', isEqualTo: game.name).where('User Uid', isEqualTo: user.uid).get()).docs.first.reference.delete();
       game.isInLibrary = false;
     }
   }

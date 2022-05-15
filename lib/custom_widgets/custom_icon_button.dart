@@ -24,9 +24,7 @@ class _CustomIconButtonState extends State<CustomIconButton> {
       label: Text(widget.label, style: TextStyle(fontSize: 15, color: widget.color == Colors.white ? Colors.grey.shade900 : Colors.white)),
       style: ElevatedButton.styleFrom(
           primary: widget.color,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20.0),
-          ),
+          shape: StadiumBorder(),
           fixedSize: const Size(140, 40)),
     );
   }
