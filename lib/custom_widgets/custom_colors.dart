@@ -39,7 +39,7 @@ Map<int, Color> _contrastedYellowMap = {
   900: const Color.fromRGBO(242, 202, 26, 1),
 };
 Map<int, Color> _contrastedPurpleMap = {
-  900: const Color.fromRGBO(138, 49, 239, 1),
+  900: const Color.fromRGBO(255, 0, 189, 1),
 };
 
 class CustomColors{
@@ -49,17 +49,17 @@ class CustomColors{
   static Color yellowColor() => Common.contrastTheme ? MaterialColor(0x000000, _contrastedYellowMap).shade900 : MaterialColor(0x000000, _yellowMap).shade900;
   static Color purpleColor() => Common.contrastTheme ? MaterialColor(0x000000, _contrastedPurpleMap).shade900 : MaterialColor(0x000000, _purpleMap).shade900;
 
-  static Color greyColor() => MaterialColor(0x000000, _greyMap).shade900;
-  static Color blackColor() => MaterialColor(0x000000, _blackMap).shade900;
+  static Color greyColor = MaterialColor(0x000000, _greyMap).shade900;
+  static Color blackColor = MaterialColor(0x000000, _blackMap).shade900;
 
   //The main color in the current part of the app
   static Color currentColor = redColor();
 
   //The default color adapted to each theme
-  static Color darkThemeColor = Common.darkTheme ? Colors.white : blackColor();
+  static Color darkThemeColor() => Common.darkTheme ? Colors.white : blackColor;
 
   //The default color adapted to each theme inversed
-  static Color inversedDarkThemeColor = Common.darkTheme ? blackColor() : Colors.white;
+  static Color inversedDarkThemeColor() => Common.darkTheme ? blackColor : Colors.white;
 }
 
 

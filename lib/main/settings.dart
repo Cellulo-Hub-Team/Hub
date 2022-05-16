@@ -31,7 +31,6 @@ class _SettingsState extends State<Settings> {
       Common.darkTheme = !Common.darkTheme;
       MyApp.themeNotifier.value =
           Common.darkTheme ? ThemeMode.dark : ThemeMode.light;
-      CustomColors.currentColor = CustomColors.greyColor.shade900;
       Common.showSnackBar(context,
           Common.darkTheme ? "Switched to Night mode" : "Switched to Day mode");
     });
@@ -77,7 +76,7 @@ class _SettingsState extends State<Settings> {
 
   @override
   void initState() {
-    CustomColors.currentColor = CustomColors.purpleColor.shade900;
+    CustomColors.currentColor = CustomColors.purpleColor();
     super.initState();
   }
 
@@ -140,7 +139,7 @@ class _SettingsState extends State<Settings> {
             return Center(
               child: Text('Connected as: $output',
                   style: TextStyle(
-                      fontSize: 18, color: CustomColors.greyColor.shade900)),
+                      fontSize: 18, color: CustomColors.darkThemeColor())),
             );
           }
         },

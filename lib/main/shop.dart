@@ -132,7 +132,7 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin, WidgetsBindi
 
   @override
   void initState() {
-    CustomColors.currentColor = CustomColors.blueColor.shade900;
+    CustomColors.currentColor = CustomColors.blueColor();
     WidgetsBinding.instance?.addObserver(this);
     Common.percentageController =
         AnimationController(duration: const Duration(seconds: 1), vsync: this);
@@ -189,7 +189,7 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin, WidgetsBindi
                           animation: _trendingController,
                           builder: (BuildContext context, Widget? child) {
                             return SliverAppBar(
-                                backgroundColor: Common.darkTheme ? CustomColors.blackColor.shade900 : Colors.white,
+                                backgroundColor: CustomColors.inversedDarkThemeColor(),
                                 automaticallyImplyLeading: false,
                                 leading: null,
                                 collapsedHeight: 420, // Check for web and desktop
@@ -240,7 +240,7 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin, WidgetsBindi
                             ],
                             labelColor: CustomColors.currentColor,
                             indicatorColor: CustomColors.currentColor,
-                            unselectedLabelColor: Common.darkTheme ? Colors.white : CustomColors.blackColor.shade900,
+                            unselectedLabelColor: CustomColors.darkThemeColor(),
                           ),
                         ),
                         floating: true,

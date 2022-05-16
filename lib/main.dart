@@ -87,7 +87,7 @@ class MyApp extends StatelessWidget {
                   brightness: Brightness.light),
               darkTheme: ThemeData(
                   textTheme: GoogleFonts.comfortaaTextTheme(),
-                  scaffoldBackgroundColor: CustomColors.blackColor.shade900,
+                  scaffoldBackgroundColor: CustomColors.blackColor,
                   brightness: Brightness.light),
               themeMode: currentMode,
               home: const WelcomeScreen());
@@ -117,7 +117,7 @@ class _MainMenuState extends State<MainMenu> {
             CustomMenuButton(
               label: "My Games",
               icon: FontAwesome.gamepad,
-              color: CustomColors.greenColor.shade900,
+              color: CustomColors.greenColor(),
               onPressed: () => Common.goToTarget(
                   context, const MyGames(), true, Activity.MyGames),
             ),
@@ -125,7 +125,7 @@ class _MainMenuState extends State<MainMenu> {
             CustomMenuButton(
               label: "Shop",
               icon: Entypo.shop,
-              color: CustomColors.blueColor.shade900,
+              color: CustomColors.blueColor(),
               onPressed: () =>
                   Common.goToTarget(context, const Shop(), true, Activity.Shop),
             ),
@@ -133,7 +133,7 @@ class _MainMenuState extends State<MainMenu> {
             CustomMenuButton(
               label: "Progress",
               icon: Octicons.graph,
-              color: CustomColors.redColor.shade900,
+              color: CustomColors.redColor(),
               onPressed: () => Common.goToTarget(
                   context, const Progress(), true, Activity.Progress),
             ),
@@ -168,7 +168,7 @@ class _MainMenuState extends State<MainMenu> {
             child: CustomIconButton(
                 label: "Settings",
                 icon: Ionicons.ios_settings,
-                color: CustomColors.greyColor.shade500,
+                color: Colors.grey.shade300,
                 onPressed: () => Common.goToTarget(
                   context, const Settings(), true, Activity.Profile))),
         /*Container(

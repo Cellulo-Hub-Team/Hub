@@ -14,7 +14,7 @@ class _ProgressState extends State<Progress> {
 
   @override
   void initState() {
-    CustomColors.currentColor = CustomColors.redColor.shade900;
+    CustomColors.currentColor = CustomColors.redColor();
     super.initState();
   }
 

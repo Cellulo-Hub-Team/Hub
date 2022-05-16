@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cellulo_hub/main/common.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../custom_widgets/custom_icon_button.dart';
 import 'game.dart';
@@ -160,7 +161,7 @@ class _GameHeaderState extends State<GameHeader> {
       ),
       label: Text(
         'Not available on your device',
-        style: Style.tagStyle(true, true),
+        style: GoogleFonts.comfortaa(fontSize: 20, color: Colors.white),//TODO fix
         textAlign: TextAlign.center,
       ),
       style: ElevatedButton.styleFrom(
