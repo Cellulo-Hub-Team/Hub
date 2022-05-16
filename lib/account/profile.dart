@@ -60,7 +60,7 @@ class _ProfileState extends State<Profile> {
 
   @override
   void initState() {
-    CustomColors.currentColor = CustomColors.purpleColor.shade900;
+    CustomColors.currentColor = CustomColors.purpleColor();
     super.initState();
   }
 

@@ -205,7 +205,9 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin, WidgetsBindi
                                       Text("Trending", style: Style.titleStyle()),
                                   _trendingWidget(),
                                   _trendingDescriptionDisplayed
-                                      ? (Common.isDesktop || Common.isWeb ? _trendingDescriptionDesktop() : _trendingDescription())
+                                      ? (Common.isDesktop || Common.isWeb || MediaQuery.of(context).orientation == Orientation.landscape
+                                        ? _trendingDescriptionDesktop()
+                                        : _trendingDescription())
                                       : Container(),
                                       Padding(
                                           padding: const EdgeInsets.only(left: 100, right: 100, top: 10, bottom: 10),
