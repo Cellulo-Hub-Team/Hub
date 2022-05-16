@@ -12,9 +12,7 @@ import 'package:device_apps/device_apps.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../main/common.dart';
 import '../game/game.dart';
-import '../main/my_games.dart';
 
-//TODO: Trouver un moyen clean de faire une ref static/ Exceptions/ Link à firebase storage quand on aura les jeux
 
 class FlutterfireApi {
   static firebase_storage.FirebaseStorage storage =
@@ -84,20 +82,18 @@ class FlutterfireApi {
 
   ///Creates the local list of games the player owns
   static Future<void> buildUserGamesList() async {
-
+    User? user = auth.currentUser;
     for (var localGame in Common.allGamesList) {
       localGame.isInLibrary = false;
     }
 
-    QuerySnapshot querySnapshot = await owns.get();
+    QuerySnapshot querySnapshot = (await owns.where('User Uid', isEqualTo: user?.uid).get());
     final allData = querySnapshot.docs.toList();
-    User? user = auth.currentUser;
+
     for (var game in allData) {
-      if (game.get("User Uid") == user?.uid) {
         for (var localGame in Common.allGamesList) {
           if (localGame.name == game.get("Game Uid")) {
             localGame.isInLibrary = true;
-          }
         }
       }
     }
@@ -157,9 +153,12 @@ class FlutterfireApi {
           .child(game.apkName)
           .writeToFile(downloadToFile);
       task.snapshotEvents.listen((firebase_storage.TaskSnapshot snapshot) {
-        print('Task state: ${snapshot.state}');
+        game.downloading = snapshot.bytesTransferred / snapshot.totalBytes * 100;
         print(
-            'Progress: ${(snapshot.bytesTransferred / snapshot.totalBytes) * 100} %');
+            'Progress game: ${game.downloading} %');
+        /*print('Task state: ${snapshot.state}');
+        print(
+            'Progress: ${(snapshot.bytesTransferred / snapshot.totalBytes) * 100} %');*/
       });
       try {
         await task; //download from FirebaseStorage and write into the right file
@@ -167,7 +166,6 @@ class FlutterfireApi {
         if (e.code == 'permission-denied') {
           print('User does not have permission to upload to this reference.');
         }
-        // e.g, e.code == 'canceled'
       }
       Common.openFile('$path/${game.apkName}'); //open the apk = message to install it
 
