@@ -270,10 +270,10 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin, WidgetsBindi
   ///Trending games list
   Widget _trendingWidget() {
     return SizedBox(
-        height: 320,
+        height: 270,
         child: ScrollSnapList(
           itemBuilder: _buildItemTrendingList,
-          itemSize: 300,
+          itemSize: 250,
           dynamicItemSize: true,
           onReachEnd: () {},
           itemCount: 3,
@@ -295,8 +295,7 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin, WidgetsBindi
     return Padding(
         padding: const EdgeInsets.only(top: 15, bottom: 15),
         child: Container(
-          width: 300,
-          height: 200,
+          width: 250,
           child: TextButton(
             onPressed: () => _onPressedTrending(index),
             child: Text(
@@ -354,17 +353,9 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin, WidgetsBindi
             alignment: Alignment.center,
             child: Column(
                 children: [
-        Padding(
-            padding: const EdgeInsets.all(15), //apply padding to all four sides
-            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Spacer(),
-              _percentageIndicator(_game.physicalPercentage / 100, Colors.deepOrangeAccent, Ionicons.ios_fitness),
-              Spacer(),
-              _percentageIndicator(_game.cognitivePercentage / 100, Colors.lightBlueAccent, MaterialCommunityIcons.brain),
-              Spacer(),
-              _percentageIndicator(_game.socialPercentage / 100, Colors.greenAccent, MaterialIcons.people),
-              Spacer()
-            ])),
+                  Padding(
+                      padding: const EdgeInsets.all(15), //apply padding to all four sides
+                      child: Text(_game.description, style: Style.descriptionStyle())),
         Padding(
             padding: const EdgeInsets.all(15), //apply padding to all four sides
             child: Row(

@@ -16,9 +16,10 @@ Map<int, Color> _yellowMap = {
   900: const Color.fromRGBO(248, 200, 80, 1),
 };
 Map<int, Color> _purpleMap = {
-  900: const Color.fromRGBO(172, 46, 208, 1),
+  900: const Color.fromRGBO(182, 56, 208, 1),
 };
 Map<int, Color> _greyMap = {
+  500: const Color.fromRGBO(100, 100, 100, .4),
   900: const Color.fromRGBO(100, 100, 100, 1),
 };
 Map<int, Color> _blackMap = {

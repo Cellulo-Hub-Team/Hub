@@ -56,7 +56,7 @@ class _SignUpState extends State<SignUp> {
     hasFloating: false,
     body: Form(
         key: _formKey,
-        child: Column(//TODO max width of 1000
+        child: Center(child: SizedBox(width: 800,child: Column(//TODO max width of 1000
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
@@ -66,6 +66,7 @@ class _SignUpState extends State<SignUp> {
               decoration: const InputDecoration(
                 hintText: 'Enter an email',
                 labelText: 'Email',
+                prefixIcon: Icon(Icons.mail, color: Colors.black),
               ),
               controller: emailController,
               validator: (value) {
@@ -80,6 +81,7 @@ class _SignUpState extends State<SignUp> {
               decoration: const InputDecoration(
                 hintText: 'Enter a password',
                 labelText: 'Password',
+                prefixIcon: Icon(Icons.lock, color: Colors.black),
               ),
               controller: passwordController,
               validator: (value) {
@@ -101,6 +103,7 @@ class _SignUpState extends State<SignUp> {
               decoration: const InputDecoration(
                 hintText: 'Confirm the password',
                 labelText: 'Confirm password',
+                prefixIcon: Icon(Icons.lock, color: Colors.black),
               ),
               controller: confirmationController,
               validator: (value) {
@@ -130,6 +133,6 @@ class _SignUpState extends State<SignUp> {
           ],
         ),
       ),
-    );
+    )));
   }
 }
