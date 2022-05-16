@@ -15,6 +15,7 @@ import 'main/common.dart';
 import 'custom_widgets/custom_colors.dart';
 import 'main/my_games.dart';
 import 'main/progress.dart';
+import 'main/settings.dart';
 import 'main/shop.dart';
 import 'main/welcome_screen.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -102,25 +103,6 @@ class MainMenu extends StatefulWidget {
 }
 
 class _MainMenuState extends State<MainMenu> {
-  _goToTarget(Widget _target) {
-    Common.resetOpenPanels();
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => _target),
-    );
-  }
-
-  _switchTheme() {
-    setState(() {
-      Common.darkTheme = !Common.darkTheme;
-      MyApp.themeNotifier.value =
-          Common.darkTheme ? ThemeMode.dark : ThemeMode.light;
-      CustomColors.currentColor = CustomColors.greyColor.shade900;
-      Common.showSnackBar(context,
-          Common.darkTheme ? "Switched to Night mode" : "Switched to Day mode");
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -155,19 +137,49 @@ class _MainMenuState extends State<MainMenu> {
               onPressed: () => Common.goToTarget(
                   context, const Progress(), true, Activity.Progress),
             ),
+            const Spacer(),
+            Container(
+              height: 150,
+              decoration : BoxDecoration(
+                  border: Border(
+                    top: BorderSide(width: 10.0, color: Colors.grey.shade300),
+                    bottom: BorderSide(width: 10.0, color: Colors.grey.shade300),
+                    )),
+                  child:
+          ElevatedButton.icon(
+              onPressed: () => Common.goToTarget(
+                  context, const Progress(), true, Activity.Progress),
+              icon: Icon(MaterialCommunityIcons.lightbulb_on, color: Colors.orangeAccent.shade100, size: 40),
+              label: const Text(" Why don't you try beating your high score in Cellulan World today ?",
+                  style: TextStyle(fontSize: 20, color: Colors.grey),
+                  textAlign: TextAlign.center),
+            style: ElevatedButton.styleFrom(
+              elevation: 0,
+              primary: Colors.white,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0.0)),
+            ),
+          )),
             const Spacer(flex: 2),
           ],
         )),
         Container(
-            padding: const EdgeInsets.only(right: 30, bottom: 60),
-            alignment: Alignment.bottomRight,
+            padding: const EdgeInsets.only(right: 30, top: 30),
+            alignment: Alignment.topRight,
+            child: CustomIconButton(
+                label: "Settings",
+                icon: Ionicons.ios_settings,
+                color: CustomColors.greyColor.shade500,
+                onPressed: () => Common.goToTarget(
+                  context, const Settings(), true, Activity.Profile))),
+        /*Container(
+            padding: const EdgeInsets.only(right: 30, top: 30),
+            alignment: Alignment.topRight,
             child: CustomIconButton(
                 label: "Theme",
-                icon:
-                    Common.darkTheme ? Icons.wb_sunny : Icons.wb_sunny_outlined,
+                icon: Common.darkTheme ? Icons.wb_sunny : Icons.wb_sunny_outlined,
                 color: CustomColors.yellowColor.shade900,
-                onPressed: () => _switchTheme())),
-        Container(
+                onPressed: () => _switchTheme())),*/
+        /*Container(
             padding: const EdgeInsets.only(left: 30, bottom: 60),
             alignment: Alignment.bottomLeft,
             child: CustomIconButton(
@@ -175,7 +187,7 @@ class _MainMenuState extends State<MainMenu> {
                 icon: Ionicons.md_person,
                 color: CustomColors.purpleColor.shade900,
                 onPressed: () => Common.goToTarget(
-                    context, const Profile(), true, Activity.Profile)))
+                    context, const Profile(), true, Activity.Profile)))*/
       ],
     ));
   }

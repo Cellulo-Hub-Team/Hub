@@ -67,7 +67,7 @@ class _ProfileHomeState extends State<ProfileHome> {
       const Spacer(),
       CustomMenuButton(
         label: "Sign Up",
-        icon: Entypo.shop,
+        icon: MaterialCommunityIcons.account_plus,
         color: CustomColors.currentColor,
         onPressed: () => Common.goToTarget(
             context, const SignUp(), true, Common.currentScreen),

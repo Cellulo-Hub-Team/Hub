@@ -1,3 +1,4 @@
+import 'package:cellulo_hub/custom_widgets/custom_colors.dart';
 import 'package:flutter/material.dart';
 
 //The custom square button from the menu
@@ -11,7 +12,8 @@ class CustomMenuButton extends StatefulWidget {
       required this.label,
       required this.icon,
       required this.color,
-      required this.onPressed})
+      required this.onPressed,
+      })
       : super(key: key);
 
   @override
@@ -29,11 +31,12 @@ class _CustomMenuButtonState extends State<CustomMenuButton> {
             color: Colors.white,
             size: 40,
           ),
-          label: Text(" " + widget.label, style: const TextStyle(fontSize: 25), textAlign: TextAlign.center),
+          label: Text(" " + widget.label,
+              style: TextStyle(fontSize: 25, color: Colors.white),
+              textAlign: TextAlign.center),
           style: ElevatedButton.styleFrom(
             primary: widget.color,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0)),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
             fixedSize: const Size(300, 120),
           )
     );

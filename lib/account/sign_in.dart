@@ -72,7 +72,7 @@ class _SignInState extends State<SignIn> {
       leadingScreen: Activity.Profile,
       leadingTarget: const ProfileHome(),
       hasFloating: false,
-      body: Center(child: Column( //TODO max width of 1000
+      body: Center(child: SizedBox(width: 800,child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -106,7 +106,7 @@ class _SignInState extends State<SignIn> {
               onPressed: _onPressed),
           const Spacer(flex: 5)
         ],
-      )),
+      ))),
     );
   }
 }
