@@ -52,7 +52,7 @@ class _SignInState extends State<SignIn> {
 
   @override
   void initState() {
-    CustomColors.currentColor = CustomColors.purpleColor.shade900;
+    CustomColors.currentColor = CustomColors.purpleColor();
     super.initState();
   }
 
@@ -78,19 +78,23 @@ class _SignInState extends State<SignIn> {
         children: [
           const Spacer(flex: 5),
           TextField(
+            cursorColor: CustomColors.darkThemeColor(),
+            style: TextStyle(color: CustomColors.darkThemeColor()),
             controller: _emailController,
             keyboardType: TextInputType.emailAddress,
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               hintText: "User Email",
-              prefixIcon: Icon(Icons.mail, color: Colors.black),
+              prefixIcon: Icon(Icons.mail, color: CustomColors.darkThemeColor()),
             ),
           ),
           TextField(
             obscureText: true,
+            cursorColor: CustomColors.darkThemeColor(),
+            style: TextStyle(color: CustomColors.darkThemeColor()),
             controller: _passwordController,
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               hintText: "User Password",
-              prefixIcon: Icon(Icons.lock, color: Colors.black),
+              prefixIcon: Icon(Icons.lock, color: CustomColors.darkThemeColor()),
             ),
           ),
           TextButton(

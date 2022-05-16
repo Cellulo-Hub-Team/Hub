@@ -49,10 +49,10 @@ void main() async {
       version: "v13.0",
     );
   }
-  runApp(MyApp());
+  runApp(MyAppDesktop());
 }
 
-class MyApp extends StatelessWidget {
+class MyAppDesktop extends StatelessWidget {
   // Using "static" so that we can easily access it later
   static final ValueNotifier<ThemeMode> themeNotifier =
   ValueNotifier(ThemeMode.light);
@@ -66,12 +66,11 @@ class MyApp extends StatelessWidget {
               debugShowCheckedModeBanner: false,
               theme: ThemeData(
                   textTheme: GoogleFonts.comfortaaTextTheme(),
-                  brightness: Brightness.light,
-                  accentColor: Colors.white),
+                  brightness: Brightness.light),
               darkTheme: ThemeData(
                   textTheme: GoogleFonts.comfortaaTextTheme(),
-                  scaffoldBackgroundColor: CustomColors.blackColor.shade900,
-                  brightness: Brightness.light),
+                  scaffoldBackgroundColor: CustomColors.blackColor,
+                  brightness: Brightness.dark),
               themeMode: currentMode,
               home: const WelcomeScreen());
         });

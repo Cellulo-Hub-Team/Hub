@@ -1,3 +1,4 @@
+import 'package:cellulo_hub/main_desktop.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
@@ -10,6 +11,7 @@ import '../api/flutterfire_api.dart';
 import '../custom_widgets/custom_colors.dart';
 import '../custom_widgets/custom_elevated_button.dart';
 import '../custom_widgets/custom_icon_button.dart';
+import '../custom_widgets/custom_scaffold.dart';
 import '../custom_widgets/style.dart';
 import '../main.dart';
 import 'common.dart';
@@ -22,18 +24,27 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
-  bool _boolTheme = false;
-  bool _boolContrast = false;
+  static bool _boolTheme = false;
+  static bool _boolContrast = false;
 
   //Switches between day mode and night mode
   _switchTheme() {
     setState(() {
       Common.darkTheme = !Common.darkTheme;
-      MyApp.themeNotifier.value =
-          Common.darkTheme ? ThemeMode.dark : ThemeMode.light;
-      CustomColors.currentColor = CustomColors.greyColor.shade900;
+      MyApp.themeNotifier.value = Common.darkTheme ? ThemeMode.dark : ThemeMode.light;
+      MyAppDesktop.themeNotifier.value = Common.darkTheme ? ThemeMode.dark : ThemeMode.light;
       Common.showSnackBar(context,
           Common.darkTheme ? "Switched to Night mode" : "Switched to Day mode");
+    });
+  }
+
+  //Switches between normal mode and high contrast mode
+  _switchContrast() {
+    setState(() {
+      Common.contrastTheme = !Common.contrastTheme;
+      CustomColors.currentColor = CustomColors.purpleColor();
+      Common.showSnackBar(context,
+          Common.darkTheme ? "Switched to High contrast mode" : "Switched to Normal contrast mode");
     });
   }
 
@@ -77,13 +88,19 @@ class _SettingsState extends State<Settings> {
 
   @override
   void initState() {
-    CustomColors.currentColor = CustomColors.purpleColor.shade900;
+    CustomColors.currentColor = CustomColors.purpleColor();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
+        name: "Settings",
+        leadingIcon: Entypo.shop,
+        leadingName: "Menu",
+        leadingScreen: Activity.Menu,
+        leadingTarget: const MainMenu(),
+        hasFloating: false,
         body: Center(
             child: Column(children: [
       const Spacer(flex: 8),
@@ -97,6 +114,7 @@ class _SettingsState extends State<Settings> {
                 scale: 1.5,
                 child: Switch(
                   activeTrackColor: Colors.greenAccent,
+                  thumbColor: MaterialStateProperty.all(Colors.white),
                   value: _boolTheme,
                   onChanged: (value) {
                     setState(() {
@@ -105,7 +123,7 @@ class _SettingsState extends State<Settings> {
                     });
                   },
                 )),
-            Text("Day/night theme"),
+            Text("  Day/night theme", style: TextStyle(color: CustomColors.darkThemeColor())),
           ])),
       const Spacer(),
               Container(
@@ -116,14 +134,16 @@ class _SettingsState extends State<Settings> {
                         scale: 1.5,
                         child: Switch(
                           activeTrackColor: Colors.greenAccent,
+                          thumbColor: MaterialStateProperty.all(Colors.white),
                           value: _boolContrast,
                           onChanged: (value) {
+                            _boolContrast = value;
                             setState(() {
-                              _boolContrast = value;
+                              _switchContrast();
                             });
                           },
                         )),
-                    Text("High contrast theme"),
+                    Text("  High contrast theme", style: TextStyle(color: CustomColors.darkThemeColor())),
                   ])),
       const Spacer(flex: 4),
       Text("Profile settings", style: Style.titleStyle()),
@@ -140,7 +160,7 @@ class _SettingsState extends State<Settings> {
             return Center(
               child: Text('Connected as: $output',
                   style: TextStyle(
-                      fontSize: 18, color: CustomColors.greyColor.shade900)),
+                      fontSize: 18, color: CustomColors.darkThemeColor())),
             );
           }
         },

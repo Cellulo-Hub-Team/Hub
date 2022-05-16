@@ -22,6 +22,9 @@ class Common {
   //The variable storing the current theme state
   static bool darkTheme = false;
 
+  //The variable storing the current high contrast state
+  static bool contrastTheme = false;
+
   //The controller for the percentages animation
   static late AnimationController percentageController;
 

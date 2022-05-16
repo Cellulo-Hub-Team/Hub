@@ -89,7 +89,7 @@ class _MyGamesState extends State<MyGames>
 
   @override
   void initState(){
-    CustomColors.currentColor = CustomColors.greenColor.shade900;
+    CustomColors.currentColor = CustomColors.greenColor();
     WidgetsBinding.instance?.addObserver(this);
 
     Common.percentageController = AnimationController(duration: const Duration(seconds: 1), vsync: this);

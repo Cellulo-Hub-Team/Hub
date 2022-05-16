@@ -115,9 +115,10 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin, WidgetsBindi
     setState(() {
       if (_trendingDescriptionDisplayed && _index == _trendingDecriptionIndex) {
         _trendingController.reverse();
-        Future.delayed(
+        _trendingDescriptionDisplayed = !_trendingDescriptionDisplayed;
+        /*Future.delayed(
             const Duration(milliseconds: 300),
-                () => _trendingDescriptionDisplayed = !_trendingDescriptionDisplayed);
+                () => _trendingDescriptionDisplayed = !_trendingDescriptionDisplayed);*/ //TODO find fix to restore
       } else if (!_trendingDescriptionDisplayed) {
         Common.percentageController.reset();
         Common.percentageController.forward();
@@ -132,7 +133,7 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin, WidgetsBindi
 
   @override
   void initState() {
-    CustomColors.currentColor = CustomColors.blueColor.shade900;
+    CustomColors.currentColor = CustomColors.blueColor();
     WidgetsBinding.instance?.addObserver(this);
     Common.percentageController =
         AnimationController(duration: const Duration(seconds: 1), vsync: this);
@@ -189,23 +190,25 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin, WidgetsBindi
                           animation: _trendingController,
                           builder: (BuildContext context, Widget? child) {
                             return SliverAppBar(
-                                backgroundColor: Common.darkTheme ? CustomColors.blackColor.shade900 : Colors.white,
+                                backgroundColor: CustomColors.inversedDarkThemeColor(),
                                 automaticallyImplyLeading: false,
                                 leading: null,
-                                collapsedHeight: 420, // Check for web and desktop
+                                collapsedHeight: 370, // Check for web and desktop
                                 expandedHeight: (_trendingController
                                             .drive(
                                                 CurveTween(curve: Curves.ease))
                                             .value *
                                         (myChildSize.height + 30)) +
-                                    420,
+                                    370,
                                 flexibleSpace: FlexibleSpaceBar(
                                     background: Column(children: [
                                       const SizedBox(height: 10),
                                       Text("Trending", style: Style.titleStyle()),
                                   _trendingWidget(),
                                   _trendingDescriptionDisplayed
-                                      ? (Common.isDesktop || Common.isWeb ? _trendingDescriptionDesktop() : _trendingDescription())
+                                      ? (Common.isDesktop || Common.isWeb || MediaQuery.of(context).orientation == Orientation.landscape
+                                        ? _trendingDescriptionDesktop()
+                                        : _trendingDescription())
                                       : Container(),
                                       Padding(
                                           padding: const EdgeInsets.only(left: 100, right: 100, top: 10, bottom: 10),
@@ -238,7 +241,7 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin, WidgetsBindi
                             ],
                             labelColor: CustomColors.currentColor,
                             indicatorColor: CustomColors.currentColor,
-                            unselectedLabelColor: Common.darkTheme ? Colors.white : CustomColors.blackColor.shade900,
+                            unselectedLabelColor: CustomColors.darkThemeColor(),
                           ),
                         ),
                         floating: true,
