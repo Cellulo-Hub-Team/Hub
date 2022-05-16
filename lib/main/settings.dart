@@ -10,6 +10,7 @@ import '../api/flutterfire_api.dart';
 import '../custom_widgets/custom_colors.dart';
 import '../custom_widgets/custom_elevated_button.dart';
 import '../custom_widgets/custom_icon_button.dart';
+import '../custom_widgets/custom_scaffold.dart';
 import '../custom_widgets/style.dart';
 import '../main.dart';
 import 'common.dart';
@@ -82,7 +83,13 @@ class _SettingsState extends State<Settings> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
+        name: "Settings",
+        leadingIcon: Entypo.shop,
+        leadingName: "Menu",
+        leadingScreen: Activity.Menu,
+        leadingTarget: const MainMenu(),
+        hasFloating: false,
         body: Center(
             child: Column(children: [
       const Spacer(flex: 8),
@@ -96,6 +103,7 @@ class _SettingsState extends State<Settings> {
                 scale: 1.5,
                 child: Switch(
                   activeTrackColor: Colors.greenAccent,
+                  thumbColor: MaterialStateProperty.all(Colors.white),
                   value: _boolTheme,
                   onChanged: (value) {
                     setState(() {
@@ -104,7 +112,7 @@ class _SettingsState extends State<Settings> {
                     });
                   },
                 )),
-            Text("Day/night theme"),
+            Text("  Day/night theme", style: TextStyle(color: CustomColors.darkThemeColor())),
           ])),
       const Spacer(),
               Container(
@@ -115,6 +123,7 @@ class _SettingsState extends State<Settings> {
                         scale: 1.5,
                         child: Switch(
                           activeTrackColor: Colors.greenAccent,
+                          thumbColor: MaterialStateProperty.all(Colors.white),
                           value: _boolContrast,
                           onChanged: (value) {
                             setState(() {
@@ -122,7 +131,7 @@ class _SettingsState extends State<Settings> {
                             });
                           },
                         )),
-                    Text("High contrast theme"),
+                    Text("  High contrast theme", style: TextStyle(color: CustomColors.darkThemeColor())),
                   ])),
       const Spacer(flex: 4),
       Text("Profile settings", style: Style.titleStyle()),

@@ -88,7 +88,7 @@ class MyApp extends StatelessWidget {
               darkTheme: ThemeData(
                   textTheme: GoogleFonts.comfortaaTextTheme(),
                   scaffoldBackgroundColor: CustomColors.blackColor,
-                  brightness: Brightness.light),
+                  brightness: Brightness.dark),
               themeMode: currentMode,
               home: const WelcomeScreen());
         });
@@ -168,26 +168,9 @@ class _MainMenuState extends State<MainMenu> {
             child: CustomIconButton(
                 label: "Settings",
                 icon: Ionicons.ios_settings,
-                color: Colors.grey.shade300,
+                color: Colors.grey.shade500,
                 onPressed: () => Common.goToTarget(
                   context, const Settings(), true, Activity.Profile))),
-        /*Container(
-            padding: const EdgeInsets.only(right: 30, top: 30),
-            alignment: Alignment.topRight,
-            child: CustomIconButton(
-                label: "Theme",
-                icon: Common.darkTheme ? Icons.wb_sunny : Icons.wb_sunny_outlined,
-                color: CustomColors.yellowColor.shade900,
-                onPressed: () => _switchTheme())),*/
-        /*Container(
-            padding: const EdgeInsets.only(left: 30, bottom: 60),
-            alignment: Alignment.bottomLeft,
-            child: CustomIconButton(
-                label: "Profile",
-                icon: Ionicons.md_person,
-                color: CustomColors.purpleColor.shade900,
-                onPressed: () => Common.goToTarget(
-                    context, const Profile(), true, Activity.Profile)))*/
       ],
     ));
   }

@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:cellulo_hub/custom_widgets/custom_colors.dart';
 import 'package:cellulo_hub/custom_widgets/custom_elevated_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
