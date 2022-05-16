@@ -1,3 +1,4 @@
+import 'package:cellulo_hub/main_desktop.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
@@ -30,8 +31,8 @@ class _SettingsState extends State<Settings> {
   _switchTheme() {
     setState(() {
       Common.darkTheme = !Common.darkTheme;
-      MyApp.themeNotifier.value =
-          Common.darkTheme ? ThemeMode.dark : ThemeMode.light;
+      MyApp.themeNotifier.value = Common.darkTheme ? ThemeMode.dark : ThemeMode.light;
+      MyAppDesktop.themeNotifier.value = Common.darkTheme ? ThemeMode.dark : ThemeMode.light;
       Common.showSnackBar(context,
           Common.darkTheme ? "Switched to Night mode" : "Switched to Day mode");
     });
@@ -41,6 +42,7 @@ class _SettingsState extends State<Settings> {
   _switchContrast() {
     setState(() {
       Common.contrastTheme = !Common.contrastTheme;
+      CustomColors.currentColor = CustomColors.purpleColor();
       Common.showSnackBar(context,
           Common.darkTheme ? "Switched to High contrast mode" : "Switched to Normal contrast mode");
     });

@@ -140,6 +140,7 @@ class _MainMenuState extends State<MainMenu> {
             const Spacer(),
             Container(
               height: 150,
+              width: MediaQuery.of(context).size.width,
               decoration : BoxDecoration(
                   border: Border(
                     top: BorderSide(width: 10.0, color: Colors.grey.shade300),
@@ -150,12 +151,12 @@ class _MainMenuState extends State<MainMenu> {
               onPressed: () => Common.goToTarget(
                   context, const Progress(), true, Activity.Progress),
               icon: Icon(MaterialCommunityIcons.lightbulb_on, color: Colors.orangeAccent.shade100, size: 40),
-              label: const Text(" Why don't you try beating your high score in Cellulan World today ?",
-                  style: TextStyle(fontSize: 20, color: Colors.grey),
+              label: Text(" Why don't you try beating your high score in Cellulan World today ?",
+                  style: TextStyle(fontSize: 20, color: CustomColors.darkThemeColor()),
                   textAlign: TextAlign.center),
             style: ElevatedButton.styleFrom(
               elevation: 0,
-              primary: Colors.white,
+              primary: CustomColors.inversedDarkThemeColor(),
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0.0)),
             ),
           )),
