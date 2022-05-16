@@ -62,11 +62,13 @@ class _SignUpState extends State<SignUp> {
           children: <Widget>[
             const Spacer(flex: 5),
             TextFormField(
+              cursorColor: CustomColors.darkThemeColor(),
+              style: TextStyle(color: CustomColors.darkThemeColor()),
               keyboardType: TextInputType.emailAddress,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 hintText: 'Enter an email',
                 labelText: 'Email',
-                prefixIcon: Icon(Icons.mail, color: Colors.black),
+                prefixIcon: Icon(Icons.mail, color: CustomColors.darkThemeColor()),
               ),
               controller: emailController,
               validator: (value) {
@@ -77,11 +79,13 @@ class _SignUpState extends State<SignUp> {
               },
             ),
             TextFormField(
+              cursorColor: CustomColors.darkThemeColor(),
+              style: TextStyle(color: CustomColors.darkThemeColor()),
               obscureText: true,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 hintText: 'Enter a password',
                 labelText: 'Password',
-                prefixIcon: Icon(Icons.lock, color: Colors.black),
+                prefixIcon: Icon(Icons.lock, color: CustomColors.darkThemeColor()),
               ),
               controller: passwordController,
               validator: (value) {
@@ -99,11 +103,13 @@ class _SignUpState extends State<SignUp> {
               },
             ),
             TextFormField(
+              cursorColor: CustomColors.darkThemeColor(),
+              style: TextStyle(color: CustomColors.darkThemeColor()),
               obscureText: true,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 hintText: 'Confirm the password',
                 labelText: 'Confirm password',
-                prefixIcon: Icon(Icons.lock, color: Colors.black),
+                prefixIcon: Icon(Icons.lock, color: CustomColors.darkThemeColor()),
               ),
               controller: confirmationController,
               validator: (value) {

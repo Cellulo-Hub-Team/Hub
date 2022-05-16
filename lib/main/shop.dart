@@ -115,9 +115,10 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin, WidgetsBindi
     setState(() {
       if (_trendingDescriptionDisplayed && _index == _trendingDecriptionIndex) {
         _trendingController.reverse();
-        Future.delayed(
+        _trendingDescriptionDisplayed = !_trendingDescriptionDisplayed;
+        /*Future.delayed(
             const Duration(milliseconds: 300),
-                () => _trendingDescriptionDisplayed = !_trendingDescriptionDisplayed);
+                () => _trendingDescriptionDisplayed = !_trendingDescriptionDisplayed);*/ //TODO find fix to restore
       } else if (!_trendingDescriptionDisplayed) {
         Common.percentageController.reset();
         Common.percentageController.forward();
@@ -192,13 +193,13 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin, WidgetsBindi
                                 backgroundColor: CustomColors.inversedDarkThemeColor(),
                                 automaticallyImplyLeading: false,
                                 leading: null,
-                                collapsedHeight: 420, // Check for web and desktop
+                                collapsedHeight: 370, // Check for web and desktop
                                 expandedHeight: (_trendingController
                                             .drive(
                                                 CurveTween(curve: Curves.ease))
                                             .value *
                                         (myChildSize.height + 30)) +
-                                    420,
+                                    370,
                                 flexibleSpace: FlexibleSpaceBar(
                                     background: Column(children: [
                                       const SizedBox(height: 10),

@@ -33,7 +33,9 @@ class CustomSearch extends SearchDelegate<String> {
         headline6: TextStyle(
             fontSize: 24
         )
-      ), textSelectionTheme: TextSelectionThemeData(cursorColor: Colors.blueAccent),
+      ),
+
+      textSelectionTheme: const TextSelectionThemeData(cursorColor: Colors.white),
     );
   }
 
@@ -52,7 +54,7 @@ class CustomSearch extends SearchDelegate<String> {
   @override
   Widget? buildLeading(BuildContext context) {
     return IconButton(
-      icon: Icon(Icons.arrow_back),
+      icon: const Icon(Icons.arrow_back),
       color: Colors.white,
       onPressed: () {
         close(context, query);

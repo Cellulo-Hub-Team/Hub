@@ -23,8 +23,8 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
-  bool _boolTheme = false;
-  bool _boolContrast = false;
+  static bool _boolTheme = false;
+  static bool _boolContrast = false;
 
   //Switches between day mode and night mode
   _switchTheme() {
@@ -34,6 +34,15 @@ class _SettingsState extends State<Settings> {
           Common.darkTheme ? ThemeMode.dark : ThemeMode.light;
       Common.showSnackBar(context,
           Common.darkTheme ? "Switched to Night mode" : "Switched to Day mode");
+    });
+  }
+
+  //Switches between normal mode and high contrast mode
+  _switchContrast() {
+    setState(() {
+      Common.contrastTheme = !Common.contrastTheme;
+      Common.showSnackBar(context,
+          Common.darkTheme ? "Switched to High contrast mode" : "Switched to Normal contrast mode");
     });
   }
 
@@ -126,8 +135,9 @@ class _SettingsState extends State<Settings> {
                           thumbColor: MaterialStateProperty.all(Colors.white),
                           value: _boolContrast,
                           onChanged: (value) {
+                            _boolContrast = value;
                             setState(() {
-                              _boolContrast = value;
+                              _switchContrast();
                             });
                           },
                         )),
