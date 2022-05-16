@@ -32,8 +32,7 @@ class _MyGamesState extends State<MyGames>
   List<Game> inLibraryGames = Common.allGamesList.where((game) => game.isInLibrary).toList();
 
   ///Installs the game on the device
-  _onPressedInstall(Game _game) {
-    setState(() async {
+  _onPressedInstall(Game _game) async{
       //TODO add iOS and MacOS
       if (Common.isDesktop){
         if (_game.isInstalled) {
@@ -56,10 +55,6 @@ class _MyGamesState extends State<MyGames>
           }
         }
       }
-      setState(() {
-        _game.isInstalled = !_game.isInstalled;
-      });
-    });
   }
 
   ///Launches the installed game or the web game if no game can be installed on this platform

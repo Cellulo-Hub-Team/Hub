@@ -77,7 +77,7 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin, WidgetsBindi
         Common.isDesktop ? await FiredartApi.addToUserLibrary(_game) : await FlutterfireApi.addToUserLibrary(_game);
         Common.showSnackBar(context, "Correctly added to My Games!");
         _beingInstalledGame = _game;
-        if (Common.isAndroid){
+        if (Common.isAndroid && _game.androidBuild != null){
           await FlutterfireApi.downloadFile(_game);
         }
         Common.isDesktop ? await FiredartApi.incrementDownloads(_game) : await FlutterfireApi.incrementDownloads(_game);
