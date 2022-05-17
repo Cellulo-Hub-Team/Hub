@@ -25,22 +25,24 @@ class Achievement {
   final String label;
   final String type;
   final int steps;
+  final int value;
 
-  Achievement(this.label, this.type, this.steps);
+  Achievement(this.label, this.type, this.steps, this.value);
 
   Achievement.fromJson(Map<String, dynamic> json)
       : label = json['label'],
         type = json['type'],
-        steps = json['steps'];
+        steps = json['steps'],
+        value = json['value'];
 
   Map<String, dynamic> toJson() =>
-      {'label': label, 'type': type, 'steps': steps};
+      {'label': label, 'type': type, 'steps': steps, 'value': value};
 }
 
 void main() async {
-  /*
+/*
   var path =
-      "C:/Users/antoi/AppData/LocalLow/DefaultCompany/Achievements/achievements.json";
+      "C:/Users/antoi/AppData/LocalLow/Chili/Achievements/achievements.json";
   File(path)
       .openRead()
       .transform(utf8.decoder)
@@ -51,7 +53,8 @@ void main() async {
 
     print(achievement.label);
   });
-  */
+
+ */
 
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -67,13 +70,15 @@ void main() async {
       version: "v13.0",
     );
   }
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   // Using "static" so that we can easily access it later
   static final ValueNotifier<ThemeMode> themeNotifier =
       ValueNotifier(ThemeMode.light);
+
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

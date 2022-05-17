@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:process_run/shell.dart';
 import 'package:process_run/which.dart';
 import 'package:firedart/firedart.dart';
@@ -22,19 +25,69 @@ class Achievement {
   final String label;
   final String type;
   final int steps;
+  final int value;
 
-  Achievement(this.label, this.type, this.steps);
+  const Achievement({
+    required this.label,
+    required this.type,
+    required this.steps,
+    required this.value});
 
-  Achievement.fromJson(Map<String, dynamic> json)
-      : label = json['label'],
-        type = json['type'],
-        steps = json['steps'];
-
-  Map<String, dynamic> toJson() =>
-      {'label': label, 'type': type, 'steps': steps};
+  factory Achievement.fromJson(Map<String, dynamic> json){
+    return Achievement(
+      label : json['label'] as String,
+      type : json['type'] as String,
+      steps : json['steps'] as int,
+      value : json['value'] as int
+    );
+  }
 }
 
 void main() async {
+  String? _appData = Platform.environment['APPDATA']?.replaceAll(r"\", "/").replaceAll("/Roaming", "");
+  print(_appData! + "/LocalLow/Chili/Achievements/achievements.json");
+  var path = _appData + "/LocalLow/Chili/Achievements/achievements.json";
+  int _index = 0;
+  int _count = 0;
+  int _minutes = 0;
+  List<Achievement> _achievementsList = [];
+  await File(path)
+      .openRead()
+      .transform(utf8.decoder)
+      .transform(LineSplitter())
+      .forEach((line) {
+        if (_index == 0){
+          _count = int.parse(line);
+          _index++;
+          return;
+        }
+        if (_index == _count + 1){
+          _minutes = int.parse(line);
+          return;
+        }
+        Map<String, dynamic> achievementMap = jsonDecode(line);
+        _achievementsList.add(Achievement.fromJson(achievementMap));
+        print("${Achievement.fromJson(achievementMap).label} (${Achievement.fromJson(achievementMap).value}/${Achievement.fromJson(achievementMap).steps})");
+        _index++;
+
+  });
+
+  /*
+
+  print("Time played: ${_minutes} minutes");
+  for (var _achievement in _achievementsList){
+    if (_achievement.type == "one"){
+      print(_achievement.label);
+      return;
+    }
+    if (_achievement.type == "multiple"){
+      print("${_achievement.label} (${_achievement.value}/${_achievement.steps})");
+      return;
+    }
+    print(_achievement.label);
+  }
+  */
+
   WidgetsFlutterBinding.ensureInitialized();
 
   FirebaseAuth.initialize('AIzaSyB-rpiGCDAUXScHzmUXAhaIuSTJ5cP7SwE', VolatileStore());
@@ -49,13 +102,15 @@ void main() async {
       version: "v13.0",
     );
   }
-  runApp(MyAppDesktop());
+  runApp(const MyAppDesktop());
 }
 
 class MyAppDesktop extends StatelessWidget {
   // Using "static" so that we can easily access it later
   static final ValueNotifier<ThemeMode> themeNotifier =
   ValueNotifier(ThemeMode.light);
+
+  const MyAppDesktop({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
