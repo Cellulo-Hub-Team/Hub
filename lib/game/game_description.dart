@@ -67,7 +67,7 @@ class _GameDescriptionState extends State<GameDescription> with TickerProviderSt
                       SliverAppBar(
                           collapsedHeight: 150,
                           expandedHeight: 150,
-                          backgroundColor: Common.darkTheme ? CustomColors.blackColor.shade900 : Colors.white,
+                          backgroundColor: CustomColors.inversedDarkThemeColor(),
                           automaticallyImplyLeading: false,
                           leading: null,
                           flexibleSpace: FlexibleSpaceBar(
@@ -95,9 +95,7 @@ class _GameDescriptionState extends State<GameDescription> with TickerProviderSt
                           ],
                           labelColor: CustomColors.currentColor,
                           indicatorColor: CustomColors.currentColor,
-                          unselectedLabelColor: Common.darkTheme
-                              ? CustomColors.greyColor.shade900
-                              : CustomColors.blackColor.shade900,
+                          unselectedLabelColor: CustomColors.darkThemeColor(),
                         )),
                         floating: true,
                         pinned: true,

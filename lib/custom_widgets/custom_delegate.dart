@@ -10,7 +10,7 @@ class CustomDelegate extends SliverPersistentHeaderDelegate{
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
     return Container(
-      color: Common.darkTheme ? CustomColors.blackColor.shade900 : Colors.white,
+      color: CustomColors.inversedDarkThemeColor(),
       child: tabBar,
     );
   }

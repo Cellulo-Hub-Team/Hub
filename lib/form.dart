@@ -236,7 +236,7 @@ class MyCustomFormState extends State<MyCustomForm> {
     return MaterialApp(
       home: Scaffold(
           appBar: AppBar(
-              backgroundColor: CustomColors.greenColor.shade900,
+              backgroundColor: CustomColors.greenColor(),
               title: const Text('Upload a game')),
           body: SingleChildScrollView(
             child: Form(

@@ -87,8 +87,8 @@ class MyApp extends StatelessWidget {
                   brightness: Brightness.light),
               darkTheme: ThemeData(
                   textTheme: GoogleFonts.comfortaaTextTheme(),
-                  scaffoldBackgroundColor: CustomColors.blackColor.shade900,
-                  brightness: Brightness.light),
+                  scaffoldBackgroundColor: CustomColors.blackColor,
+                  brightness: Brightness.dark),
               themeMode: currentMode,
               home: const WelcomeScreen());
         });
@@ -117,7 +117,7 @@ class _MainMenuState extends State<MainMenu> {
             CustomMenuButton(
               label: "My Games",
               icon: FontAwesome.gamepad,
-              color: CustomColors.greenColor.shade900,
+              color: CustomColors.greenColor(),
               onPressed: () => Common.goToTarget(
                   context, const MyGames(), true, Activity.MyGames),
             ),
@@ -125,7 +125,7 @@ class _MainMenuState extends State<MainMenu> {
             CustomMenuButton(
               label: "Shop",
               icon: Entypo.shop,
-              color: CustomColors.blueColor.shade900,
+              color: CustomColors.blueColor(),
               onPressed: () =>
                   Common.goToTarget(context, const Shop(), true, Activity.Shop),
             ),
@@ -133,13 +133,14 @@ class _MainMenuState extends State<MainMenu> {
             CustomMenuButton(
               label: "Progress",
               icon: Octicons.graph,
-              color: CustomColors.redColor.shade900,
+              color: CustomColors.redColor(),
               onPressed: () => Common.goToTarget(
                   context, const Progress(), true, Activity.Progress),
             ),
             const Spacer(),
             Container(
               height: 150,
+              width: MediaQuery.of(context).size.width,
               decoration : BoxDecoration(
                   border: Border(
                     top: BorderSide(width: 10.0, color: Colors.grey.shade300),
@@ -150,12 +151,12 @@ class _MainMenuState extends State<MainMenu> {
               onPressed: () => Common.goToTarget(
                   context, const Progress(), true, Activity.Progress),
               icon: Icon(MaterialCommunityIcons.lightbulb_on, color: Colors.orangeAccent.shade100, size: 40),
-              label: const Text(" Why don't you try beating your high score in Cellulan World today ?",
-                  style: TextStyle(fontSize: 20, color: Colors.grey),
+              label: Text(" Why don't you try beating your high score in Cellulan World today ?",
+                  style: TextStyle(fontSize: 20, color: CustomColors.darkThemeColor()),
                   textAlign: TextAlign.center),
             style: ElevatedButton.styleFrom(
               elevation: 0,
-              primary: Colors.white,
+              primary: CustomColors.inversedDarkThemeColor(),
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0.0)),
             ),
           )),
@@ -168,26 +169,9 @@ class _MainMenuState extends State<MainMenu> {
             child: CustomIconButton(
                 label: "Settings",
                 icon: Ionicons.ios_settings,
-                color: CustomColors.greyColor.shade500,
+                color: Colors.grey.shade500,
                 onPressed: () => Common.goToTarget(
                   context, const Settings(), true, Activity.Profile))),
-        /*Container(
-            padding: const EdgeInsets.only(right: 30, top: 30),
-            alignment: Alignment.topRight,
-            child: CustomIconButton(
-                label: "Theme",
-                icon: Common.darkTheme ? Icons.wb_sunny : Icons.wb_sunny_outlined,
-                color: CustomColors.yellowColor.shade900,
-                onPressed: () => _switchTheme())),*/
-        /*Container(
-            padding: const EdgeInsets.only(left: 30, bottom: 60),
-            alignment: Alignment.bottomLeft,
-            child: CustomIconButton(
-                label: "Profile",
-                icon: Ionicons.md_person,
-                color: CustomColors.purpleColor.shade900,
-                onPressed: () => Common.goToTarget(
-                    context, const Profile(), true, Activity.Profile)))*/
       ],
     ));
   }

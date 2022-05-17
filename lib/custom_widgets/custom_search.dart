@@ -10,7 +10,6 @@ class CustomSearch extends SearchDelegate<String> {
 
   CustomSearch({required this.allGames});
 
-  /*
   @override
   ThemeData appBarTheme(BuildContext context) {
     return ThemeData(
@@ -35,9 +34,11 @@ class CustomSearch extends SearchDelegate<String> {
             fontSize: 24
         )
       ),
+
+      textSelectionTheme: const TextSelectionThemeData(cursorColor: Colors.white),
     );
   }
-  */
+
 
   @override
   List<Widget>? buildActions(BuildContext context) {
@@ -53,7 +54,7 @@ class CustomSearch extends SearchDelegate<String> {
   @override
   Widget? buildLeading(BuildContext context) {
     return IconButton(
-      icon: Icon(Icons.arrow_back),
+      icon: const Icon(Icons.arrow_back),
       color: Colors.white,
       onPressed: () {
         close(context, query);
