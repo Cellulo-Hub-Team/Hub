@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,7 @@ import 'custom_widgets/custom_menu_button.dart';
 import 'custom_widgets/custom_icon_button.dart';
 import 'custom_widgets/style.dart';
 import 'firebase_options.dart';
+import 'game/game.dart';
 import 'main/common.dart';
 import 'custom_widgets/custom_colors.dart';
 import 'main/my_games.dart';
@@ -103,8 +105,11 @@ class MainMenu extends StatefulWidget {
 }
 
 class _MainMenuState extends State<MainMenu> {
+  List<Game> userGames = Common.allGamesList.where((element) => element.isInLibrary).toList();
+
   @override
   Widget build(BuildContext context) {
+    Game _selectedGame = userGames[Random().nextInt(userGames.length)];
     return Scaffold(
         body: Stack(
       children: [
@@ -148,10 +153,15 @@ class _MainMenuState extends State<MainMenu> {
                     )),
                   child:
           ElevatedButton.icon(
-              onPressed: () => Common.goToTarget(
-                  context, const Progress(), true, Activity.Progress),
+              onPressed: () => {
+                Common.goToTarget(
+                  context, const MyGames(), true, Activity.MyGames),
+                  _selectedGame.isExpanded = true
+                //TODO Focus on the game in myGames
+              },
+
               icon: Icon(MaterialCommunityIcons.lightbulb_on, color: Colors.orangeAccent.shade100, size: 40),
-              label: Text(" Why don't you try beating your high score in Cellulan World today ?",
+              label: Text(" Why don't you try beating your high score in ${_selectedGame.name} today ?",
                   style: TextStyle(fontSize: 20, color: CustomColors.darkThemeColor()),
                   textAlign: TextAlign.center),
             style: ElevatedButton.styleFrom(
