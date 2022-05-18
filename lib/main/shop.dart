@@ -12,6 +12,7 @@ import 'package:scroll_snap_list/scroll_snap_list.dart';
 
 import '../api/flutterfire_api.dart';
 import '../api/firedart_api.dart';
+import '../api/shell_scripts.dart';
 import '../custom_widgets/custom_delegate.dart';
 import '../custom_widgets/custom_elevated_button.dart';
 import '../custom_widgets/custom_scaffold.dart';
@@ -79,6 +80,12 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin, WidgetsBindi
         _beingInstalledGame = _game;
         if (Common.isAndroid && _game.androidBuild != null){
           await FlutterfireApi.downloadFile(_game);
+        }
+        if (Common.isDesktop){
+          ShellScripts.installGame(_game)
+              .whenComplete(() => setState(() {
+            _game.isInstalled = true;
+          }));
         }
         Common.isDesktop ? await FiredartApi.incrementDownloads(_game) : await FlutterfireApi.incrementDownloads(_game);
       }

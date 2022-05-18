@@ -8,7 +8,6 @@ import 'package:cellulo_hub/main/shop.dart';
 import 'package:device_apps/device_apps.dart';
 import 'package:flutter/material.dart';
 
-
 import '../api/flutterfire_api.dart';
 import '../api/firedart_api.dart';
 import 'common.dart';
@@ -17,44 +16,46 @@ import '../game/game.dart';
 
 //User games library
 class MyGames extends StatefulWidget {
-
   const MyGames({Key? key}) : super(key: key);
 
   @override
   _MyGamesState createState() => _MyGamesState();
-
 }
 
 class _MyGamesState extends State<MyGames>
     with TickerProviderStateMixin, WidgetsBindingObserver {
-
   Game? _beingInstalledGame;
-  List<Game> inLibraryGames = Common.allGamesList.where((game) => game.isInLibrary).toList();
+  List<Game> inLibraryGames =
+      Common.allGamesList.where((game) => game.isInLibrary).toList();
 
   ///Installs the game on the device
-  _onPressedInstall(Game _game) async{
-      //TODO add iOS and MacOS
-      if (Common.isDesktop){
-        if (_game.isInstalled) {
-          ShellScripts.uninstallGameWindows(_game);
+  _onPressedInstall(Game _game) async {
+    //TODO add iOS and MacOS
+    if (Common.isDesktop) {
+      if (_game.isInstalled) {
+        ShellScripts.uninstallGameWindows(_game)
+            .whenComplete(() => setState(() {
+                  _game.isInstalled = false;
+                }));
+      } else {
+        ShellScripts.installGame(_game)
+            .whenComplete(() => setState(() {
+              _game.isInstalled = true;
+            }));
+      }
+    } else if (Common.isAndroid) {
+      _beingInstalledGame = _game;
+      if (_game.isInstalled) {
+        DeviceApps.uninstallApp(FlutterfireApi.createPackageName(_game));
+      } else {
+        if (await Common.isConnected()) {
+          await FlutterfireApi.downloadFile(_game);
         } else {
-          ShellScripts.installGame(_game);
+          Common.showSnackBar(
+              context, 'Please connect the device to the Internet');
         }
       }
-      else if (Common.isAndroid){
-        _beingInstalledGame = _game;
-        if (_game.isInstalled) {
-          DeviceApps.uninstallApp(FlutterfireApi.createPackageName(_game));
-        }
-        else {
-          if(await Common.isConnected()){
-            await FlutterfireApi.downloadFile(_game);
-          }
-          else{
-            Common.showSnackBar(context, 'Please connect the device to the Internet');
-          }
-        }
-      }
+    }
   }
 
   ///Launches the installed game or the web game if no game can be installed on this platform
@@ -62,37 +63,43 @@ class _MyGamesState extends State<MyGames>
     if (!_game.isInstalled) {
       FlutterfireApi.launchWebApp(_game);
     } else {
-      Common.isDesktop ? FiredartApi.launchApp(_game) : FlutterfireApi.launchApp(_game);
+      Common.isDesktop
+          ? FiredartApi.launchApp(_game)
+          : FlutterfireApi.launchApp(_game);
     }
   }
 
   ///Delete game from my games
-  _onPressedDelete(Game _game) async{
-    if(_game.isInLibrary){
-      if (Common.isDesktop){
+  _onPressedDelete(Game _game) async {
+    if (_game.isInLibrary) {
+      if (Common.isDesktop) {
         await FiredartApi.removeFromUserLibrary(_game);
         if (_game.isInstalled) {
-          ShellScripts.uninstallGameWindows(_game);
+          ShellScripts.uninstallGameWindows(_game)
+              .whenComplete(() => setState(() {
+            _game.isInstalled = false;
+          }));
         }
-      }
-      else{
+      } else {
         await FlutterfireApi.removeFromUserLibrary(_game, context);
         if (_game.isInstalled) {
           DeviceApps.uninstallApp(FlutterfireApi.createPackageName(_game));
         }
       }
       setState(() {
-        inLibraryGames = Common.allGamesList.where((game) => game.isInLibrary).toList();
+        inLibraryGames =
+            Common.allGamesList.where((game) => game.isInLibrary).toList();
       });
     }
   }
 
   @override
-  void initState(){
+  void initState() {
     CustomColors.currentColor = CustomColors.greenColor();
     WidgetsBinding.instance?.addObserver(this);
 
-    Common.percentageController = AnimationController(duration: const Duration(seconds: 1), vsync: this);
+    Common.percentageController =
+        AnimationController(duration: const Duration(seconds: 1), vsync: this);
     Common.percentageController.reset();
     Common.percentageController.forward();
     super.initState();
@@ -109,12 +116,12 @@ class _MyGamesState extends State<MyGames>
     super.didChangeAppLifecycleState(state);
 
     if (state == AppLifecycleState.resumed && _beingInstalledGame != null) {
-      if (await DeviceApps.isAppInstalled(FlutterfireApi.createPackageName(_beingInstalledGame!))) {
+      if (await DeviceApps.isAppInstalled(
+          FlutterfireApi.createPackageName(_beingInstalledGame!))) {
         setState(() {
-        _beingInstalledGame!.isInstalled = true;
-      });
-      }
-      else{
+          _beingInstalledGame!.isInstalled = true;
+        });
+      } else {
         setState(() {
           _beingInstalledGame!.isInstalled = false;
         });
@@ -135,13 +142,12 @@ class _MyGamesState extends State<MyGames>
         floatingLabel: "Add game",
         onPressedFloating: () {
           Common.goToTarget(context, const Shop(), false, Activity.Shop);
-          },
-      body: GamePanelList(
+        },
+        body: GamePanelList(
           games: inLibraryGames,
           onPressedPrimary: _onPressedInstall,
           onPressedSecondary: _onPressedLaunch,
           onPressedTertiary: _onPressedDelete,
-      )
-    );
+        ));
   }
 }

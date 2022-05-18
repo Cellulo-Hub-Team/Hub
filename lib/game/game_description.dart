@@ -43,13 +43,12 @@ class _GameDescriptionState extends State<GameDescription>
 
   _getAchievements() async {
     String? _user = Platform.environment['USERPROFILE']?.replaceAll(r"\", "/");
-    print(_user! +
+    var path = _user! +
         "/AppData/LocalLow/" +
         widget.game.unityCompanyName +
         "/" +
         widget.game.unityName +
-        "/achievements.json");
-    var path = _user + "/AppData/LocalLow/Chili/Achievements/achievements.json";
+        "/achievements.json";
     int _index = 0;
     int _count = 0;
     int _minutes = 0;
@@ -81,21 +80,25 @@ class _GameDescriptionState extends State<GameDescription>
     if (_achievement.type == "one") {
       _achievementsTable.add(_achievementRow(
           _achievement.label,
-          Feather.check_circle,
-          _achievement.value > 0 ? "Completed" : "Not completed"));
+          MaterialCommunityIcons.medal,
+          _achievement.value > 0
+              ? Icon(Feather.check_circle, size: 40, color: CustomColors.darkThemeColor())
+              : Icon(Feather.circle, size: 40, color: CustomColors.darkThemeColor())));
       return;
     }
     if (_achievement.type == "multiple") {
       _achievementsTable.add(_achievementRow(
           _achievement.label,
           MaterialCommunityIcons.counter,
-          _achievement.value >= _achievement.steps ? "Completed" : "${_achievement.value} / ${_achievement.steps}"));
+          _achievement.value >= _achievement.steps
+            ? Icon(Feather.check_circle, size: 40, color: CustomColors.darkThemeColor())
+            : Text("${_achievement.value} / ${_achievement.steps}", style: Style.achievementStyle())));
       return;
     }
     _achievementsTable.add(_achievementRow(
         _achievement.label,
         Ionicons.ios_podium,
-        _achievement.value.toString()));
+        Text(_achievement.value.toString(), style: Style.achievementStyle())));
   }
 
   @override
@@ -208,7 +211,7 @@ class _GameDescriptionState extends State<GameDescription>
   }
 
   Widget _achievementsPanel() {
-    return Table(
+    return Padding(padding: const EdgeInsets.all(20), child: Table(
           border: TableBorder(
               horizontalInside: BorderSide(width: 1, color: CustomColors.darkThemeColor(), style: BorderStyle.solid),
               verticalInside: BorderSide(width: 1, color: CustomColors.darkThemeColor(), style: BorderStyle.solid)
@@ -220,10 +223,10 @@ class _GameDescriptionState extends State<GameDescription>
           },
           defaultVerticalAlignment: TableCellVerticalAlignment.middle,
           children: _achievementsTable,
-        );
+        ));
   }
 
-  TableRow _achievementRow(String _label, IconData _icon, String _value){
+  TableRow _achievementRow(String _label, IconData _icon, Widget _value){
     return TableRow(
       children: <Widget>[
         SizedBox(
@@ -233,7 +236,7 @@ class _GameDescriptionState extends State<GameDescription>
           child: Center(child: Text(_label, style: Style.descriptionStyle())),
         ),
         TableCell(
-          child: Center(child: Text(_value, style: Style.descriptionStyle())),
+          child: Center(child: _value),
         ),
       ],
     );

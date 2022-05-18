@@ -1,19 +1,20 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:process_run/shell.dart';
 import '../game/game.dart';
 import '../main/common.dart';
 
 class ShellScripts{
-  static void installGame(Game _game){
+  static Future<List<ProcessResult>> installGame(Game _game){
     if (Common.isWindows){
-      installGameWindows(_game);
+      return installGameWindows(_game);
     }
-    else if (Common.isLinux){
-      installGameWindows(_game);//TODO
-    }
+    return installGameWindows(_game);//TODO
   }
 
   //Installs the game on the hard drive on Windows
-  static void installGameWindows(Game _game) async{
+  static Future<List<ProcessResult>> installGameWindows(Game _game) async{
     var shell = Shell();
     shell.cd('');
     await shell.run('if not exist CelluloGames md CelluloGames');
@@ -21,7 +22,7 @@ class ShellScripts{
     await shell2.run('md ${_game.unityName}');
     var shell3 = shell2.cd(_game.unityName);
     await shell3.run('curl "${_game.windowsBuild}" --output ${_game.unityName}.zip'); // TODO add loading icon
-    await shell3.run('tar -xf ${_game.unityName}.zip');
+    return shell3.run('tar -xf ${_game.unityName}.zip');
   }
 
   //Checks whether the game is on the hard drive on Windows
@@ -45,10 +46,10 @@ class ShellScripts{
   }
 
   //Deletes the game from the hard drive on Windows
-  static void uninstallGameWindows(Game _game) async{
+  static Future<List<ProcessResult>> uninstallGameWindows(Game _game) async{
     var shell = Shell();
     shell.cd('');
     var shell2 = shell.cd('CelluloGames');
-    await shell2.run('rmdir /Q /S ${_game.unityName}');
+    return shell2.run('rmdir /Q /S ${_game.unityName}');
   }
 }
