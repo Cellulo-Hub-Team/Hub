@@ -211,7 +211,7 @@ class _GameDescriptionState extends State<GameDescription>
   }
 
   Widget _achievementsPanel() {
-    return Padding(padding: const EdgeInsets.all(20), child: Table(
+    return SingleChildScrollView(child: Padding(padding: const EdgeInsets.all(20), child: Table(
           border: TableBorder(
               horizontalInside: BorderSide(width: 1, color: CustomColors.darkThemeColor(), style: BorderStyle.solid),
               verticalInside: BorderSide(width: 1, color: CustomColors.darkThemeColor(), style: BorderStyle.solid)
@@ -223,7 +223,7 @@ class _GameDescriptionState extends State<GameDescription>
           },
           defaultVerticalAlignment: TableCellVerticalAlignment.middle,
           children: _achievementsTable,
-        ));
+        )));
   }
 
   TableRow _achievementRow(String _label, IconData _icon, Widget _value){
