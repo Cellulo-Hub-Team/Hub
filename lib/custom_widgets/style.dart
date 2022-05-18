@@ -13,6 +13,7 @@ class Style{
   static TextStyle tabStyle() => GoogleFonts.comfortaa(fontSize: 15);
   static TextStyle snackStyle() => GoogleFonts.comfortaa(fontSize: 20, color: Colors.white);
   static TextStyle descriptionStyle() => GoogleFonts.comfortaa(fontSize: 20, color: CustomColors.darkThemeColor());
+  static TextStyle achievementStyle() => GoogleFonts.comfortaa(fontSize: 30, color: CustomColors.darkThemeColor());
 
 }
 

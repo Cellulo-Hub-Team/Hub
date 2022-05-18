@@ -75,10 +75,10 @@ class FiredartApi {
       localGame.isInLibrary = false;
     }
 
-    var allGamesFuture = await owns.get();
-    final allGames = allGamesFuture.toList();
+    var allDataFuture = await owns.get();
+    final allData = allDataFuture.toList();
     var user = await auth.getUser();
-    for (var game in allGames) {
+    for (var game in allData) {
       if (game["User Uid"] == user.id) {
         for (var localGame in Common.allGamesList) {
           if (localGame.name == game["Game Uid"]) {
@@ -90,12 +90,19 @@ class FiredartApi {
   }
 
   ///Remove game from user library
-  static Future<void> removeFromUserLibrary(Game game) async {
+  static Future<void> removeFromUserLibrary(Game localGame) async {
     var user = await auth.getUser();
+
+    var allDataFuture = await owns.get();
+    final allData = allDataFuture.toList();
     if (auth.isSignedIn) {
-      (await owns.where('Game Uid', isEqualTo: game.name).where('User Uid', isEqualTo: user.id).get()).first.reference.delete();
-      game.isInLibrary = false;
+      for (var game in allData) {
+        if (game["User Uid"] == user.id && game["Game Uid"] == localGame.name) {
+          owns.document(game.id).delete();
+        }
+      }
     }
+    localGame.isInLibrary = false;
   }
 
   //Add game to user library on the database
