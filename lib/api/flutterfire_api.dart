@@ -13,7 +13,6 @@ import 'package:url_launcher/url_launcher.dart';
 import '../main/common.dart';
 import '../game/game.dart';
 
-
 class FlutterfireApi {
   static firebase_storage.FirebaseStorage storage =
       firebase_storage.FirebaseStorage.instance;
@@ -47,6 +46,7 @@ class FlutterfireApi {
 
   /// Build the list of all games stored on Firebase
   static Future<void> buildAllGamesList() async {
+    Common.allGamesList = []; //Test, I think it is useless
     QuerySnapshot querySnapshot = await games.get();
     final allData = querySnapshot.docs.toList();
     for (var game in allData) {
@@ -87,13 +87,14 @@ class FlutterfireApi {
       localGame.isInLibrary = false;
     }
 
-    QuerySnapshot querySnapshot = (await owns.where('User Uid', isEqualTo: user?.uid).get());
+    QuerySnapshot querySnapshot =
+        (await owns.where('User Uid', isEqualTo: user?.uid).get());
     final allData = querySnapshot.docs.toList();
 
     for (var game in allData) {
-        for (var localGame in Common.allGamesList) {
-          if (localGame.name == game.get("Game Uid")) {
-            localGame.isInLibrary = true;
+      for (var localGame in Common.allGamesList) {
+        if (localGame.name == game.get("Game Uid")) {
+          localGame.isInLibrary = true;
         }
       }
     }
@@ -116,10 +117,20 @@ class FlutterfireApi {
   }
 
   ///Remove game from user library
-  static Future<void> removeFromUserLibrary(Game game) async {
+  static Future<void> removeFromUserLibrary(
+      Game game, BuildContext context) async {
     User? user = auth.currentUser;
     if (user != null) {
-      (await owns.where('Game Uid', isEqualTo: game.name).where('User Uid', isEqualTo: user.uid).get()).docs.first.reference.delete();
+      (await owns
+              .where('Game Uid', isEqualTo: game.name)
+              .where('User Uid', isEqualTo: user.uid)
+              .get())
+          .docs
+          .first
+          .reference
+          .delete()
+          .whenComplete(() => Common.showSnackBar(context,
+              '${game.name} has successfully been deleted from your game list !'));
       game.isInLibrary = false;
     }
   }
@@ -148,14 +159,12 @@ class FlutterfireApi {
       }
       downloadToFile = File(
           '$path/${game.apkName}'); //declare where the apk with be store (in the Application Documents right now)
-      firebase_storage.DownloadTask task = ref
-          .child(game.name)
-          .child(game.apkName)
-          .writeToFile(downloadToFile);
+      firebase_storage.DownloadTask task =
+          ref.child(game.name).child(game.apkName).writeToFile(downloadToFile);
       task.snapshotEvents.listen((firebase_storage.TaskSnapshot snapshot) {
-        game.downloading = snapshot.bytesTransferred / snapshot.totalBytes * 100;
-        print(
-            'Progress game: ${game.downloading} %');
+        game.downloading =
+            snapshot.bytesTransferred / snapshot.totalBytes * 100;
+        print('Progress game: ${game.downloading} %');
         /*print('Task state: ${snapshot.state}');
         print(
             'Progress: ${(snapshot.bytesTransferred / snapshot.totalBytes) * 100} %');*/
@@ -167,12 +176,12 @@ class FlutterfireApi {
           print('User does not have permission to upload to this reference.');
         }
       }
-      Common.openFile('$path/${game.apkName}'); //open the apk = message to install it
+      Common.openFile(
+          '$path/${game.apkName}'); //open the apk = message to install it
 
     } else {
       downloadToFile = File('');
     }
-
   }
 
   ///Basic Email+password signUp (found on FirebaseAuth doc)
@@ -224,8 +233,7 @@ class FlutterfireApi {
       if (_isInstalled) {
         DeviceApps.openApp(_packageName);
       } else {
-        OpenFile.open(
-            '${appDocDir.path}/${game.unityName}.apk');
+        OpenFile.open('${appDocDir.path}/${game.unityName}.apk');
       }
     }
   }

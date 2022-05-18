@@ -245,12 +245,12 @@ class MyCustomFormState extends State<MyCustomForm> {
                   padding: const EdgeInsets.all(10),
                   child: Column(//TODO max width of 1000
                     children: <Widget>[
-                      _requiredField('Game name', 'Enter the game name', gameNameController),
-                      _requiredField('Game name in Unity', 'Enter the game name as used in Unity', gameNameUnityController),
-                      _requiredField('Company name', 'Enter the company name', companyNameController),
-                      _requiredField('Company name in Unity', 'Enter the company name as used in Unity', companyNameUnityController),
-                      _requiredField('Game description', 'Enter the game description', gameDescriptionController),
-                      _requiredField('Game instructions (how to play)', 'Enter the game instructions (how to play)', gameInstructionsController),
+                      _requiredField('Game name', 'Enter the game name', gameNameController, 50),
+                      _requiredField('Game name in Unity', 'Enter the game name as used in Unity', gameNameUnityController, 50),
+                      _requiredField('Company name', 'Enter the company name', companyNameController, 50),
+                      _requiredField('Company name in Unity', 'Enter the company name as used in Unity', companyNameUnityController, 50),
+                      _requiredField('Game description', 'Enter the game description', gameDescriptionController, 300),
+                      _requiredField('Game instructions (how to play)', 'Enter the game instructions (how to play)', gameInstructionsController, 300),
                       _fileField('Web build', 'Enter a web build zip', webBuildController),
                       TextFormField(
                           decoration: const InputDecoration(
@@ -319,13 +319,14 @@ class MyCustomFormState extends State<MyCustomForm> {
     );
   }
 
-  Widget _requiredField(String label, String hint, TextEditingController controller){
+  Widget _requiredField(String label, String hint, TextEditingController controller, [int? maxLength]){
     return TextFormField(
       decoration: InputDecoration(
         hintText: hint,
         labelText: label,
       ),
       controller: controller,
+      maxLength: maxLength,
       validator: (value) {
         if (value == null || value.isEmpty) {
           return 'Please enter some text';

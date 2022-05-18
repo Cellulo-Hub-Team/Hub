@@ -58,7 +58,7 @@ class _SearchResultState extends State<SearchResult> with TickerProviderStateMix
         leadingTarget: const Shop(),
         hasFloating: false,
         body: GamePanelList(
-            games: Common.allGamesList,
+            games: widget.selectedGames,
             onPressedPrimary: widget.onPressedPrimary,
         ));
   }
