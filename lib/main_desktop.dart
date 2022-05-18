@@ -1,38 +1,13 @@
-import 'package:process_run/shell.dart';
-import 'package:process_run/which.dart';
+import 'dart:convert';
+import 'dart:io';
 import 'package:firedart/firedart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-import 'account/profile.dart';
-import 'custom_widgets/custom_menu_button.dart';
-import 'custom_widgets/custom_icon_button.dart';
-import 'custom_widgets/style.dart';
-import 'main/common.dart';
 import 'custom_widgets/custom_colors.dart';
-import 'main/my_games.dart';
-import 'main/progress.dart';
-import 'main/shop.dart';
 import 'main/welcome_screen.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
-
-class Achievement {
-  final String label;
-  final String type;
-  final int steps;
-
-  Achievement(this.label, this.type, this.steps);
-
-  Achievement.fromJson(Map<String, dynamic> json)
-      : label = json['label'],
-        type = json['type'],
-        steps = json['steps'];
-
-  Map<String, dynamic> toJson() =>
-      {'label': label, 'type': type, 'steps': steps};
-}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -49,13 +24,15 @@ void main() async {
       version: "v13.0",
     );
   }
-  runApp(MyAppDesktop());
+  runApp(const MyAppDesktop());
 }
 
 class MyAppDesktop extends StatelessWidget {
   // Using "static" so that we can easily access it later
   static final ValueNotifier<ThemeMode> themeNotifier =
   ValueNotifier(ThemeMode.light);
+
+  const MyAppDesktop({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

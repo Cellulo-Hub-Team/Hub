@@ -120,7 +120,7 @@ class _GameBodyState extends State<GameBody> {
             size: 30,
           ),
           progressColor: _color,
-          backgroundColor: Colors.grey.shade200,
+          backgroundColor: Common.darkTheme ? Colors.grey.shade700 : Colors.grey.shade200,
         );
       },
     );

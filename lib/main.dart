@@ -23,38 +23,7 @@ import 'main/welcome_screen.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
-class Achievement {
-  final String label;
-  final String type;
-  final int steps;
-
-  Achievement(this.label, this.type, this.steps);
-
-  Achievement.fromJson(Map<String, dynamic> json)
-      : label = json['label'],
-        type = json['type'],
-        steps = json['steps'];
-
-  Map<String, dynamic> toJson() =>
-      {'label': label, 'type': type, 'steps': steps};
-}
-
 void main() async {
-  /*
-  var path =
-      "C:/Users/antoi/AppData/LocalLow/DefaultCompany/Achievements/achievements.json";
-  File(path)
-      .openRead()
-      .transform(utf8.decoder)
-      .transform(new LineSplitter())
-      .forEach((l) {
-    Map<String, dynamic> achievementMap = jsonDecode(l);
-    var achievement = Achievement.fromJson(achievementMap);
-
-    print(achievement.label);
-  });
-  */
-
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(
@@ -69,13 +38,15 @@ void main() async {
       version: "v13.0",
     );
   }
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   // Using "static" so that we can easily access it later
   static final ValueNotifier<ThemeMode> themeNotifier =
       ValueNotifier(ThemeMode.light);
+
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

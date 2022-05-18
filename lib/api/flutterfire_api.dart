@@ -281,7 +281,7 @@ class FlutterfireApi {
     return games
         .doc(_gameName)
         .set({
-          gameName: _gameNameUnity,
+          gameNameUnity: _gameNameUnity,
           companyName: _companyName,
           companyNameUnity: _companyNameUnity,
           gameDescription: _gameDescription,

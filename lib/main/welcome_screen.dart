@@ -18,10 +18,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
   //Build local games lists and get to login screen or main menu depending if user is logged in or not
   Future<Widget> _getStartingScreen() async {
-    print('test');
     if (Common.isDesktop){
-
-      print('desktop');
       if (FiredartApi.isLoggedIn()){
         await FiredartApi.buildAllGamesList();
         await FiredartApi.buildUserGamesList();
@@ -30,20 +27,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       return const ProfileHome();
     }
     else{
-
-      print('else');
       await FlutterfireApi.buildAllGamesList();
-
-      print('test');
       if (FlutterfireApi.isLoggedIn() || await FacebookApi.isLoggedIn()){
         await FlutterfireApi.buildUserGamesList();
         return const MainMenu();
       }
-
-      print('test');
       return const ProfileHome();
-
-      print('test');
     }
   }
 
