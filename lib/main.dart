@@ -21,41 +21,7 @@ import 'main/welcome_screen.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
-class Achievement {
-  final String label;
-  final String type;
-  final int steps;
-  final int value;
-
-  Achievement(this.label, this.type, this.steps, this.value);
-
-  Achievement.fromJson(Map<String, dynamic> json)
-      : label = json['label'],
-        type = json['type'],
-        steps = json['steps'],
-        value = json['value'];
-
-  Map<String, dynamic> toJson() =>
-      {'label': label, 'type': type, 'steps': steps, 'value': value};
-}
-
 void main() async {
-/*
-  var path =
-      "C:/Users/antoi/AppData/LocalLow/Chili/Achievements/achievements.json";
-  File(path)
-      .openRead()
-      .transform(utf8.decoder)
-      .transform(new LineSplitter())
-      .forEach((l) {
-    Map<String, dynamic> achievementMap = jsonDecode(l);
-    var achievement = Achievement.fromJson(achievementMap);
-
-    print(achievement.label);
-  });
-
- */
-
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(

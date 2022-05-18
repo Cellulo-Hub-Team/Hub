@@ -95,11 +95,11 @@ class MyCustomFormState extends State<MyCustomForm> {
         : FlutterfireApi.ref.child(gameName).child(backgroundImageController.text);
     String webLink = _isNull(webLinkController) ? '' : webLinkController.text;
 
-    FlutterfireApi.uploadFile(_file1, webBuildRef);
-    FlutterfireApi.uploadFile(_file2, linuxBuildRef);
-    FlutterfireApi.uploadFile(_file3, windowsBuildRef);
-    FlutterfireApi.uploadFile(_file4, androidBuildRef);
-    FlutterfireApi.uploadFile(_file5, imageRef);
+    await FlutterfireApi.uploadFile(_file1, webBuildRef);
+    await FlutterfireApi.uploadFile(_file2, linuxBuildRef);
+    await FlutterfireApi.uploadFile(_file3, windowsBuildRef);
+    await FlutterfireApi.uploadFile(_file4, androidBuildRef);
+    await FlutterfireApi.uploadFile(_file5, imageRef);
 
     fs.Reference bucketRef = FirebaseStorage.instance.ref();
     String? linuxBuild = (linuxBuildRef == null)
@@ -405,6 +405,6 @@ class MyCustomFormState extends State<MyCustomForm> {
 }
 
 class PrimitiveWrapper {
-  var value;
+  int value;
   PrimitiveWrapper(this.value);
 }
