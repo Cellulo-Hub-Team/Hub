@@ -39,7 +39,7 @@ class GameDescription extends StatefulWidget {
 
 class _GameDescriptionState extends State<GameDescription>
     with TickerProviderStateMixin {
-  List<Widget> _achievementsWidgets = [];
+  final List<TableRow> _achievementsTable = [];
 
   _getAchievements() async {
     String? _user = Platform.environment['USERPROFILE']?.replaceAll(r"\", "/");
@@ -59,7 +59,7 @@ class _GameDescriptionState extends State<GameDescription>
     await File(path)
         .openRead()
         .transform(utf8.decoder)
-        .transform(LineSplitter())
+        .transform(const LineSplitter())
         .forEach((line) {
       if (_index == 0) {
         _count = int.parse(line);
@@ -79,17 +79,23 @@ class _GameDescriptionState extends State<GameDescription>
 
   _buildAchievement(Achievement _achievement) {
     if (_achievement.type == "one") {
-      _achievementsWidgets.add(Text(_achievement.label +
-          ((_achievement.value > 0) ? ": Completed" : ": Not completed")));
+      _achievementsTable.add(_achievementRow(
+          _achievement.label,
+          Icons.favorite,
+          (_achievement.value > 0) ? "Completed" : "Not completed"));
       return;
     }
     if (_achievement.type == "multiple") {
-      _achievementsWidgets.add(Text(_achievement.label +
+      _achievementsTable.add(_achievementRow(
+          _achievement.label,
+          Icons.favorite,
           "${_achievement.value} / ${_achievement.steps}"));
       return;
     }
-    _achievementsWidgets
-        .add(Text(_achievement.label + ": Highest = ${_achievement.value}"));
+    _achievementsTable.add(_achievementRow(
+        _achievement.label,
+        MaterialCommunityIcons.podium_gold,
+        "Highest = ${_achievement.value}"));
   }
 
   @override
@@ -98,6 +104,7 @@ class _GameDescriptionState extends State<GameDescription>
         AnimationController(duration: const Duration(seconds: 1), vsync: this);
     Common.percentageController.reset();
     Common.percentageController.forward();
+    _getAchievements();
     super.initState();
   }
 
@@ -109,7 +116,7 @@ class _GameDescriptionState extends State<GameDescription>
       leadingName: "Back",
       leadingScreen: Common.currentScreen,
       leadingTarget:
-          Common.currentScreen == Activity.MyGames ? MyGames() : Shop(),
+          Common.currentScreen == Activity.MyGames ? const MyGames() : const Shop(),
       hasFloating: false,
       body: DefaultTabController(
         length: 3,
@@ -150,7 +157,7 @@ class _GameDescriptionState extends State<GameDescription>
                             ),
                             Tab(
                               icon: const Icon(Ionicons.md_podium),
-                              child: Text("Successes", style: Style.tabStyle()),
+                              child: Text("Achievements", style: Style.tabStyle()),
                             ),
                           ],
                           labelColor: CustomColors.currentColor,
@@ -190,7 +197,7 @@ class _GameDescriptionState extends State<GameDescription>
               padding:
                   const EdgeInsets.all(15), //apply padding to all four sides
               child: Text("Installation instructions",
-                  style: Style.descriptionStyle())),
+                  style: Style.titleStyle())),
           Padding(
               padding:
                   const EdgeInsets.all(15), //apply padding to all four sides
@@ -206,9 +213,31 @@ class _GameDescriptionState extends State<GameDescription>
   }
 
   Widget _achievementsPanel() {
-    return Container(
-        width: 500,
-        alignment: Alignment.center,
-        child: Column(children: _achievementsWidgets));
+    return Table(
+          border: TableBorder.all(),
+          columnWidths: const <int, TableColumnWidth>{
+            0: FixedColumnWidth(100),
+            1: FlexColumnWidth(),
+            2: FixedColumnWidth(200),
+          },
+          defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+          children: _achievementsTable,
+        );
+  }
+
+  TableRow _achievementRow(String _label, IconData _icon, String _value){
+    return TableRow(
+      children: <Widget>[
+        SizedBox(
+          height: 100,
+          child: Icon(_icon, size: 40)),
+        TableCell(
+          child: Center(child: Text(_label, style: Style.descriptionStyle())),
+        ),
+        TableCell(
+          child: Center(child: Text(_value, style: Style.descriptionStyle())),
+        ),
+      ],
+    );
   }
 }
