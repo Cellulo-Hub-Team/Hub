@@ -81,21 +81,21 @@ class _GameDescriptionState extends State<GameDescription>
     if (_achievement.type == "one") {
       _achievementsTable.add(_achievementRow(
           _achievement.label,
-          Icons.favorite,
-          (_achievement.value > 0) ? "Completed" : "Not completed"));
+          Feather.check_circle,
+          _achievement.value > 0 ? "Completed" : "Not completed"));
       return;
     }
     if (_achievement.type == "multiple") {
       _achievementsTable.add(_achievementRow(
           _achievement.label,
-          Icons.favorite,
-          "${_achievement.value} / ${_achievement.steps}"));
+          MaterialCommunityIcons.counter,
+          _achievement.value >= _achievement.steps ? "Completed" : "${_achievement.value} / ${_achievement.steps}"));
       return;
     }
     _achievementsTable.add(_achievementRow(
         _achievement.label,
-        MaterialCommunityIcons.podium_gold,
-        "Highest = ${_achievement.value}"));
+        Ionicons.ios_podium,
+        _achievement.value.toString()));
   }
 
   @override
@@ -196,11 +196,6 @@ class _GameDescriptionState extends State<GameDescription>
           Padding(
               padding:
                   const EdgeInsets.all(15), //apply padding to all four sides
-              child: Text("Installation instructions",
-                  style: Style.titleStyle())),
-          Padding(
-              padding:
-                  const EdgeInsets.all(15), //apply padding to all four sides
               child: Text(
                   widget.game.celluloCount.toString() + " cellulos required.",
                   style: Style.descriptionStyle())),
@@ -214,7 +209,10 @@ class _GameDescriptionState extends State<GameDescription>
 
   Widget _achievementsPanel() {
     return Table(
-          border: TableBorder.all(),
+          border: TableBorder(
+              horizontalInside: BorderSide(width: 1, color: CustomColors.darkThemeColor(), style: BorderStyle.solid),
+              verticalInside: BorderSide(width: 1, color: CustomColors.darkThemeColor(), style: BorderStyle.solid)
+          ),
           columnWidths: const <int, TableColumnWidth>{
             0: FixedColumnWidth(100),
             1: FlexColumnWidth(),
@@ -230,7 +228,7 @@ class _GameDescriptionState extends State<GameDescription>
       children: <Widget>[
         SizedBox(
           height: 100,
-          child: Icon(_icon, size: 40)),
+          child: Icon(_icon, size: 40, color: CustomColors.darkThemeColor())),
         TableCell(
           child: Center(child: Text(_label, style: Style.descriptionStyle())),
         ),
