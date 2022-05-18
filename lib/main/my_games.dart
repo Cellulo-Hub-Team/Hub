@@ -76,7 +76,7 @@ class _MyGamesState extends State<MyGames>
         }
       }
       else{
-        await FlutterfireApi.removeFromUserLibrary(_game);
+        await FlutterfireApi.removeFromUserLibrary(_game, context);
         if (_game.isInstalled) {
           DeviceApps.uninstallApp(FlutterfireApi.createPackageName(_game));
         }

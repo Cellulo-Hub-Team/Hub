@@ -1,4 +1,5 @@
 import 'package:cellulo_hub/custom_widgets/custom_icon_button.dart';
+import 'package:cellulo_hub/custom_widgets/style.dart';
 import 'package:flutter/material.dart';
 
 import '../main/common.dart';
@@ -43,12 +44,7 @@ class _CustomScaffoldState extends State<CustomScaffold> {
       backgroundColor: CustomColors.currentColor,
       title: Text(widget.name),
       leading: Row(children: [
-        IconButton(
-          icon: Icon(widget.leadingIcon),
-          onPressed: () => Common.goToTarget(context, widget.leadingTarget, false, widget.leadingScreen),
-        ),
-        SizedBox(width: 15),
-        Text(widget.leadingName, style: TextStyle(color: Colors.white, fontSize: 20))
+        TextButton.icon(onPressed: () => Common.goToTarget(context, widget.leadingTarget, false, widget.leadingScreen), icon: Icon(widget.leadingIcon, color: Colors.white), label: Text(widget.leadingName, style: TextStyle(color: Colors.white, fontSize: 20),))
       ]),
       leadingWidth: 200,
     );

@@ -57,13 +57,12 @@ class Common {
   ///Display pop-up at the bottom of the screen
   static showSnackBar(BuildContext _context, String _text) {
     final snackBar = SnackBar(
+      duration: const Duration(seconds: 2),
       backgroundColor: CustomColors.currentColor,
       content: Text(_text, style: Style.snackStyle()),
     );
     ScaffoldMessenger.of(_context).hideCurrentSnackBar();
     ScaffoldMessenger.of(_context).showSnackBar(snackBar);
-    Future.delayed(const Duration(seconds: 3),
-            () => ScaffoldMessenger.of(_context).hideCurrentSnackBar());
   }
 
   ///Navigate to new screen
