@@ -287,6 +287,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                           'Enter the company name as used in Unity',
                           companyNameUnityController,
                           50),
+                      _hintImage(),
                       TextFormField(
                           decoration: const InputDecoration(
                             icon: Icon(Feather.link),
@@ -464,6 +465,28 @@ class MyCustomFormState extends State<MyCustomForm> {
             },
           ))
     ]);
+  }
+
+  Widget _hintImage() {
+    return Stack(
+      children: [
+        Container(
+          child: SizedBox(
+              height: 200,
+              width: 500,
+              child: Center(
+                  child: Text(
+                    gameNameController.value.text,
+                    style: Style.bannerStyle(),
+                  ))),
+          decoration: BoxDecoration(
+            image: DecorationImage(
+                image: Image.asset('graphics/unity_settings.png').image,
+                fit: BoxFit.fitWidth),
+          ),
+        )
+      ],
+    );
   }
 
   Widget _previewImage() {
