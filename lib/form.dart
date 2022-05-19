@@ -289,6 +289,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                           50),
                       TextFormField(
                           decoration: const InputDecoration(
+                            icon: Icon(Feather.link),
                             hintText: 'Enter link to your personal website',
                             labelText: 'Personal website link',
                           ),
@@ -307,6 +308,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                           webBuildController),
                       TextFormField(
                           decoration: const InputDecoration(
+                            icon: Icon(Feather.link),
                             hintText: 'Enter a web link',
                             labelText: 'Web link',
                           ),
@@ -429,7 +431,7 @@ class MyCustomFormState extends State<MyCustomForm> {
           ),
           TextSpan(
               text: _second,
-              style: TextStyle(fontSize: 20, color: Colors.blueAccent),
+              style: const TextStyle(fontSize: 20, color: Colors.blueAccent),
               recognizer: TapGestureRecognizer()
                 ..onTap = () => _launchLink(_link)),
         ],
