@@ -40,6 +40,7 @@ class FiredartApi {
       String? androidUrl =
           game["Android Build"] == "" ? null : game["Android Build"];
       String? linuxUrl = game["Linux Build"] == "" ? null : game["Linux Build"];
+      String? companyUrl = game["Company Link"] == "" ? null : game["Company Link"];
       String? windowsUrl =
           game["Windows Build"] == "" ? null : game["Windows Build"];
       String? webUrl = game["Web Link"] == "" ? null : game["Web Link"];
@@ -49,6 +50,7 @@ class FiredartApi {
           game[nameUnity],
           game[companyName],
           game[companyNameUnity],
+          companyUrl,
           game[gameDescription],
           game[gameInstructions],
           game[backgroundImage],

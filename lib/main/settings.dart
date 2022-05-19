@@ -44,7 +44,7 @@ class _SettingsState extends State<Settings> {
       CustomColors.currentColor = CustomColors.purpleColor();
       Common.showSnackBar(
           context,
-          Common.darkTheme
+          Common.contrastTheme
               ? "Switched to High contrast mode"
               : "Switched to Normal contrast mode");
     });

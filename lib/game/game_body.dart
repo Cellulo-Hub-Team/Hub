@@ -1,9 +1,12 @@
 import 'dart:math';
 
 import 'package:cellulo_hub/custom_widgets/custom_elevated_button.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../custom_widgets/style.dart';
 import '../main/common.dart';
@@ -33,6 +36,17 @@ class GameBody extends StatefulWidget {
 }
 
 class _GameBodyState extends State<GameBody> {
+  //Launches url corresponding to the developer's website
+  _launchLink() async {
+    if (widget.game.companyUrl != null) {
+      if (await canLaunch(widget.game.companyUrl!)) {
+        await launch(widget.game.companyUrl!);
+      } else {
+        throw 'Could not launch ${widget.game.companyUrl}';
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -43,8 +57,20 @@ class _GameBodyState extends State<GameBody> {
           Padding(
               padding:
                   const EdgeInsets.all(15), //apply padding to all four sides
-              child: Text("A game by: " + widget.game.companyName,
-                  style: Style.descriptionStyle())),
+              child: RichText(
+                text: TextSpan(
+                    children: <TextSpan>[
+                        TextSpan(
+                            text: "A game by: ",
+                            style: Style.descriptionStyle()),
+                      TextSpan(
+                          text: widget.game.companyName,
+                          style: GoogleFonts.comfortaa(fontSize: 20, color: Colors.blueAccent),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () => _launchLink()),
+                      ],
+                    ),
+                  )),
           Padding(
               padding:
                   const EdgeInsets.all(15), //apply padding to all four sides
@@ -75,11 +101,17 @@ class _GameBodyState extends State<GameBody> {
                   Spacer(),
                   CustomElevatedButton(
                       label: Common.currentScreen == Activity.MyGames
-                          ? widget.game.downloading == 1 ? "Loading" : (widget.game.isInstalled ? "Uninstall" : "Install")
+                          ? widget.game.downloading == 1
+                              ? "Loading"
+                              : (widget.game.isInstalled
+                                  ? "Uninstall"
+                                  : "Install")
                           : (widget.game.isInLibrary
                               ? "See in library"
                               : "Add to My Games"),
-                      onPressed: widget.game.downloading == 1 ? null : widget.onPressedPrimary),
+                      onPressed: widget.game.downloading == 1
+                          ? null
+                          : widget.onPressedPrimary),
                   Common.currentScreen == Activity.MyGames
                       ? Spacer()
                       : Container(),

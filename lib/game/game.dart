@@ -3,6 +3,7 @@ class Game {
   String unityName = "";
   String companyName = "";
   String unityCompanyName = "";
+  String? companyUrl;
   String description = "";
   String instructions = "";
   bool isInstalled = false;
@@ -28,6 +29,7 @@ class Game {
       this.unityName,
       this.companyName,
       this.unityCompanyName,
+      this.companyUrl,
       this.description,
       this.instructions,
       this.backgroundImage,

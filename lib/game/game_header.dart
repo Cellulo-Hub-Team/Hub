@@ -162,9 +162,9 @@ class _GameHeaderState extends State<GameHeader> {
         color: Colors.white,
       ),
       label: Text(
-        'Not available on your device',
+        'Unavailable on your device',
         style:
-            GoogleFonts.comfortaa(fontSize: 15, color: Colors.white), //TODO fix
+            GoogleFonts.comfortaa(fontSize: 14, color: Colors.white), //TODO fix
         textAlign: TextAlign.center,
       ),
       style: ElevatedButton.styleFrom(
@@ -173,7 +173,7 @@ class _GameHeaderState extends State<GameHeader> {
             borderRadius: BorderRadius.only(
                 bottomRight: Radius.circular(30.0),
                 topRight: Radius.circular(30.0))),
-        fixedSize: const Size(180, 50),
+        fixedSize: const Size(170, 50),
       ),
     );
   }

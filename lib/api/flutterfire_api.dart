@@ -30,6 +30,7 @@ class FlutterfireApi {
       gameNameUnity = 'Game Name Unity',
       companyName = 'Company Name',
       companyNameUnity = 'Company Name Unity',
+      companyLink = 'Company Link',
       gameDescription = 'Game Description',
       gameInstructions = 'Game Instructions',
       webBuild = 'Web Build',
@@ -54,6 +55,7 @@ class FlutterfireApi {
       String? androidUrl =
           game["Android Build"] == "" ? null : game["Android Build"];
       String? linuxUrl = game["Linux Build"] == "" ? null : game["Linux Build"];
+      String? companyUrl = game["Company Link"] == "" ? null : game["Company Link"];
       String? windowsUrl =
           game["Windows Build"] == "" ? null : game["Windows Build"];
       String? webUrl = game["Web Link"] == "" ? null : game["Web Link"];
@@ -63,6 +65,7 @@ class FlutterfireApi {
           game[gameNameUnity],
           game[companyName],
           game[companyNameUnity],
+          companyUrl,
           game[gameDescription],
           game[gameInstructions],
           game[backgroundImage],
@@ -263,6 +266,7 @@ class FlutterfireApi {
       String _gameNameUnity,
       String _companyName,
       String _companyNameUnity,
+      String _companyLink,
       String _gameDescription,
       String _gameInstructions,
       String _webBuild,
@@ -282,6 +286,7 @@ class FlutterfireApi {
           gameNameUnity: _gameNameUnity,
           companyName: _companyName,
           companyNameUnity: _companyNameUnity,
+          companyLink: _companyLink,
           gameDescription: _gameDescription,
           gameInstructions: _gameInstructions,
           webBuild: _webBuild,

@@ -48,6 +48,7 @@ class MyCustomFormState extends State<MyCustomForm> {
   final webBuildController = TextEditingController();
   final backgroundImageController = TextEditingController();
   final webLinkController = TextEditingController();
+  final companyLinkController = TextEditingController();
   final PrimitiveWrapper _physicalPercentage = PrimitiveWrapper(0);
   final PrimitiveWrapper _cognitivePercentage = PrimitiveWrapper(0);
   final PrimitiveWrapper _socialPercentage = PrimitiveWrapper(0);
@@ -95,6 +96,7 @@ class MyCustomFormState extends State<MyCustomForm> {
             .child(gameName)
             .child(backgroundImageController.text);
     String webLink = _isNull(webLinkController) ? '' : webLinkController.text;
+    String companyLink = _isNull(companyLinkController) ? '' : companyLinkController.text;
 
     await FlutterfireApi.uploadFile(_file1, webBuildRef);
     await FlutterfireApi.uploadFile(_file2, linuxBuildRef);
@@ -128,6 +130,7 @@ class MyCustomFormState extends State<MyCustomForm> {
         gameNameUnityController.text,
         companyNameController.text,
         companyNameUnityController.text,
+        companyLink,
         gameDescriptionController.text,
         gameInstructionsController.text,
         webBuild ?? "",
@@ -228,6 +231,7 @@ class MyCustomFormState extends State<MyCustomForm> {
     windowsBuildController.dispose();
     webBuildController.dispose();
     webLinkController.dispose();
+    companyLinkController.dispose();
     super.dispose();
   }
 
@@ -261,6 +265,12 @@ class MyCustomFormState extends State<MyCustomForm> {
                           'Enter the company name as used in Unity',
                           companyNameUnityController,
                           50),
+                      TextFormField(
+                          decoration: const InputDecoration(
+                            hintText: 'Enter link to your personal website',
+                            labelText: 'Personal website link',
+                          ),
+                          controller: companyLinkController),
                       _requiredField(
                           'Game description',
                           'Enter the game description',
