@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 
 import '../api/flutterfire_api.dart';
-import '../custom_widgets/custom_colors.dart';
 import '../custom_widgets/custom_scaffold.dart';
 import '../main/common.dart';
 import 'profile_home.dart';
@@ -36,7 +35,8 @@ class _ForgotPasswordState extends State<ForgotPassword> {
       leadingScreen: Activity.Profile,
       leadingTarget: const ProfileHome(),
       hasFloating: false,
-      body: Column(//TODO max width of 1000
+      body: Column(
+        //TODO max width of 1000
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -55,7 +55,8 @@ class _ForgotPasswordState extends State<ForgotPassword> {
               onPressed: () {
                 Common.isDesktop
                     ? FiredartApi.auth.resetPassword(_emailController.text)
-                    : FlutterfireApi.auth.sendPasswordResetEmail(email: _emailController.text);
+                    : FlutterfireApi.auth
+                        .sendPasswordResetEmail(email: _emailController.text);
               }),
           const Spacer(flex: 5),
         ],

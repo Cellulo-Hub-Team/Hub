@@ -3,26 +3,27 @@ import 'package:cellulo_hub/custom_widgets/custom_scaffold.dart';
 import 'package:cellulo_hub/main/shop.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+
 import '../api/flutterfire_api.dart';
+import '../game/game.dart';
 import '../game/game_panel_list.dart';
 import 'common.dart';
-import '../custom_widgets/custom_colors.dart';
-import '../game/game.dart';
 import 'my_games.dart';
 
 class SearchResult extends StatefulWidget {
   final List<Game> selectedGames;
   final Function(Game)? onPressedPrimary;
 
-  const SearchResult({Key? key,
-    required this.selectedGames,
-    required this.onPressedPrimary}) : super(key: key);
+  const SearchResult(
+      {Key? key, required this.selectedGames, required this.onPressedPrimary})
+      : super(key: key);
 
   @override
   State<SearchResult> createState() => _SearchResultState();
 }
 
-class _SearchResultState extends State<SearchResult> with TickerProviderStateMixin {
+class _SearchResultState extends State<SearchResult>
+    with TickerProviderStateMixin {
   _onPressedMain(Game _game) {
     setState(() async {
       if (_game.isInLibrary) {
@@ -34,7 +35,9 @@ class _SearchResultState extends State<SearchResult> with TickerProviderStateMix
         );
       } else {
         _game.isInLibrary = true;
-        await Common.isDesktop ? FiredartApi.addToUserLibrary(_game) : FlutterfireApi.addToUserLibrary(_game);
+        await Common.isDesktop
+            ? FiredartApi.addToUserLibrary(_game)
+            : FlutterfireApi.addToUserLibrary(_game);
         Common.showSnackBar(context, "Correctly added to My Games!");
       }
     });
@@ -51,15 +54,16 @@ class _SearchResultState extends State<SearchResult> with TickerProviderStateMix
 
   @override
   Widget build(BuildContext context) {
-    return CustomScaffold(name: "Search result",
+    return CustomScaffold(
+        name: "Search result",
         leadingIcon: Entypo.shop,
         leadingName: "Shop",
         leadingScreen: Activity.Shop,
         leadingTarget: const Shop(),
         hasFloating: false,
         body: GamePanelList(
-            games: widget.selectedGames,
-            onPressedPrimary: widget.onPressedPrimary,
+          games: widget.selectedGames,
+          onPressedPrimary: widget.onPressedPrimary,
         ));
   }
 }

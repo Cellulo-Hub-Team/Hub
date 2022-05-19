@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cellulo_hub/custom_widgets/style.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -5,15 +7,8 @@ import 'package:open_file/open_file.dart';
 
 import '../custom_widgets/custom_colors.dart';
 import '../game/game.dart';
-import 'dart:io';
 
-enum Activity {
-  Menu,
-  MyGames,
-  Shop,
-  Profile,
-  Progress
-}
+enum Activity { Menu, MyGames, Shop, Profile, Progress }
 
 class Common {
   //The variable storing the current screen we are in
@@ -85,7 +80,7 @@ class Common {
     }
   }
 
-  static Future<bool> isConnected() async{
+  static Future<bool> isConnected() async {
     try {
       final result = await InternetAddress.lookup('example.com');
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {

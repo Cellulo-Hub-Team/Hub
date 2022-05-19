@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 
 import '../api/facebook_api.dart';
 import '../api/flutterfire_api.dart';
-import '../main.dart';
 import '../custom_widgets/custom_colors.dart';
+import '../main.dart';
 import '../main/common.dart';
 import 'profile_home.dart';
 
@@ -19,14 +19,13 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
 
-  //Disconnect user from the database
+  ///Disconnect user from the database
   _signOut() async {
-    if (Common.isDesktop){
+    if (Common.isDesktop) {
       if (FiredartApi.isLoggedIn()) {
         FiredartApi.auth.signOut();
       }
-    }
-    else{
+    } else {
       if (FlutterfireApi.isLoggedIn()) {
         await FlutterfireApi.auth.signOut();
       } else if (FacebookApi.loggedWithFacebook) {
@@ -37,20 +36,20 @@ class _ProfileState extends State<Profile> {
     Common.goToTarget(context, const ProfileHome(), false, Activity.Profile);
   }
 
-  //Get user name or email depending on availability on the current platform
+  ///Get user name or email depending on availability on the current platform
   Future<String> _getCurrentAuth() async {
-    if (Common.isDesktop){
+    if (Common.isDesktop) {
       if (FiredartApi.isLoggedIn()) {
         var user = await FiredartApi.auth.getUser();
         return user.email!;
       }
       return 'No User';
-    }
-    else {
+    } else {
       if (FlutterfireApi.isLoggedIn()) {
         return (FlutterfireApi.auth.currentUser!.email)!;
       } else if (FacebookApi.loggedWithFacebook) {
-        Map<String, dynamic> userData = await FacebookApi.auth.getUserData(fields: 'name,friends');
+        Map<String, dynamic> userData =
+            await FacebookApi.auth.getUserData(fields: 'name,friends');
         print(userData['friends']);
         return userData['name'];
       }
@@ -73,33 +72,27 @@ class _ProfileState extends State<Profile> {
         leadingScreen: Activity.Menu,
         leadingTarget: const MainMenu(),
         hasFloating: false,
-        body: Center(child: Column(
-          children: [
-            const Spacer(flex: 3),
-            FutureBuilder(
-              future: _getCurrentAuth(),
-              builder: (BuildContext context,
-                  AsyncSnapshot<String> snapshot) {
-                if (!snapshot.hasData) {
-                  // while data is loading:
-                  return const CircularProgressIndicator();
-                } else {
-                  // data loaded:
-                  final output = snapshot.data;
-                  return Center(
-                    child:
-                    Text('Welcome $output'),
-                  );
-                }
-              },
-            ),
-            const Spacer(),
-            CustomElevatedButton(
-              label: "Log out",
-              onPressed: _signOut
-              ),
-            const Spacer(flex: 3)
-          ]))
-    );
+        body: Center(
+            child: Column(children: [
+          const Spacer(flex: 3),
+          FutureBuilder(
+            future: _getCurrentAuth(),
+            builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+              if (!snapshot.hasData) {
+                // while data is loading:
+                return const CircularProgressIndicator();
+              } else {
+                // data loaded:
+                final output = snapshot.data;
+                return Center(
+                  child: Text('Welcome $output'),
+                );
+              }
+            },
+          ),
+          const Spacer(),
+          CustomElevatedButton(label: "Log out", onPressed: _signOut),
+          const Spacer(flex: 3)
+        ])));
   }
 }

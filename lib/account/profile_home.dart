@@ -18,7 +18,6 @@ class ProfileHome extends StatefulWidget {
 }
 
 class _ProfileHomeState extends State<ProfileHome> {
-
   ///Launch the facebook authentication page
   _onPressedFacebook() async {
     if (await FacebookApi.isLoggedIn()) {
@@ -41,7 +40,7 @@ class _ProfileHomeState extends State<ProfileHome> {
         FacebookApi.loggedWithFacebook = true;
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => const MainMenu()));
-      } else { }//TODO
+      } else {} //TODO
     }
   }
 
