@@ -33,14 +33,22 @@ class _MyGamesState extends State<MyGames>
     //TODO add iOS and MacOS
     if (Common.isDesktop) {
       if (_game.isInstalled) {
+        setState(() {
+          _game.downloading = 1;
+        });
         ShellScripts.uninstallGameWindows(_game)
             .whenComplete(() => setState(() {
                   _game.isInstalled = false;
+                  _game.downloading = 0;
                 }));
       } else {
+        setState(() {
+          _game.downloading = 1;
+        });
         ShellScripts.installGame(_game)
             .whenComplete(() => setState(() {
               _game.isInstalled = true;
+              _game.downloading = 0;
             }));
       }
     } else if (Common.isAndroid) {
