@@ -1,28 +1,27 @@
 import 'dart:math';
 
-import 'package:cellulo_hub/custom_widgets/colored_app_bar.dart';
+import 'package:cellulo_hub/custom_widgets/style.dart';
 import 'package:cellulo_hub/main.dart';
 import 'package:cellulo_hub/main/search_result.dart';
 import 'package:device_apps/device_apps.dart';
-import 'package:cellulo_hub/custom_widgets/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:scroll_snap_list/scroll_snap_list.dart';
 
-import '../api/flutterfire_api.dart';
 import '../api/firedart_api.dart';
+import '../api/flutterfire_api.dart';
 import '../api/shell_scripts.dart';
+import '../custom_widgets/custom_colors.dart';
 import '../custom_widgets/custom_delegate.dart';
 import '../custom_widgets/custom_elevated_button.dart';
 import '../custom_widgets/custom_scaffold.dart';
+import '../custom_widgets/custom_search.dart';
+import '../game/game.dart';
 import '../game/game_body.dart';
 import '../game/game_description.dart';
 import '../game/game_panel_list.dart';
 import 'common.dart';
-import '../custom_widgets/custom_colors.dart';
-import '../custom_widgets/custom_search.dart';
-import '../game/game.dart';
 import 'measure_size.dart';
 import 'my_games.dart';
 
@@ -35,11 +34,11 @@ class Shop extends StatefulWidget {
   _ShopState createState() => _ShopState();
 }
 
-class _ShopState extends State<Shop> with TickerProviderStateMixin, WidgetsBindingObserver {
+class _ShopState extends State<Shop>
+    with TickerProviderStateMixin, WidgetsBindingObserver {
   bool _trendingDescriptionDisplayed = false;
   String _searchResult = "";
   late Game? _beingInstalledGame;
-
 
   int _trendingDecriptionIndex = 0;
   final GlobalKey<ScrollSnapListState> _trendingKey = GlobalKey();
@@ -64,31 +63,34 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin, WidgetsBindi
           game.socialPercentage >= game.physicalPercentage)
       .toList();
 
-  final List<Game> _trendingGames = List.from(Common.allGamesList)..sort((a,b) => b.downloads.compareTo(a.downloads));
-
+  final List<Game> _trendingGames = List.from(Common.allGamesList)
+    ..sort((a, b) => b.downloads.compareTo(a.downloads));
 
   ///Function called when pressing Add to My Games button
   _onPressedPrimary(Game _game) async {
-      if (_game.isInLibrary) {
-        Common.goToTarget(context, const MyGames(), false, Activity.MyGames);
-      } else {
-        setState(() {
-          _game.isInLibrary = true;
-        });
-        Common.isDesktop ? await FiredartApi.addToUserLibrary(_game) : await FlutterfireApi.addToUserLibrary(_game);
-        Common.showSnackBar(context, "Correctly added to My Games!");
-        _beingInstalledGame = _game;
-        if (Common.isAndroid && _game.androidBuild != null){
-          await FlutterfireApi.downloadFile(_game);
-        }
-        if (Common.isDesktop){
-          ShellScripts.installGame(_game)
-              .whenComplete(() => setState(() {
-            _game.isInstalled = true;
-          }));
-        }
-        Common.isDesktop ? await FiredartApi.incrementDownloads(_game) : await FlutterfireApi.incrementDownloads(_game);
+    if (_game.isInLibrary) {
+      Common.goToTarget(context, const MyGames(), false, Activity.MyGames);
+    } else {
+      setState(() {
+        _game.isInLibrary = true;
+      });
+      Common.isDesktop
+          ? await FiredartApi.addToUserLibrary(_game)
+          : await FlutterfireApi.addToUserLibrary(_game);
+      Common.showSnackBar(context, "Correctly added to My Games!");
+      _beingInstalledGame = _game;
+      if (Common.isAndroid && _game.androidBuild != null) {
+        await FlutterfireApi.downloadFile(_game);
       }
+      if (Common.isDesktop) {
+        ShellScripts.installGame(_game).whenComplete(() => setState(() {
+              _game.isInstalled = true;
+            }));
+      }
+      Common.isDesktop
+          ? await FiredartApi.incrementDownloads(_game)
+          : await FlutterfireApi.incrementDownloads(_game);
+    }
   }
 
   ///Function called when pressing search icon
@@ -107,10 +109,9 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin, WidgetsBindi
         Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) =>
-                  SearchResult(
-                      selectedGames: _selectedGames,
-                      onPressedPrimary: _onPressedPrimary,
+              builder: (context) => SearchResult(
+                    selectedGames: _selectedGames,
+                    onPressedPrimary: _onPressedPrimary,
                   )),
         );
       }
@@ -161,7 +162,8 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin, WidgetsBindi
   Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
     super.didChangeAppLifecycleState(state);
     if (state == AppLifecycleState.resumed && _beingInstalledGame != null) {
-      if (await DeviceApps.isAppInstalled(FlutterfireApi.createPackageName(_beingInstalledGame!))) {
+      if (await DeviceApps.isAppInstalled(
+          FlutterfireApi.createPackageName(_beingInstalledGame!))) {
         setState(() {
           _beingInstalledGame!.isInstalled = true;
         });
@@ -197,10 +199,12 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin, WidgetsBindi
                           animation: _trendingController,
                           builder: (BuildContext context, Widget? child) {
                             return SliverAppBar(
-                                backgroundColor: CustomColors.inversedDarkThemeColor(),
+                                backgroundColor:
+                                    CustomColors.inversedDarkThemeColor(),
                                 automaticallyImplyLeading: false,
                                 leading: null,
-                                collapsedHeight: 370, // Check for web and desktop
+                                collapsedHeight:
+                                    370, // Check for web and desktop
                                 expandedHeight: (_trendingController
                                             .drive(
                                                 CurveTween(curve: Curves.ease))
@@ -209,19 +213,31 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin, WidgetsBindi
                                     370,
                                 flexibleSpace: FlexibleSpaceBar(
                                     background: Column(children: [
-                                      const SizedBox(height: 10),
-                                      Text("Trending", style: Style.titleStyle()),
+                                  const SizedBox(height: 10),
+                                  Text("Trending", style: Style.titleStyle()),
                                   _trendingWidget(),
                                   _trendingDescriptionDisplayed
-                                      ? (Common.isDesktop || Common.isWeb || MediaQuery.of(context).orientation == Orientation.landscape
-                                        ? _trendingDescriptionDesktop()
-                                        : _trendingDescription())
+                                      ? (Common.isDesktop ||
+                                              Common.isWeb ||
+                                              MediaQuery.of(context)
+                                                      .orientation ==
+                                                  Orientation.landscape
+                                          ? _trendingDescriptionDesktop()
+                                          : _trendingDescription())
                                       : Container(),
-                                      Padding(
-                                          padding: const EdgeInsets.only(left: 100, right: 100, top: 10, bottom: 10),
-                                        child: Container(height: 2, color: Colors.grey.shade200, child: Container()),
-                                      ),
-                                      Text("Search all games", style: Style.titleStyle()),
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 100,
+                                        right: 100,
+                                        top: 10,
+                                        bottom: 10),
+                                    child: Container(
+                                        height: 2,
+                                        color: Colors.grey.shade200,
+                                        child: Container()),
+                                  ),
+                                  Text("Search all games",
+                                      style: Style.titleStyle()),
                                 ])));
                           }),
                       SliverPersistentHeader(
@@ -317,9 +333,8 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin, WidgetsBindi
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(50),
               image: DecorationImage(
-                  image:
-                      Image.network(_trendingGames[index].backgroundImage)
-                          .image,
+                  image: Image.network(_trendingGames[index].backgroundImage)
+                      .image,
                   fit: BoxFit.fitHeight),
               boxShadow: [
                 BoxShadow(
@@ -349,7 +364,7 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin, WidgetsBindi
         ));
   }
 
-  Widget _trendingDescriptionDesktop(){
+  Widget _trendingDescriptionDesktop() {
     Game _game = _trendingGames[_trendingDecriptionIndex];
     return MeasureSize(
         onChange: (size) {
@@ -357,48 +372,49 @@ class _ShopState extends State<Shop> with TickerProviderStateMixin, WidgetsBindi
             myChildSize = size;
           });
         },
-        child:
-        Container(
+        child: Container(
             width: 500,
             alignment: Alignment.center,
-            child: Column(
-                children: [
-                  Padding(
-                      padding: const EdgeInsets.all(15), //apply padding to all four sides
-                      child: Text(_game.description, style: Style.descriptionStyle())),
-        Padding(
-            padding: const EdgeInsets.all(15), //apply padding to all four sides
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Spacer(flex: 5),
-                CustomElevatedButton(
-                    label: _game.isInLibrary ? "See in library" : "Add to My Games",
-                    onPressed: () => _onPressedPrimary(_game)),
-                const Spacer(),
-                CustomElevatedButton(
-                    label: "See more",
-                    onPressed: () => Common.goToTarget(
-                        context,
-                        GameDescription(
-                          game: _game,
-                          index: 0, //TODO actual index
-                          onPressedPrimary: () => _onPressedPrimary(_game),
-                        ),
-                        false,
-                        Common.currentScreen
-                    )),
-                const Spacer(flex: 5),
-              ],
-            ))
-        ]))
-    );
-
+            child: Column(children: [
+              Padding(
+                  padding: const EdgeInsets.all(
+                      15), //apply padding to all four sides
+                  child:
+                      Text(_game.description, style: Style.descriptionStyle())),
+              Padding(
+                  padding: const EdgeInsets.all(
+                      15), //apply padding to all four sides
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Spacer(flex: 5),
+                      CustomElevatedButton(
+                          label: _game.isInLibrary
+                              ? "See in library"
+                              : "Add to My Games",
+                          onPressed: () => _onPressedPrimary(_game)),
+                      const Spacer(),
+                      CustomElevatedButton(
+                          label: "See more",
+                          onPressed: () => Common.goToTarget(
+                              context,
+                              GameDescription(
+                                game: _game,
+                                index: 0, //TODO actual index
+                                onPressedPrimary: () =>
+                                    _onPressedPrimary(_game),
+                              ),
+                              false,
+                              Common.currentScreen)),
+                      const Spacer(flex: 5),
+                    ],
+                  ))
+            ])));
   }
 
-
   //Clean up this mess
-  Widget _percentageIndicator(double _percentage, Color _color, IconData _icon) {
+  Widget _percentageIndicator(
+      double _percentage, Color _color, IconData _icon) {
     return AnimatedBuilder(
       animation: Common.percentageController,
       builder: (BuildContext context, Widget? child) {

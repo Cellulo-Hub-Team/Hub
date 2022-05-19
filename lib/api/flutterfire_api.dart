@@ -1,17 +1,18 @@
 import 'dart:io';
-import 'dart:math';
 import 'dart:typed_data';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
-import 'package:firebase_core/firebase_core.dart' as firebase_core;
-import 'package:open_file/open_file.dart';
 import 'package:device_apps/device_apps.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart' as firebase_core;
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:flutter/cupertino.dart';
+import 'package:open_file/open_file.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../main/common.dart';
+
 import '../game/game.dart';
+import '../main/common.dart';
 
 class FlutterfireApi {
   static firebase_storage.FirebaseStorage storage =
@@ -46,7 +47,7 @@ class FlutterfireApi {
 
   /// Build the list of all games stored on Firebase
   static Future<void> buildAllGamesList() async {
-    Common.allGamesList = []; //Test, I think it is useless
+    Common.allGamesList.clear(); //Test, I think it is useless
     QuerySnapshot querySnapshot = await games.get();
     final allData = querySnapshot.docs.toList();
     for (var game in allData) {
@@ -165,9 +166,6 @@ class FlutterfireApi {
         game.downloading =
             snapshot.bytesTransferred / snapshot.totalBytes * 100;
         print('Progress game: ${game.downloading} %');
-        /*print('Task state: ${snapshot.state}');
-        print(
-            'Progress: ${(snapshot.bytesTransferred / snapshot.totalBytes) * 100} %');*/
       });
       try {
         await task; //download from FirebaseStorage and write into the right file

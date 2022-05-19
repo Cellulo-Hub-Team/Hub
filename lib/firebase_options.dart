@@ -58,7 +58,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '647250430928',
     projectId: 'cellulo-hub-games',
     storageBucket: 'cellulo-hub-games.appspot.com',
-    iosClientId: '647250430928-cgen993vmnbp97t5avcbkspbbtkuv7d2.apps.googleusercontent.com',
+    iosClientId:
+        '647250430928-cgen993vmnbp97t5avcbkspbbtkuv7d2.apps.googleusercontent.com',
     iosBundleId: 'com.chili.celluloHub',
   );
 
@@ -68,7 +69,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '647250430928',
     projectId: 'cellulo-hub-games',
     storageBucket: 'cellulo-hub-games.appspot.com',
-    iosClientId: '647250430928-cgen993vmnbp97t5avcbkspbbtkuv7d2.apps.googleusercontent.com',
+    iosClientId:
+        '647250430928-cgen993vmnbp97t5avcbkspbbtkuv7d2.apps.googleusercontent.com',
     iosBundleId: 'com.chili.celluloHub',
   );
 }

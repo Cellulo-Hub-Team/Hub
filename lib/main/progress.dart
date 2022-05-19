@@ -4,12 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../custom_widgets/custom_colors.dart';
 import '../custom_widgets/custom_scaffold.dart';
-import '../custom_widgets/style.dart';
 import '../game/game.dart';
 import '../main.dart';
 import 'common.dart';
-import '../custom_widgets/custom_colors.dart';
 
 class Progress extends StatefulWidget {
   const Progress({Key? key}) : super(key: key);
@@ -41,7 +40,7 @@ class _ProgressState extends State<Progress> {
         body: SingleChildScrollView(
             child: Center(
                 child: Container(
-                  padding: const EdgeInsets.all(50),
+          padding: const EdgeInsets.all(50),
           width: MediaQuery.of(context).size.width,
           height: 500,
           child: Row(children: [
@@ -92,25 +91,37 @@ class _ProgressState extends State<Progress> {
           width: _width,
           height: 30,
           child: _index == 1
-              ? const Icon(MaterialCommunityIcons.medal, size: 28, color: Colors.white)
-              : Center(child: Text(_index == 0 ? '2nd' : '3rd', style: TextStyle(color: Colors.white))),
+              ? const Icon(MaterialCommunityIcons.medal,
+                  size: 28, color: Colors.white)
+              : Center(
+                  child: Text(_index == 0 ? '2nd' : '3rd',
+                      style: TextStyle(color: Colors.white))),
         ),
         Expanded(
             child: Container(
                 decoration: BoxDecoration(
-                  gradient: _index != 1 ? LinearGradient(
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                    colors: [
-                      _index < 1 ? Color.fromRGBO(0xFF, 0x70, 0x70, 1) : Color.fromRGBO(0xFF, 0x50, 0x50, 1),
-                      _index > 1 ? Color.fromRGBO(0xFF, 0x70, 0x70, 1) : Color.fromRGBO(0xFF, 0x50, 0x50, 1),
-                    ],
-                  ) : null,
-                  color: _index == 1 ? Color.fromRGBO(0xFF, 0x68, 0x68, 1) : null,
+                  gradient: _index != 1
+                      ? LinearGradient(
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight,
+                          colors: [
+                            _index < 1
+                                ? Color.fromRGBO(0xFF, 0x70, 0x70, 1)
+                                : Color.fromRGBO(0xFF, 0x50, 0x50, 1),
+                            _index > 1
+                                ? Color.fromRGBO(0xFF, 0x70, 0x70, 1)
+                                : Color.fromRGBO(0xFF, 0x50, 0x50, 1),
+                          ],
+                        )
+                      : null,
+                  color:
+                      _index == 1 ? Color.fromRGBO(0xFF, 0x68, 0x68, 1) : null,
                 ),
                 height: _height,
                 width: _width,
-                child: const Center(child: Text('Time played : 20h', style: TextStyle(color: Colors.white, fontSize: 15))))),
+                child: const Center(
+                    child: Text('Time played : 20h',
+                        style: TextStyle(color: Colors.white, fontSize: 15))))),
       ],
     );
   }

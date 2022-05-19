@@ -7,15 +7,13 @@ import 'package:cellulo_hub/game/game_header.dart';
 import 'package:cellulo_hub/main/my_games.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../custom_widgets/custom_colors.dart';
 import '../custom_widgets/custom_delegate.dart';
-import '../main.dart';
+import '../custom_widgets/style.dart';
 import '../main/achievement.dart';
 import '../main/common.dart';
 import '../main/shop.dart';
-import '../custom_widgets/style.dart';
 import 'game.dart';
 
 class GameDescription extends StatefulWidget {
@@ -40,6 +38,7 @@ class GameDescription extends StatefulWidget {
 class _GameDescriptionState extends State<GameDescription>
     with TickerProviderStateMixin {
   final List<TableRow> _achievementsTable = [];
+  int _minutes = 3;
 
   _getAchievements() async {
     String? _user = Platform.environment['USERPROFILE']?.replaceAll(r"\", "/");
@@ -51,7 +50,6 @@ class _GameDescriptionState extends State<GameDescription>
         "/achievements.json";
     int _index = 0;
     int _count = 0;
-    int _minutes = 0;
     if (!await File(path).exists()) {
       return;
     }
@@ -82,8 +80,10 @@ class _GameDescriptionState extends State<GameDescription>
           _achievement.label,
           MaterialCommunityIcons.medal,
           _achievement.value > 0
-              ? Icon(Feather.check_circle, size: 40, color: CustomColors.darkThemeColor())
-              : Icon(Feather.circle, size: 40, color: CustomColors.darkThemeColor())));
+              ? Icon(Feather.check_square,
+                  size: 40, color: CustomColors.darkThemeColor())
+              : Icon(Feather.square,
+                  size: 40, color: CustomColors.darkThemeColor())));
       return;
     }
     if (_achievement.type == "multiple") {
@@ -91,8 +91,10 @@ class _GameDescriptionState extends State<GameDescription>
           _achievement.label,
           MaterialCommunityIcons.counter,
           _achievement.value >= _achievement.steps
-            ? Icon(Feather.check_circle, size: 40, color: CustomColors.darkThemeColor())
-            : Text("${_achievement.value} / ${_achievement.steps}", style: Style.achievementStyle())));
+              ? Icon(Feather.check_square,
+                  size: 40, color: CustomColors.darkThemeColor())
+              : Text("${_achievement.value} / ${_achievement.steps}",
+                  style: Style.achievementStyle())));
       return;
     }
     _achievementsTable.add(_achievementRow(
@@ -118,8 +120,9 @@ class _GameDescriptionState extends State<GameDescription>
       leadingIcon: Icons.arrow_back,
       leadingName: "Back",
       leadingScreen: Common.currentScreen,
-      leadingTarget:
-          Common.currentScreen == Activity.MyGames ? const MyGames() : const Shop(),
+      leadingTarget: Common.currentScreen == Activity.MyGames
+          ? const MyGames()
+          : const Shop(),
       hasFloating: false,
       body: DefaultTabController(
         length: 3,
@@ -160,7 +163,8 @@ class _GameDescriptionState extends State<GameDescription>
                             ),
                             Tab(
                               icon: const Icon(Ionicons.md_podium),
-                              child: Text("Achievements", style: Style.tabStyle()),
+                              child:
+                                  Text("Achievements", style: Style.tabStyle()),
                             ),
                           ],
                           labelColor: CustomColors.currentColor,
@@ -204,6 +208,12 @@ class _GameDescriptionState extends State<GameDescription>
                   style: Style.descriptionStyle())),
           Padding(
               padding:
+              const EdgeInsets.all(15), //apply padding to all four sides
+              child: Text(
+                  _minutes.toString() + " minutes played.",
+                  style: Style.descriptionStyle())),
+          Padding(
+              padding:
                   const EdgeInsets.all(15), //apply padding to all four sides
               child: Text(widget.game.instructions,
                   style: Style.descriptionStyle()))
@@ -211,11 +221,18 @@ class _GameDescriptionState extends State<GameDescription>
   }
 
   Widget _achievementsPanel() {
-    return Padding(padding: const EdgeInsets.all(20), child: Table(
+    return Padding(
+        padding: const EdgeInsets.all(20),
+        child: Table(
           border: TableBorder(
-              horizontalInside: BorderSide(width: 1, color: CustomColors.darkThemeColor(), style: BorderStyle.solid),
-              verticalInside: BorderSide(width: 1, color: CustomColors.darkThemeColor(), style: BorderStyle.solid)
-          ),
+              horizontalInside: BorderSide(
+                  width: 1,
+                  color: CustomColors.darkThemeColor(),
+                  style: BorderStyle.solid),
+              verticalInside: BorderSide(
+                  width: 1,
+                  color: CustomColors.darkThemeColor(),
+                  style: BorderStyle.solid)),
           columnWidths: const <int, TableColumnWidth>{
             0: FixedColumnWidth(100),
             1: FlexColumnWidth(),
@@ -226,12 +243,12 @@ class _GameDescriptionState extends State<GameDescription>
         ));
   }
 
-  TableRow _achievementRow(String _label, IconData _icon, Widget _value){
+  TableRow _achievementRow(String _label, IconData _icon, Widget _value) {
     return TableRow(
       children: <Widget>[
         SizedBox(
-          height: 100,
-          child: Icon(_icon, size: 40, color: CustomColors.darkThemeColor())),
+            height: 100,
+            child: Icon(_icon, size: 40, color: CustomColors.darkThemeColor())),
         TableCell(
           child: Center(child: Text(_label, style: Style.descriptionStyle())),
         ),

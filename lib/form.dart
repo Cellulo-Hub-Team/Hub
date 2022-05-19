@@ -3,17 +3,16 @@ import 'dart:typed_data';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart' as fs;
+import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 
 import 'api/flutterfire_api.dart';
-import 'firebase_options.dart';
 import 'custom_widgets/custom_colors.dart';
 import 'custom_widgets/style.dart';
-
+import 'firebase_options.dart';
 
 //TODO add Unity plugin download link
 void main() async {
@@ -24,7 +23,7 @@ void main() async {
   runApp(const MyCustomForm());
 }
 
-// Create a Form widget.
+///Create a Form widget.
 class MyCustomForm extends StatefulWidget {
   const MyCustomForm({Key? key}) : super(key: key);
 
@@ -32,7 +31,7 @@ class MyCustomForm extends StatefulWidget {
   MyCustomFormState createState() => MyCustomFormState();
 }
 
-// Create a corresponding State class. This class holds data related to the form.
+/// Create a corresponding State class. This class holds data related to the form.
 class MyCustomFormState extends State<MyCustomForm> {
   // Create a global key that uniquely identifies the Form widget
   // and allows validation of the form.
@@ -62,10 +61,10 @@ class MyCustomFormState extends State<MyCustomForm> {
 
   ///Check if there is at least one build for the game
   bool _checkAtLeastOne() {
-    return !(_isNull(webBuildController)
-        && _isNull(linuxBuildController)
-        && _isNull(androidBuildController)
-        && _isNull(windowsBuildController));
+    return !(_isNull(webBuildController) &&
+        _isNull(linuxBuildController) &&
+        _isNull(androidBuildController) &&
+        _isNull(windowsBuildController));
   }
 
   ///Check if the given controller is null
@@ -92,7 +91,9 @@ class MyCustomFormState extends State<MyCustomForm> {
         : FlutterfireApi.ref.child(gameName).child(androidBuildController.text);
     fs.Reference? imageRef = _isNull(backgroundImageController)
         ? null
-        : FlutterfireApi.ref.child(gameName).child(backgroundImageController.text);
+        : FlutterfireApi.ref
+            .child(gameName)
+            .child(backgroundImageController.text);
     String webLink = _isNull(webLinkController) ? '' : webLinkController.text;
 
     await FlutterfireApi.uploadFile(_file1, webBuildRef);
@@ -103,8 +104,8 @@ class MyCustomFormState extends State<MyCustomForm> {
 
     fs.Reference bucketRef = FirebaseStorage.instance.ref();
     String? linuxBuild = (linuxBuildRef == null)
-     ? null
-     : await bucketRef.child(linuxBuildRef.fullPath).getDownloadURL();
+        ? null
+        : await bucketRef.child(linuxBuildRef.fullPath).getDownloadURL();
 
     String? androidBuild = (androidBuildRef == null)
         ? null
@@ -146,14 +147,14 @@ class MyCustomFormState extends State<MyCustomForm> {
   _searchFiles(TextEditingController controller) async {
     FilePickerResult? result;
     int fileNumber;
-    if (controller == linuxBuildController || controller == webBuildController || controller == windowsBuildController) {
+    if (controller == linuxBuildController ||
+        controller == webBuildController ||
+        controller == windowsBuildController) {
       if (controller == webBuildController) {
         fileNumber = 1;
-      }
-      else if (controller == linuxBuildController){
+      } else if (controller == linuxBuildController) {
         fileNumber = 2;
-      }
-      else{
+      } else {
         fileNumber = 3;
       }
       result = await FilePicker.platform.pickFiles(
@@ -172,36 +173,36 @@ class MyCustomFormState extends State<MyCustomForm> {
         type: FileType.custom,
         allowedExtensions: ['png', 'jpeg', 'jpg'],
       );
-
     }
 
     setState(() {
-    if (result != null) {
-      try {
-        if (fileNumber == 1) {
-          _file1 = result.files.single.bytes!;
+      if (result != null) {
+        try {
+          if (fileNumber == 1) {
+            _file1 = result.files.single.bytes!;
+          }
+          if (fileNumber == 2) {
+            _file2 = result.files.single.bytes!;
+          }
+          if (fileNumber == 3) {
+            _file3 = result.files.single.bytes!;
+          }
+          if (fileNumber == 4) {
+            _file4 = result.files.single.bytes!;
+          }
+          if (fileNumber == 5) {
+            _file5 = result.files.single.bytes!;
+            _previewBackgroundImage =
+                Image.memory(result.files.single.bytes!).image;
+          }
+          controller.text = result.files.single.name;
+        } catch (e) {
+          print(e);
         }
-        if (fileNumber == 2) {
-          _file2 = result.files.single.bytes!;
-        }
-        if (fileNumber == 3) {
-          _file3 = result.files.single.bytes!;
-        }
-        if (fileNumber == 4) {
-          _file4 = result.files.single.bytes!;
-        }
-        if (fileNumber == 5) {
-          _file5 = result.files.single.bytes!;
-          _previewBackgroundImage = Image.memory(result.files.single.bytes!).image;
-        }
-        controller.text = result.files.single.name;
-      } catch (e) {
-        print(e);
+      } else {
+        // User canceled the picker
+        controller.text = 'No file selected !';
       }
-    } else {
-      // User canceled the picker
-      controller.text = 'No file selected !';
-    }
     });
   }
 
@@ -243,25 +244,47 @@ class MyCustomFormState extends State<MyCustomForm> {
                 key: _formKey,
                 child: Padding(
                   padding: const EdgeInsets.all(10),
-                  child: Column(//TODO max width of 1000
+                  child: Column(
+                    //TODO max width of 1000
                     children: <Widget>[
-                      _requiredField('Game name', 'Enter the game name', gameNameController, 50),
-                      _requiredField('Game name in Unity', 'Enter the game name as used in Unity', gameNameUnityController, 50),
-                      _requiredField('Company name', 'Enter the company name', companyNameController, 50),
-                      _requiredField('Company name in Unity', 'Enter the company name as used in Unity', companyNameUnityController, 50),
-                      _requiredField('Game description', 'Enter the game description', gameDescriptionController, 300),
-                      _requiredField('Game instructions (how to play)', 'Enter the game instructions (how to play)', gameInstructionsController, 300),
-                      _fileField('Web build', 'Enter a web build zip', webBuildController),
+                      _requiredField('Game name', 'Enter the game name',
+                          gameNameController, 50),
+                      _requiredField(
+                          'Game name in Unity',
+                          'Enter the game name as used in Unity',
+                          gameNameUnityController,
+                          50),
+                      _requiredField('Company name', 'Enter the company name',
+                          companyNameController, 50),
+                      _requiredField(
+                          'Company name in Unity',
+                          'Enter the company name as used in Unity',
+                          companyNameUnityController,
+                          50),
+                      _requiredField(
+                          'Game description',
+                          'Enter the game description',
+                          gameDescriptionController,
+                          300),
+                      _requiredField(
+                          'Game instructions (how to play)',
+                          'Enter the game instructions (how to play)',
+                          gameInstructionsController,
+                          300),
+                      _fileField('Web build', 'Enter a web build zip',
+                          webBuildController),
                       TextFormField(
                           decoration: const InputDecoration(
                             hintText: 'Enter a web link',
                             labelText: 'Web link',
                           ),
-                          controller: webLinkController
-                      ),
-                      _fileField('Linux build', 'Enter a linux build zip', linuxBuildController),
-                      _fileField('Windows build', 'Enter a windows build zip', windowsBuildController),
-                      _fileField('Android build', 'Enter an apk build', androidBuildController),
+                          controller: webLinkController),
+                      _fileField('Linux build', 'Enter a linux build zip',
+                          linuxBuildController),
+                      _fileField('Windows build', 'Enter a windows build zip',
+                          windowsBuildController),
+                      _fileField('Android build', 'Enter an apk build',
+                          androidBuildController),
                       TextFormField(
                         decoration: const InputDecoration(
                           hintText: 'Enter a background image',
@@ -270,7 +293,9 @@ class MyCustomFormState extends State<MyCustomForm> {
                         enableInteractiveSelection: false, //useless btw
                         controller: backgroundImageController,
                         validator: (value) {
-                          if (value == null || value.isEmpty || value == 'No file selected !') {
+                          if (value == null ||
+                              value.isEmpty ||
+                              value == 'No file selected !') {
                             return 'Please enter a background image';
                           }
                           return null;
@@ -278,25 +303,29 @@ class MyCustomFormState extends State<MyCustomForm> {
                         onTap: () => {_searchFiles(backgroundImageController)},
                       ),
                       _previewImage(),
-                      _sliderCustom("How physical is your game ?",
+                      _sliderCustom(
+                          "How physical is your game ?",
                           Colors.deepOrangeAccent,
                           Colors.deepOrangeAccent.shade100.withOpacity(.5),
                           _physicalPercentage,
                           Ionicons.ios_fitness,
                           100),
-                      _sliderCustom("How cognitive is your game ?",
+                      _sliderCustom(
+                          "How cognitive is your game ?",
                           Colors.lightBlueAccent,
                           Colors.lightBlueAccent.shade100.withOpacity(.5),
                           _cognitivePercentage,
                           MaterialCommunityIcons.brain,
                           100),
-                      _sliderCustom("How social is your game ?",
+                      _sliderCustom(
+                          "How social is your game ?",
                           Colors.greenAccent,
                           Colors.greenAccent.shade100.withOpacity(.5),
                           _socialPercentage,
                           MaterialIcons.people,
                           100),
-                      _sliderCustom("How many Cellulos does your game use ?",
+                      _sliderCustom(
+                          "How many Cellulos does your game use ?",
                           Colors.grey.shade400,
                           Colors.grey.shade200,
                           _celluloCount,
@@ -319,7 +348,9 @@ class MyCustomFormState extends State<MyCustomForm> {
     );
   }
 
-  Widget _requiredField(String label, String hint, TextEditingController controller, [int? maxLength]){
+  Widget _requiredField(
+      String label, String hint, TextEditingController controller,
+      [int? maxLength]) {
     return TextFormField(
       decoration: InputDecoration(
         hintText: hint,
@@ -336,9 +367,10 @@ class MyCustomFormState extends State<MyCustomForm> {
     );
   }
 
-  Widget _fileField(String label, String hint, TextEditingController controller){
+  Widget _fileField(
+      String label, String hint, TextEditingController controller) {
     return TextFormField(
-      decoration:  InputDecoration(
+      decoration: InputDecoration(
         hintText: hint,
         labelText: label,
       ),
@@ -353,7 +385,8 @@ class MyCustomFormState extends State<MyCustomForm> {
     );
   }
 
-  Widget _sliderCustom(String _text, Color _activeColor, Color _inactiveColor, PrimitiveWrapper _count, IconData _icon, int _max){
+  Widget _sliderCustom(String _text, Color _activeColor, Color _inactiveColor,
+      PrimitiveWrapper _count, IconData _icon, int _max) {
     return Row(children: [
       Text(_text),
       SfSliderTheme(
@@ -362,18 +395,14 @@ class MyCustomFormState extends State<MyCustomForm> {
               inactiveTrackColor: _inactiveColor,
               thumbColor: Colors.white,
               thumbRadius: 20,
-              tooltipBackgroundColor: _activeColor
-          ),
+              tooltipBackgroundColor: _activeColor),
           child: SfSlider(
             value: _count.value,
             max: _max,
             stepSize: 1,
             showLabels: true,
             enableTooltip: true,
-            thumbIcon: Icon(
-                _icon,
-                color: _activeColor,
-                size: 30.0),
+            thumbIcon: Icon(_icon, color: _activeColor, size: 30.0),
             onChanged: (dynamic value) {
               setState(() {
                 _count.value = value;
@@ -383,7 +412,7 @@ class MyCustomFormState extends State<MyCustomForm> {
     ]);
   }
 
-  Widget _previewImage(){
+  Widget _previewImage() {
     return Stack(
       children: [
         Container(
@@ -391,12 +420,13 @@ class MyCustomFormState extends State<MyCustomForm> {
               height: 200,
               child: Center(
                   child: Text(
-                    gameNameController.value.text,
-                    style: Style.bannerStyle(),
-                  ))),
+                gameNameController.value.text,
+                style: Style.bannerStyle(),
+              ))),
           decoration: BoxDecoration(
             image: DecorationImage(
-                image: _previewBackgroundImage ?? Image.asset('graphics/empty_image.png').image,
+                image: _previewBackgroundImage ??
+                    Image.asset('graphics/empty_image.png').image,
                 fit: BoxFit.fitWidth),
           ),
         )

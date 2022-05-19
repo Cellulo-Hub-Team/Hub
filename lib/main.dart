@@ -1,25 +1,24 @@
-import 'dart:convert';
-import 'dart:io';
+import 'dart:math';
 
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'account/profile.dart';
-import 'custom_widgets/custom_menu_button.dart';
+import 'custom_widgets/custom_colors.dart';
 import 'custom_widgets/custom_icon_button.dart';
+import 'custom_widgets/custom_menu_button.dart';
 import 'custom_widgets/style.dart';
 import 'firebase_options.dart';
+import 'game/game.dart';
 import 'main/common.dart';
-import 'custom_widgets/custom_colors.dart';
 import 'main/my_games.dart';
 import 'main/progress.dart';
 import 'main/settings.dart';
 import 'main/shop.dart';
 import 'main/welcome_screen.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -74,8 +73,12 @@ class MainMenu extends StatefulWidget {
 }
 
 class _MainMenuState extends State<MainMenu> {
+  List<Game> userGames =
+      Common.allGamesList.where((element) => element.isInLibrary).toList();
+
   @override
   Widget build(BuildContext context) {
+    Game _selectedGame = userGames[Random().nextInt(userGames.length)];
     return Scaffold(
         body: Stack(
       children: [
@@ -110,27 +113,34 @@ class _MainMenuState extends State<MainMenu> {
             ),
             const Spacer(),
             Container(
-              height: 150,
-              width: MediaQuery.of(context).size.width,
-              decoration : BoxDecoration(
-                  border: Border(
-                    top: BorderSide(width: 10.0, color: Colors.grey.shade300),
-                    bottom: BorderSide(width: 10.0, color: Colors.grey.shade300),
-                    )),
-                  child:
-          ElevatedButton.icon(
-              onPressed: () => Common.goToTarget(
-                  context, const Progress(), true, Activity.Progress),
-              icon: Icon(MaterialCommunityIcons.lightbulb_on, color: Colors.orangeAccent.shade100, size: 40),
-              label: Text(" Why don't you try beating your high score in Cellulan World today ?",
-                  style: TextStyle(fontSize: 20, color: CustomColors.darkThemeColor()),
-                  textAlign: TextAlign.center),
-            style: ElevatedButton.styleFrom(
-              elevation: 0,
-              primary: CustomColors.inversedDarkThemeColor(),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0.0)),
-            ),
-          )),
+                height: 150,
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                    border: Border(
+                  top: BorderSide(width: 10.0, color: Colors.grey.shade300),
+                  bottom: BorderSide(width: 10.0, color: Colors.grey.shade300),
+                )),
+                child: ElevatedButton.icon(
+                  onPressed: () => {
+                    Common.goToTarget(
+                        context, const MyGames(), true, Activity.MyGames),
+                    _selectedGame.isExpanded = true
+                    //TODO Focus on the game in myGames
+                  },
+                  icon: Icon(MaterialCommunityIcons.lightbulb_on,
+                      color: Colors.orangeAccent.shade100, size: 40),
+                  label: Text(
+                      " Why don't you try beating your high score in ${_selectedGame.name} today ?",
+                      style: TextStyle(
+                          fontSize: 20, color: CustomColors.darkThemeColor()),
+                      textAlign: TextAlign.center),
+                  style: ElevatedButton.styleFrom(
+                    elevation: 0,
+                    primary: CustomColors.inversedDarkThemeColor(),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(0.0)),
+                  ),
+                )),
             const Spacer(flex: 2),
           ],
         )),
@@ -142,7 +152,7 @@ class _MainMenuState extends State<MainMenu> {
                 icon: Ionicons.ios_settings,
                 color: Colors.grey.shade500,
                 onPressed: () => Common.goToTarget(
-                  context, const Settings(), true, Activity.Profile))),
+                    context, const Settings(), true, Activity.Profile))),
       ],
     ));
   }

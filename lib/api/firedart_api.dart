@@ -1,15 +1,13 @@
 import 'dart:io';
+
 import 'package:cellulo_hub/api/shell_scripts.dart';
+import 'package:firedart/firedart.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:open_file/open_file.dart';
-import 'package:device_apps/device_apps.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:firedart/firedart.dart';
-import '../main/common.dart';
-import '../game/game.dart';
 
-//TODO: Trouver un moyen clean de faire une ref static/ Exceptions/ Link à firebase storage quand on aura les jeux
+import '../game/game.dart';
+import '../main/common.dart';
+
 
 class FiredartApi {
   static Future<Directory> appDocDir = getApplicationDocumentsDirectory();
@@ -21,7 +19,7 @@ class FiredartApi {
       companyNameUnity = 'Company Name Unity',
       gameDescription = 'Game Description',
       gameInstructions = 'Game Instructions',
-      webBuild =  'Web Build',
+      webBuild = 'Web Build',
       webLink = 'Web Link',
       linuxBuild = 'Linux Build',
       androidBuild = 'Android Build',
@@ -34,14 +32,16 @@ class FiredartApi {
       downloads = 'Downloads',
       apk = 'apkName';
 
-  //Creates local list of all games available in the shop
+  ///Creates local list of all games available in the shop
   static Future<void> buildAllGamesList() async {
     var allGamesFuture = await games.get();
     final allGames = allGamesFuture.toList();
     for (var game in allGames) {
-      String? androidUrl = game["Android Build"] == "" ? null : game["Android Build"];
+      String? androidUrl =
+          game["Android Build"] == "" ? null : game["Android Build"];
       String? linuxUrl = game["Linux Build"] == "" ? null : game["Linux Build"];
-      String? windowsUrl = game["Windows Build"] == "" ? null : game["Windows Build"];
+      String? windowsUrl =
+          game["Windows Build"] == "" ? null : game["Windows Build"];
       String? webUrl = game["Web Link"] == "" ? null : game["Web Link"];
 
       Game _toAdd = Game(
@@ -61,14 +61,13 @@ class FiredartApi {
           game[socialPercentage],
           game[celluloCount],
           game[downloads],
-          game[apk]
-      );
+          game[apk]);
       _toAdd.isInstalled = await ShellScripts.isInstalledWindows(_toAdd);
       Common.allGamesList.add(_toAdd);
     }
   }
 
-  //Creates the local list of games the player owns
+  ///Creates the local list of games the player owns
   static Future<void> buildUserGamesList() async {
     //Reset user games list
     for (var localGame in Common.allGamesList) {
@@ -105,7 +104,7 @@ class FiredartApi {
     localGame.isInLibrary = false;
   }
 
-  //Add game to user library on the database
+  ///Add game to user library on the database
   static Future<void> addToUserLibrary(Game game) async {
     var user = await auth.getUser();
     return owns
@@ -126,7 +125,8 @@ class FiredartApi {
   }
 
   ///Basic Email+password signIn (found on FirebaseAuth doc)
-  static Future<void> signIn(String email, String password, BuildContext context) async {
+  static Future<void> signIn(
+      String email, String password, BuildContext context) async {
     try {
       await FirebaseAuth.instance.signIn(email, password);
       //Now that user is logged in, we can build the list of games he owns
@@ -162,9 +162,8 @@ class FiredartApi {
   }
 
   ///Add a download to a game
-  static incrementDownloads(Game game) async{
+  static incrementDownloads(Game game) async {
     await games.document(game.name).update({downloads: game.downloads + 1});
     game.downloads++;
   }
-
 }

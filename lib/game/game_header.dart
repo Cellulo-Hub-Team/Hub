@@ -1,11 +1,11 @@
-import 'package:flutter/material.dart';
 import 'package:cellulo_hub/main/common.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../custom_widgets/custom_icon_button.dart';
-import 'game.dart';
 import '../custom_widgets/style.dart';
+import 'game.dart';
 
 //The top constant part of the game panel
 class GameHeader extends StatefulWidget {
@@ -133,7 +133,9 @@ class _GameHeaderState extends State<GameHeader> {
                           onPressed: () => Common.showSnackBar(
                               context,
                               "This game is" +
-                                  (widget.game.macOSBuild != null ? " " : " not ") +
+                                  (widget.game.macOSBuild != null
+                                      ? " "
+                                      : " not ") +
                                   "available on MacOS")),
                       Spacer(),
                     ],
@@ -161,7 +163,8 @@ class _GameHeaderState extends State<GameHeader> {
       ),
       label: Text(
         'Not available on your device',
-        style: GoogleFonts.comfortaa(fontSize: 15, color: Colors.white),//TODO fix
+        style:
+            GoogleFonts.comfortaa(fontSize: 15, color: Colors.white), //TODO fix
         textAlign: TextAlign.center,
       ),
       style: ElevatedButton.styleFrom(
