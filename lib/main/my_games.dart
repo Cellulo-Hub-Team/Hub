@@ -8,13 +8,13 @@ import 'package:cellulo_hub/main/shop.dart';
 import 'package:device_apps/device_apps.dart';
 import 'package:flutter/material.dart';
 
-import '../api/flutterfire_api.dart';
 import '../api/firedart_api.dart';
-import 'common.dart';
+import '../api/flutterfire_api.dart';
 import '../custom_widgets/custom_colors.dart';
 import '../game/game.dart';
+import 'common.dart';
 
-//User games library
+///User games library
 class MyGames extends StatefulWidget {
   const MyGames({Key? key}) : super(key: key);
 
@@ -38,8 +38,7 @@ class _MyGamesState extends State<MyGames>
                   _game.isInstalled = false;
                 }));
       } else {
-        ShellScripts.installGame(_game)
-            .whenComplete(() => setState(() {
+        ShellScripts.installGame(_game).whenComplete(() => setState(() {
               _game.isInstalled = true;
             }));
       }
@@ -77,8 +76,8 @@ class _MyGamesState extends State<MyGames>
         if (_game.isInstalled) {
           ShellScripts.uninstallGameWindows(_game)
               .whenComplete(() => setState(() {
-            _game.isInstalled = false;
-          }));
+                    _game.isInstalled = false;
+                  }));
         }
       } else {
         await FlutterfireApi.removeFromUserLibrary(_game, context);

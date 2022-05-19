@@ -1,18 +1,17 @@
-import 'dart:convert';
-import 'dart:io';
 import 'package:firedart/firedart.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_fonts/google_fonts.dart';
+
 import 'custom_widgets/custom_colors.dart';
 import 'main/welcome_screen.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  FirebaseAuth.initialize('AIzaSyB-rpiGCDAUXScHzmUXAhaIuSTJ5cP7SwE', VolatileStore());
+  FirebaseAuth.initialize(
+      'AIzaSyB-rpiGCDAUXScHzmUXAhaIuSTJ5cP7SwE', VolatileStore());
   Firestore.initialize('cellulo-hub-games');
 
   if (kIsWeb) {
@@ -30,7 +29,7 @@ void main() async {
 class MyAppDesktop extends StatelessWidget {
   // Using "static" so that we can easily access it later
   static final ValueNotifier<ThemeMode> themeNotifier =
-  ValueNotifier(ThemeMode.light);
+      ValueNotifier(ThemeMode.light);
 
   const MyAppDesktop({Key? key}) : super(key: key);
 

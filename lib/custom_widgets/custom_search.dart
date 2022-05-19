@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:cellulo_hub/custom_widgets/custom_colors.dart';
 import 'package:cellulo_hub/custom_widgets/style.dart';
+import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../main/common.dart';
@@ -14,7 +14,6 @@ class CustomSearch extends SearchDelegate<String> {
   ThemeData appBarTheme(BuildContext context) {
     return ThemeData(
       colorScheme: ColorScheme(
-          //primary: Common.darkTheme ? Colors.white : CustomColors.currentColor,
           primary: CustomColors.currentColor,
           secondary: Colors.white,
           brightness: Common.darkTheme ? Brightness.dark : Brightness.light,
@@ -26,19 +25,12 @@ class CustomSearch extends SearchDelegate<String> {
           onPrimary: Colors.white,
           background: Colors.white,
           onSurface: Colors.white),
-
       fontFamily: GoogleFonts.comfortaa().fontFamily,
-
-      textTheme: const TextTheme(
-        headline6: TextStyle(
-            fontSize: 24
-        )
-      ),
-
-      textSelectionTheme: const TextSelectionThemeData(cursorColor: Colors.white),
+      textTheme: const TextTheme(headline6: TextStyle(fontSize: 24)),
+      textSelectionTheme:
+          const TextSelectionThemeData(cursorColor: Colors.white),
     );
   }
-
 
   @override
   List<Widget>? buildActions(BuildContext context) {

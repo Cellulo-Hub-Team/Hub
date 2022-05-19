@@ -1,10 +1,8 @@
 import 'package:cellulo_hub/custom_widgets/custom_icon_button.dart';
-import 'package:cellulo_hub/custom_widgets/style.dart';
 import 'package:flutter/material.dart';
 
 import '../main/common.dart';
 import 'custom_colors.dart';
-
 
 //The base scaffold for each screen with custom app bar and floating app bar button
 class CustomScaffold extends StatefulWidget {
@@ -44,7 +42,14 @@ class _CustomScaffoldState extends State<CustomScaffold> {
       backgroundColor: CustomColors.currentColor,
       title: Text(widget.name),
       leading: Row(children: [
-        TextButton.icon(onPressed: () => Common.goToTarget(context, widget.leadingTarget, false, widget.leadingScreen), icon: Icon(widget.leadingIcon, color: Colors.white), label: Text(widget.leadingName, style: TextStyle(color: Colors.white, fontSize: 20),))
+        TextButton.icon(
+            onPressed: () => Common.goToTarget(
+                context, widget.leadingTarget, false, widget.leadingScreen),
+            icon: Icon(widget.leadingIcon, color: Colors.white),
+            label: Text(
+              widget.leadingName,
+              style: TextStyle(color: Colors.white, fontSize: 20),
+            ))
       ]),
       leadingWidth: 200,
     );
@@ -56,11 +61,11 @@ class _CustomScaffoldState extends State<CustomScaffold> {
       appBar: _appBar(),
       floatingActionButton: widget.hasFloating
           ? CustomIconButton(
-          label: widget.floatingLabel ?? "Close",
-          icon: widget.floatingIcon ?? Icons.close,
-          color: Colors.white,
-          onPressed: widget.onPressedFloating)
-       : null,
+              label: widget.floatingLabel ?? "Close",
+              icon: widget.floatingIcon ?? Icons.close,
+              color: Colors.white,
+              onPressed: widget.onPressedFloating)
+          : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
       body: widget.body,
     );
