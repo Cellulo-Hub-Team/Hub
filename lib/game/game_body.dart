@@ -102,7 +102,7 @@ class _GameBodyState extends State<GameBody> {
                   CustomElevatedButton(
                       label: Common.currentScreen == Activity.MyGames
                           ? widget.game.downloading == 1
-                              ? "Loading"
+                              ? "Loading..."
                               : (widget.game.isInstalled
                                   ? "Uninstall"
                                   : "Install")
