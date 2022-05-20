@@ -1,5 +1,7 @@
+import 'package:cellulo_hub/account/sign_in.dart';
 import 'package:cellulo_hub/api/firedart_api.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 
 import '../api/flutterfire_api.dart';
@@ -22,6 +24,9 @@ class _SignUpState extends State<SignUp> {
   final passwordController = TextEditingController();
   final confirmationController = TextEditingController();
 
+  // The node used to request the keyboard focus.
+  final FocusNode _focusNode = FocusNode();
+
   ///Register new user to the database and clear input fields
   Future<void> addUserAndClear() async {
     if (Common.isDesktop) {
@@ -35,6 +40,7 @@ class _SignUpState extends State<SignUp> {
     emailController.clear();
     passwordController.clear();
     confirmationController.clear();
+    Common.goToTarget(context, const SignIn(), false, Activity.Profile);
   }
 
   @override
@@ -42,6 +48,7 @@ class _SignUpState extends State<SignUp> {
     emailController.dispose();
     passwordController.dispose();
     confirmationController.dispose();
+    _focusNode.dispose();
     super.dispose();
   }
 
@@ -54,13 +61,19 @@ class _SignUpState extends State<SignUp> {
         leadingScreen: Activity.Profile,
         leadingTarget: const ProfileHome(),
         hasFloating: false,
-        body: Form(
+        body: RawKeyboardListener(
+        focusNode: _focusNode,
+        onKey: (RawKeyEvent event) {
+        if (event.data.logicalKey == LogicalKeyboardKey.enter && confirmationController.text != "") {
+          addUserAndClear();
+        }
+        },
+        child: Form(
             key: _formKey,
             child: Center(
               child: SizedBox(
                 width: 800,
                 child: Column(
-                  //TODO max width of 1000
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
@@ -69,6 +82,7 @@ class _SignUpState extends State<SignUp> {
                       cursorColor: CustomColors.darkThemeColor(),
                       style: TextStyle(color: CustomColors.darkThemeColor()),
                       keyboardType: TextInputType.emailAddress,
+                      textInputAction: TextInputAction.next,
                       decoration: InputDecoration(
                         hintText: 'Enter an email',
                         labelText: 'Email',
@@ -87,6 +101,7 @@ class _SignUpState extends State<SignUp> {
                       cursorColor: CustomColors.darkThemeColor(),
                       style: TextStyle(color: CustomColors.darkThemeColor()),
                       obscureText: true,
+                      textInputAction: TextInputAction.next,
                       decoration: InputDecoration(
                         hintText: 'Enter a password',
                         labelText: 'Password',
@@ -112,6 +127,7 @@ class _SignUpState extends State<SignUp> {
                       cursorColor: CustomColors.darkThemeColor(),
                       style: TextStyle(color: CustomColors.darkThemeColor()),
                       obscureText: true,
+                      textInputAction: TextInputAction.done,
                       decoration: InputDecoration(
                         hintText: 'Confirm the password',
                         labelText: 'Confirm password',
@@ -146,6 +162,6 @@ class _SignUpState extends State<SignUp> {
                   ],
                 ),
               ),
-            )));
+            ))));
   }
 }

@@ -68,7 +68,7 @@ class MyCustomFormState extends State<MyCustomForm> {
       "Achievements.zip?alt=media&token=94b54d99-52ec-4cf8-81e8-3ecf7d822d31";
   static const String _tutorialLink =
       "https://firebasestorage.googleapis.com/v0/b/cellulo-hub-games.appspot.com/o/"
-      "Achievements.zip?alt=media&token=94b54d99-52ec-4cf8-81e8-3ecf7d822d31";
+      "Tutorial%20for%20developers.pdf?alt=media&token=a95b658f-eb07-4d40-8b28-00a7a02f1725";
 
   ///Check if there is at least one build for the game
   bool _checkAtLeastOne() {

@@ -75,10 +75,13 @@ class MainMenu extends StatefulWidget {
 class _MainMenuState extends State<MainMenu> {
   List<Game> userGames =
       Common.allGamesList.where((element) => element.isInLibrary).toList();
+  Game? _selectedGame;
 
   @override
   Widget build(BuildContext context) {
-    Game _selectedGame = userGames[Random().nextInt(userGames.length)];
+    if (userGames.isNotEmpty){
+      _selectedGame = userGames[Random().nextInt(userGames.length)];
+    }
     return Scaffold(
         body: Stack(
       children: [
@@ -121,16 +124,22 @@ class _MainMenuState extends State<MainMenu> {
                   bottom: BorderSide(width: 10.0, color: Colors.grey.shade300),
                 )),
                 child: ElevatedButton.icon(
-                  onPressed: () => {
-                    Common.goToTarget(
-                        context, const MyGames(), true, Activity.MyGames),
-                    _selectedGame.isExpanded = true
+                  onPressed: () {
+                    if (_selectedGame != null){
+                      Common.goToTarget(context, const MyGames(), true, Activity.MyGames);
+                      _selectedGame?.isExpanded = true;
+                    }
+                    else{
+                      Common.goToTarget(context, const Shop(), true, Activity.MyGames);
+                    }
                     //TODO Focus on the game in myGames
                   },
                   icon: Icon(MaterialCommunityIcons.lightbulb_on,
                       color: Colors.orangeAccent.shade100, size: 40),
                   label: Text(
-                      " Why don't you try beating your high score in ${_selectedGame.name} today ?",
+                      _selectedGame != null
+                          ? " Why don't you try beating your high score in ${_selectedGame?.name} today ?"
+                          : " Visit the shop to find your first game!",
                       style: TextStyle(
                           fontSize: 20, color: CustomColors.darkThemeColor()),
                       textAlign: TextAlign.center),
