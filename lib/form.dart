@@ -1,13 +1,16 @@
 import 'dart:typed_data';
 
+import 'package:cellulo_hub/custom_widgets/custom_elevated_button.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_storage/firebase_storage.dart' as fs;
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'api/flutterfire_api.dart';
 import 'custom_widgets/custom_colors.dart';
@@ -48,6 +51,7 @@ class MyCustomFormState extends State<MyCustomForm> {
   final webBuildController = TextEditingController();
   final backgroundImageController = TextEditingController();
   final webLinkController = TextEditingController();
+  final companyLinkController = TextEditingController();
   final PrimitiveWrapper _physicalPercentage = PrimitiveWrapper(0);
   final PrimitiveWrapper _cognitivePercentage = PrimitiveWrapper(0);
   final PrimitiveWrapper _socialPercentage = PrimitiveWrapper(0);
@@ -58,6 +62,13 @@ class MyCustomFormState extends State<MyCustomForm> {
   Uint8List _file4 = Uint8List(0);
   Uint8List _file5 = Uint8List(0);
   ImageProvider? _previewBackgroundImage;
+
+  static const String _pluginLink =
+      "https://firebasestorage.googleapis.com/v0/b/cellulo-hub-games.appspot.com/o/"
+      "Achievements.zip?alt=media&token=94b54d99-52ec-4cf8-81e8-3ecf7d822d31";
+  static const String _tutorialLink =
+      "https://firebasestorage.googleapis.com/v0/b/cellulo-hub-games.appspot.com/o/"
+      "Achievements.zip?alt=media&token=94b54d99-52ec-4cf8-81e8-3ecf7d822d31";
 
   ///Check if there is at least one build for the game
   bool _checkAtLeastOne() {
@@ -95,6 +106,7 @@ class MyCustomFormState extends State<MyCustomForm> {
             .child(gameName)
             .child(backgroundImageController.text);
     String webLink = _isNull(webLinkController) ? '' : webLinkController.text;
+    String companyLink = _isNull(companyLinkController) ? '' : companyLinkController.text;
 
     await FlutterfireApi.uploadFile(_file1, webBuildRef);
     await FlutterfireApi.uploadFile(_file2, linuxBuildRef);
@@ -128,6 +140,7 @@ class MyCustomFormState extends State<MyCustomForm> {
         gameNameUnityController.text,
         companyNameController.text,
         companyNameUnityController.text,
+        companyLink,
         gameDescriptionController.text,
         gameInstructionsController.text,
         webBuild ?? "",
@@ -206,6 +219,15 @@ class MyCustomFormState extends State<MyCustomForm> {
     });
   }
 
+  //Launches url corresponding to the developer's website
+  _launchLink(String _url) async {
+      if (await canLaunch(_url)) {
+        await launch(_url);
+      } else {
+        throw 'Could not launch $_url';
+      }
+  }
+
   @override
   void initState() {
     gameNameController.addListener(() {
@@ -213,6 +235,7 @@ class MyCustomFormState extends State<MyCustomForm> {
         gameNameController.text;
       });
     });
+    CustomColors.currentColor = CustomColors.greenColor();
     super.initState();
   }
 
@@ -228,6 +251,7 @@ class MyCustomFormState extends State<MyCustomForm> {
     windowsBuildController.dispose();
     webBuildController.dispose();
     webLinkController.dispose();
+    companyLinkController.dispose();
     super.dispose();
   }
 
@@ -237,37 +261,47 @@ class MyCustomFormState extends State<MyCustomForm> {
     return MaterialApp(
       home: Scaffold(
           appBar: AppBar(
-              backgroundColor: CustomColors.greenColor(),
+              centerTitle: true,
+              backgroundColor: CustomColors.currentColor,
               title: const Text('Upload a game')),
           body: SingleChildScrollView(
             child: Form(
                 key: _formKey,
                 child: Padding(
                   padding: const EdgeInsets.all(10),
-                  child: Column(
-                    //TODO max width of 1000
+                  child: Center(child: SizedBox(width: 1000, child: Column(
                     children: <Widget>[
-                      _requiredField('Game name', 'Enter the game name',
+                      _downloadLink("Download: ", "Unity plugin", _pluginLink),
+                      _downloadLink("Download: ", "Upload tutorial", _tutorialLink),
+                      _requiredField('Game name [REQUIRED]', 'Enter the game name',
                           gameNameController, 50),
                       _requiredField(
-                          'Game name in Unity',
+                          'Game name in Unity [REQUIRED]',
                           'Enter the game name as used in Unity',
                           gameNameUnityController,
                           50),
-                      _requiredField('Company name', 'Enter the company name',
+                      _requiredField('Company name [REQUIRED]', 'Enter the company name',
                           companyNameController, 50),
                       _requiredField(
-                          'Company name in Unity',
+                          'Company name in Unity [REQUIRED]',
                           'Enter the company name as used in Unity',
                           companyNameUnityController,
                           50),
+                      _hintImage(),
+                      TextFormField(
+                          decoration: const InputDecoration(
+                            icon: Icon(Feather.link),
+                            hintText: 'Enter link to your personal website',
+                            labelText: 'Personal website link',
+                          ),
+                          controller: companyLinkController),
                       _requiredField(
-                          'Game description',
+                          'Game description [REQUIRED]',
                           'Enter the game description',
                           gameDescriptionController,
                           300),
                       _requiredField(
-                          'Game instructions (how to play)',
+                          'Game instructions (how to play) [REQUIRED]',
                           'Enter the game instructions (how to play)',
                           gameInstructionsController,
                           300),
@@ -275,6 +309,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                           webBuildController),
                       TextFormField(
                           decoration: const InputDecoration(
+                            icon: Icon(Feather.link),
                             hintText: 'Enter a web link',
                             labelText: 'Web link',
                           ),
@@ -287,8 +322,9 @@ class MyCustomFormState extends State<MyCustomForm> {
                           androidBuildController),
                       TextFormField(
                         decoration: const InputDecoration(
+                          icon: Icon(Octicons.file_directory),
                           hintText: 'Enter a background image',
-                          labelText: 'Background image',
+                          labelText: 'Background image [REQUIRED]',
                         ),
                         enableInteractiveSelection: false, //useless btw
                         controller: backgroundImageController,
@@ -332,17 +368,18 @@ class MyCustomFormState extends State<MyCustomForm> {
                           Icons.hexagon,
                           8),
                       const SizedBox(height: 20),
-                      ElevatedButton(
+                      CustomElevatedButton(
+                        label: 'Submit',
                         onPressed: () {
                           // Validate returns true if the form is valid, or false otherwise.
                           if (_formKey.currentState!.validate()) {
                             _submitFiles();
                           }
-                        },
-                        child: const Text('Submit'),
+                        }
                       ),
+                      const SizedBox(height: 50)
                     ],
-                  ),
+                  ))),
                 )),
           )),
     );
@@ -371,6 +408,7 @@ class MyCustomFormState extends State<MyCustomForm> {
       String label, String hint, TextEditingController controller) {
     return TextFormField(
       decoration: InputDecoration(
+        icon: const Icon(Octicons.file_directory),
         hintText: hint,
         labelText: label,
       ),
@@ -382,6 +420,24 @@ class MyCustomFormState extends State<MyCustomForm> {
         return null;
       },
       onTap: () => {_searchFiles(controller)},
+    );
+  }
+
+  Widget _downloadLink(String _first, String _second, String _link){
+    return RichText(
+      text: TextSpan(
+        children: <TextSpan>[
+          TextSpan(
+              text: _first,
+              style: TextStyle(fontSize: 20, color: Colors.grey.shade500),
+          ),
+          TextSpan(
+              text: _second,
+              style: const TextStyle(fontSize: 20, color: Colors.blueAccent),
+              recognizer: TapGestureRecognizer()
+                ..onTap = () => _launchLink(_link)),
+        ],
+      ),
     );
   }
 
@@ -410,6 +466,28 @@ class MyCustomFormState extends State<MyCustomForm> {
             },
           ))
     ]);
+  }
+
+  Widget _hintImage() {
+    return Stack(
+      children: [
+        Container(
+          child: SizedBox(
+              height: 200,
+              width: 500,
+              child: Center(
+                  child: Text(
+                    gameNameController.value.text,
+                    style: Style.bannerStyle(),
+                  ))),
+          decoration: BoxDecoration(
+            image: DecorationImage(
+                image: Image.asset('graphics/unity_settings.png').image,
+                fit: BoxFit.fitWidth),
+          ),
+        )
+      ],
+    );
   }
 
   Widget _previewImage() {

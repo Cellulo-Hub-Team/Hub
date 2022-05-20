@@ -38,7 +38,7 @@ class GameDescription extends StatefulWidget {
 class _GameDescriptionState extends State<GameDescription>
     with TickerProviderStateMixin {
   final List<TableRow> _achievementsTable = [];
-  int _minutes = 3;
+  int _minutes = 0;
 
   _getAchievements() async {
     String? _user = Platform.environment['USERPROFILE']?.replaceAll(r"\", "/");
@@ -64,7 +64,9 @@ class _GameDescriptionState extends State<GameDescription>
         return;
       }
       if (_index == _count + 1) {
-        _minutes = int.parse(line);
+        setState(() {
+          _minutes = int.parse(line);
+        });
         print("Time played: $_minutes minutes");
         return;
       }
@@ -208,12 +210,6 @@ class _GameDescriptionState extends State<GameDescription>
                   style: Style.descriptionStyle())),
           Padding(
               padding:
-              const EdgeInsets.all(15), //apply padding to all four sides
-              child: Text(
-                  _minutes.toString() + " minutes played.",
-                  style: Style.descriptionStyle())),
-          Padding(
-              padding:
                   const EdgeInsets.all(15), //apply padding to all four sides
               child: Text(widget.game.instructions,
                   style: Style.descriptionStyle()))
@@ -221,7 +217,14 @@ class _GameDescriptionState extends State<GameDescription>
   }
 
   Widget _achievementsPanel() {
-    return Padding(
+    return Column(children: [
+      Padding(
+          padding:
+          const EdgeInsets.all(15), //apply padding to all four sides
+          child: Text(
+              _minutes.toString() + " minutes played.",
+              style: Style.descriptionStyle())),
+      Padding(
         padding: const EdgeInsets.all(20),
         child: Table(
           border: TableBorder(
@@ -240,7 +243,7 @@ class _GameDescriptionState extends State<GameDescription>
           },
           defaultVerticalAlignment: TableCellVerticalAlignment.middle,
           children: _achievementsTable,
-        ));
+        ))]);
   }
 
   TableRow _achievementRow(String _label, IconData _icon, Widget _value) {
