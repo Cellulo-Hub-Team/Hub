@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cellulo_hub/api/shell_scripts.dart';
+import 'package:cellulo_hub/custom_widgets/custom_elevated_button.dart';
 import 'package:cellulo_hub/custom_widgets/custom_scaffold.dart';
 import 'package:cellulo_hub/game/game_panel_list.dart';
 import 'package:cellulo_hub/main.dart';
@@ -38,6 +39,7 @@ class _MyAchievementsState extends State<MyAchievements>
   }
 
   _buildAchievement(Pair _pair) {
+    setState(() {
     if (_pair.achievement.type == "one") {
       _achievementsTable.add(_achievementRow(
           _pair.achievement.label,
@@ -67,42 +69,55 @@ class _MyAchievementsState extends State<MyAchievements>
         Ionicons.ios_podium,
         Text(_pair.achievement.value.toString(), style: Style.achievementStyle()),
         _pair.game));
+    });
   }
 
-  _onPressedSort(){
-    setState(() {
+  _onPressedSort(int _sort){
       List<Pair> _achievementsList = [];
       for (var _game in Common.allGamesList){
         for (var _achievement in Common.allAchievementsMap[_game] ?? []){
           _achievementsList.add(Pair(_achievement, _game));
         }
       }
-      int _sort = 2;
       switch(_sort){
-        case 0: //Close to completion
-          _achievementsList = _achievementsList.where((a) => a.achievement.type == "multiple").toList();
-          _achievementsList.sort((a, b) => a.achievement.value/a.achievement.steps < b.achievement.value/b.achievement.steps ? 1 : -1);
-          break;
-        case 1: //Finished
+        case 0: //Finished
           _achievementsList = _achievementsList.where((a) =>
           (a.achievement.type == "one" && a.achievement.value > 0)
               || (a.achievement.type == "multiple" && a.achievement.value == a.achievement.steps)
           ).toList();
           break;
-        case 2: //Unfinished
+        case 1: //Unfinished
           _achievementsList = _achievementsList.where((a) =>
           (a.achievement.type == "one" && a.achievement.value == 0)
               || (a.achievement.type == "multiple" && a.achievement.value < a.achievement.steps)
           ).toList();
           break;
+        case 2: //Close to completion
+          _achievementsList = _achievementsList.where((a) =>
+          a.achievement.type == "multiple"
+              && a.achievement.value < a.achievement.steps).toList();
+          _achievementsList.sort((a, b) => a.achievement.value/a.achievement.steps < b.achievement.value/b.achievement.steps ? 1 : -1);
+          break;
+        case 3: //Far from completion
+          _achievementsList = _achievementsList.where((a) => a.achievement.type == "multiple").toList();
+          _achievementsList.sort((a, b) => a.achievement.value/a.achievement.steps > b.achievement.value/b.achievement.steps ? 1 : -1);
+          break;
+        case 4: //High scores
+          _achievementsList = _achievementsList.where((a) => a.achievement.type == "high").toList();
+          _achievementsList.sort((a, b) => a.achievement.value < b.achievement.value ? 1 : -1);
+          break;
+        default: //Close to completion
+          _achievementsList = _achievementsList.where((a) => a.achievement.type == "high").toList();
+          _achievementsList.sort((a, b) => a.achievement.value > b.achievement.value ? 1 : -1);
+          break;
       }
       _buildAchievementsList(_achievementsList);
-    });
   }
 
   @override
   void initState() {
     CustomColors.currentColor = CustomColors.redColor();
+    _onPressedSort(0);
     super.initState();
   }
 
@@ -117,8 +132,31 @@ class _MyAchievementsState extends State<MyAchievements>
         hasFloating: true,
         floatingIcon: Icons.filter_alt,
         floatingLabel: "Sort by",
-        onPressedFloating: _onPressedSort,
-        drawer: Drawer(child: Container(color: Colors.purple)),
+        onPressedFloating: (){},
+        drawer: Drawer(
+          backgroundColor: CustomColors.inversedDarkThemeColor(),
+            child:
+                Column(children: [
+                  const Spacer(flex: 2),
+                  Text("Completion", style: TextStyle(fontSize: 20, color: CustomColors.darkThemeColor())),
+                  const Spacer(),
+                  CustomElevatedButton(label: "Show finished", onPressed: () => _onPressedSort(0)),
+                  const Spacer(),
+                  CustomElevatedButton(label: "Show unfinished", onPressed: () => _onPressedSort(1)),
+                  const Spacer(),
+                  CustomElevatedButton(label: "Show closest to completion", onPressed: () => _onPressedSort(2)),
+                  const Spacer(),
+                  CustomElevatedButton(label: "Show further to completion", onPressed: () => _onPressedSort(3)),
+                  const Spacer(flex: 2),
+                  Text("High scores", style: TextStyle(fontSize: 20, color: CustomColors.darkThemeColor())),
+                  const Spacer(),
+                  CustomElevatedButton(label: "Show highest", onPressed: () => _onPressedSort(4)),
+                  const Spacer(),
+                  CustomElevatedButton(label: "Show lowest", onPressed: () => _onPressedSort(5)),
+                  const Spacer(flex: 5),
+
+                ])
+        ),
         body: SingleChildScrollView(child: Center(
             child: Container(
                 width: 1000, alignment: Alignment.center, child:

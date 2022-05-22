@@ -40,11 +40,11 @@ class _CustomScaffoldState extends State<CustomScaffold> {
   //The app bar with custom leading button and title
   AppBar _appBar() {
     return AppBar(
-      /*actions: [
+      actions: [
         Builder(
           builder: (context) => Container(),
         ),
-      ],*/
+      ],
       centerTitle: true,
       backgroundColor: CustomColors.currentColor,
       title: Text(widget.name),
@@ -55,7 +55,7 @@ class _CustomScaffoldState extends State<CustomScaffold> {
             icon: Icon(widget.leadingIcon, color: Colors.white),
             label: Text(
               widget.leadingName,
-              style: TextStyle(color: Colors.white, fontSize: 20),
+              style: const TextStyle(color: Colors.white, fontSize: 20),
             ))
       ]),
       leadingWidth: 200,
@@ -73,7 +73,9 @@ class _CustomScaffoldState extends State<CustomScaffold> {
               icon: widget.floatingIcon ?? Icons.close,
               color: Colors.white,
               onPressed: () {
-                widget.onPressedFloating!();
+                if (widget.onPressedFloating != null){
+                  widget.onPressedFloating!();
+                }
                 if (widget.drawer != null){
                   Scaffold.of(context).openEndDrawer();
                 }
