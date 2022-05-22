@@ -69,6 +69,37 @@ class _MyAchievementsState extends State<MyAchievements>
         _pair.game));
   }
 
+  _onPressedSort(){
+    setState(() {
+      List<Pair> _achievementsList = [];
+      for (var _game in Common.allGamesList){
+        for (var _achievement in Common.allAchievementsMap[_game] ?? []){
+          _achievementsList.add(Pair(_achievement, _game));
+        }
+      }
+      int _sort = 2;
+      switch(_sort){
+        case 0: //Close to completion
+          _achievementsList = _achievementsList.where((a) => a.achievement.type == "multiple").toList();
+          _achievementsList.sort((a, b) => a.achievement.value/a.achievement.steps < b.achievement.value/b.achievement.steps ? 1 : -1);
+          break;
+        case 1: //Finished
+          _achievementsList = _achievementsList.where((a) =>
+          (a.achievement.type == "one" && a.achievement.value > 0)
+              || (a.achievement.type == "multiple" && a.achievement.value == a.achievement.steps)
+          ).toList();
+          break;
+        case 2: //Unfinished
+          _achievementsList = _achievementsList.where((a) =>
+          (a.achievement.type == "one" && a.achievement.value == 0)
+              || (a.achievement.type == "multiple" && a.achievement.value < a.achievement.steps)
+          ).toList();
+          break;
+      }
+      _buildAchievementsList(_achievementsList);
+    });
+  }
+
   @override
   void initState() {
     CustomColors.currentColor = CustomColors.redColor();
@@ -86,20 +117,8 @@ class _MyAchievementsState extends State<MyAchievements>
         hasFloating: true,
         floatingIcon: Icons.filter_alt,
         floatingLabel: "Sort by",
-        onPressedFloating: () {
-          setState(() {
-            List<Pair> _achievementsList = [];
-            for (var _game in Common.allGamesList){
-              for (var _achievement in Common.allAchievementsMap[_game] ?? []){
-                _achievementsList.add(Pair(_achievement, _game));
-              }
-            }
-            _achievementsList = _achievementsList.where((a) => a.achievement.type == "multiple").toList();
-            _achievementsList.sort((a, b) => a.achievement.value/a.achievement.steps > b.achievement.value/b.achievement.steps ? 1 : -1);
-            //TODO sort by
-            _buildAchievementsList(_achievementsList);
-          });
-        },
+        onPressedFloating: _onPressedSort,
+        drawer: Drawer(child: Container(color: Colors.purple)),
         body: SingleChildScrollView(child: Center(
             child: Container(
                 width: 1000, alignment: Alignment.center, child:

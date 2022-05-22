@@ -55,7 +55,6 @@ class Achievement {
       }
       Map<String, dynamic> achievementMap = jsonDecode(line);
       Common.allAchievementsMap[_game]?.add(Achievement.fromJson(achievementMap));
-      print(Common.allAchievementsMap[_game]?.elementAt(0).label);
       _index++;
     });
   }

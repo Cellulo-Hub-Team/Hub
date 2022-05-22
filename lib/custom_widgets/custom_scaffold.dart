@@ -16,6 +16,7 @@ class CustomScaffold extends StatefulWidget {
   final IconData? floatingIcon;
   final String? floatingLabel;
   final VoidCallback? onPressedFloating;
+  final Widget? drawer;
   const CustomScaffold(
       {Key? key,
       required this.name,
@@ -27,6 +28,7 @@ class CustomScaffold extends StatefulWidget {
       this.floatingIcon,
       this.floatingLabel,
       this.onPressedFloating,
+      this.drawer,
       required this.body})
       : super(key: key);
 
@@ -38,6 +40,11 @@ class _CustomScaffoldState extends State<CustomScaffold> {
   //The app bar with custom leading button and title
   AppBar _appBar() {
     return AppBar(
+      /*actions: [
+        Builder(
+          builder: (context) => Container(),
+        ),
+      ],*/
       centerTitle: true,
       backgroundColor: CustomColors.currentColor,
       title: Text(widget.name),
@@ -60,13 +67,22 @@ class _CustomScaffoldState extends State<CustomScaffold> {
     return Scaffold(
       appBar: _appBar(),
       floatingActionButton: widget.hasFloating
-          ? CustomIconButton(
+          ? Builder(
+      builder: (context) => CustomIconButton(
               label: widget.floatingLabel ?? "Close",
               icon: widget.floatingIcon ?? Icons.close,
               color: Colors.white,
-              onPressed: widget.onPressedFloating)
+              onPressed: () {
+                widget.onPressedFloating!();
+                if (widget.drawer != null){
+                  Scaffold.of(context).openEndDrawer();
+                }
+              }
+              //onPressed: widget.onPressedFloating
+          ))
           : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
+      endDrawer: widget.drawer,
       body: widget.body,
     );
   }
