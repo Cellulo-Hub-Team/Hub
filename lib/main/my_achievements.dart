@@ -55,7 +55,7 @@ class _MyAchievementsState extends State<MyAchievements>
     if (_pair.achievement.type == "multiple") {
       _achievementsTable.add(_achievementRow(
           _pair.achievement.label,
-          MaterialCommunityIcons.counter,
+          MaterialCommunityIcons.medal,
           _pair.achievement.value >= _pair.achievement.steps
               ? Icon(Feather.check_square,
               size: 40, color: CustomColors.darkThemeColor())
@@ -171,10 +171,10 @@ class _MyAchievementsState extends State<MyAchievements>
                           color: CustomColors.darkThemeColor(),
                           style: BorderStyle.solid)),
                   columnWidths: const <int, TableColumnWidth>{
-                    0: FixedColumnWidth(200),
-                    1: FixedColumnWidth(100),
-                    2: FlexColumnWidth(),
-                    3: FixedColumnWidth(200),
+                    0: FlexColumnWidth(.1),
+                    1: FlexColumnWidth(.3),
+                    2: FlexColumnWidth(.4),
+                    3: FlexColumnWidth(.2),
                   },
                   defaultVerticalAlignment: TableCellVerticalAlignment.middle,
                   children: _achievementsTable,
@@ -186,6 +186,8 @@ class _MyAchievementsState extends State<MyAchievements>
   TableRow _achievementRow(String _label, IconData _icon, Widget _value, Game _game) {
     return TableRow(
       children: <Widget>[
+        SizedBox(
+            child: Icon(_icon, size: 40, color: CustomColors.darkThemeColor())),
         Container(
           child: SizedBox(
               height: 100,
@@ -208,8 +210,6 @@ class _MyAchievementsState extends State<MyAchievements>
                 fit: BoxFit.cover),
           ),
         ),
-        SizedBox(
-            child: Icon(_icon, size: 40, color: CustomColors.darkThemeColor())),
         TableCell(
           child: Center(child: Text(_label, style: Style.descriptionStyle())),
         ),

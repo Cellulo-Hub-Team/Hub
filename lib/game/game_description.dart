@@ -53,7 +53,7 @@ class _GameDescriptionState extends State<GameDescription> with TickerProviderSt
     if (_achievement.type == "multiple") {
       _achievementsTable.add(_achievementRow(
           _achievement.label,
-          MaterialCommunityIcons.counter,
+          MaterialCommunityIcons.medal,
           _achievement.value >= _achievement.steps
               ? Icon(Feather.check_square,
                   size: 40, color: CustomColors.darkThemeColor())
@@ -189,9 +189,7 @@ class _GameDescriptionState extends State<GameDescription> with TickerProviderSt
           child: Text(
               widget.game.minutesPlayed.toString() + " minutes played.",
               style: Style.descriptionStyle())),
-      Padding(
-        padding: const EdgeInsets.all(20),
-        child: Table(
+      Table(
           border: TableBorder(
               horizontalInside: BorderSide(
                   width: 1,
@@ -202,13 +200,13 @@ class _GameDescriptionState extends State<GameDescription> with TickerProviderSt
                   color: CustomColors.darkThemeColor(),
                   style: BorderStyle.solid)),
           columnWidths: const <int, TableColumnWidth>{
-            0: FixedColumnWidth(100),
-            1: FlexColumnWidth(),
-            2: FixedColumnWidth(200),
+            0: FlexColumnWidth(.2),
+            1: FlexColumnWidth(.6),
+            2: FlexColumnWidth(.2),
           },
           defaultVerticalAlignment: TableCellVerticalAlignment.middle,
           children: _achievementsTable,
-        ))]);
+        )]);
   }
 
   TableRow _achievementRow(String _label, IconData _icon, Widget _value) {
