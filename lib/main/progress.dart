@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:cellulo_hub/main/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -32,10 +33,10 @@ class _ProgressState extends State<Progress> {
     _width = min(MediaQuery.of(context).size.width, 1000) / 4;
     return CustomScaffold(
         name: "Progress",
-        leadingIcon: Icons.home,
-        leadingName: "Menu",
-        leadingScreen: Activity.Menu,
-        leadingTarget: const MainMenu(),
+        leadingIcon: Ionicons.ios_settings,
+        leadingName: "Settings",
+        leadingScreen: Activity.Settings,
+        leadingTarget: const Settings(),
         hasFloating: false,
         body: SingleChildScrollView(
             child: Center(

@@ -35,8 +35,7 @@ class GameDescription extends StatefulWidget {
   State<GameDescription> createState() => _GameDescriptionState();
 }
 
-class _GameDescriptionState extends State<GameDescription>
-    with TickerProviderStateMixin {
+class _GameDescriptionState extends State<GameDescription> with TickerProviderStateMixin {
   final List<TableRow> _achievementsTable = [];
 
   _buildAchievement(Achievement _achievement) {
@@ -74,6 +73,7 @@ class _GameDescriptionState extends State<GameDescription>
         AnimationController(duration: const Duration(seconds: 1), vsync: this);
     Common.percentageController.reset();
     Common.percentageController.forward();
+    _achievementsTable.clear();
     for (var _achievement in Common.allAchievementsMap[widget.game] ?? []){
       _buildAchievement(_achievement);
     }

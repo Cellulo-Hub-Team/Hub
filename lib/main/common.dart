@@ -9,7 +9,7 @@ import '../custom_widgets/custom_colors.dart';
 import '../game/game.dart';
 import 'achievement.dart';
 
-enum Activity { Menu, MyGames, Shop, Profile, Progress, Achievements }
+enum Activity { Menu, MyGames, Shop, Profile, Progress, Achievements, Settings}
 
 class Common {
   //The variable storing the current screen we are in

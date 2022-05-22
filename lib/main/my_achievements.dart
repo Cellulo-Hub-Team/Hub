@@ -7,13 +7,16 @@ import 'package:cellulo_hub/main.dart';
 import 'package:cellulo_hub/main/shop.dart';
 import 'package:device_apps/device_apps.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_icons/flutter_icons.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../api/firedart_api.dart';
 import '../api/flutterfire_api.dart';
 import '../custom_widgets/custom_colors.dart';
+import '../custom_widgets/style.dart';
 import '../game/game.dart';
+import 'achievement.dart';
 import 'common.dart';
-
 
 class MyAchievements extends StatefulWidget {
   const MyAchievements({Key? key}) : super(key: key);
@@ -22,7 +25,49 @@ class MyAchievements extends StatefulWidget {
   _MyAchievementsState createState() => _MyAchievementsState();
 }
 
-class _MyAchievementsState extends State<MyAchievements> with TickerProviderStateMixin, WidgetsBindingObserver {
+class _MyAchievementsState extends State<MyAchievements>
+    with TickerProviderStateMixin, WidgetsBindingObserver {
+
+  final List<TableRow> _achievementsTable = [];
+
+  _buildAchievementsList(List<Pair> _sortedAchievements){
+    _achievementsTable.clear();
+    for (var _achievement in _sortedAchievements){
+      _buildAchievement(_achievement);
+    }
+  }
+
+  _buildAchievement(Pair _pair) {
+    if (_pair.achievement.type == "one") {
+      _achievementsTable.add(_achievementRow(
+          _pair.achievement.label,
+          MaterialCommunityIcons.medal,
+          _pair.achievement.value > 0
+              ? Icon(Feather.check_square,
+              size: 40, color: CustomColors.darkThemeColor())
+              : Icon(Feather.square,
+              size: 40, color: CustomColors.darkThemeColor()),
+          _pair.game));
+      return;
+    }
+    if (_pair.achievement.type == "multiple") {
+      _achievementsTable.add(_achievementRow(
+          _pair.achievement.label,
+          MaterialCommunityIcons.counter,
+          _pair.achievement.value >= _pair.achievement.steps
+              ? Icon(Feather.check_square,
+              size: 40, color: CustomColors.darkThemeColor())
+              : Text("${_pair.achievement.value} / ${_pair.achievement.steps}",
+              style: Style.achievementStyle()),
+          _pair.game));
+      return;
+    }
+    _achievementsTable.add(_achievementRow(
+        _pair.achievement.label,
+        Ionicons.ios_podium,
+        Text(_pair.achievement.value.toString(), style: Style.achievementStyle()),
+        _pair.game));
+  }
 
   @override
   void initState() {
@@ -42,8 +87,86 @@ class _MyAchievementsState extends State<MyAchievements> with TickerProviderStat
         floatingIcon: Icons.filter_alt,
         floatingLabel: "Sort by",
         onPressedFloating: () {
-          //TODO sort by
+          setState(() {
+            List<Pair> _achievementsList = [];
+            for (var _game in Common.allGamesList){
+              for (var _achievement in Common.allAchievementsMap[_game] ?? []){
+                _achievementsList.add(Pair(_achievement, _game));
+              }
+            }
+            _achievementsList = _achievementsList.where((a) => a.achievement.type == "multiple").toList();
+            _achievementsList.sort((a, b) => a.achievement.value/a.achievement.steps > b.achievement.value/b.achievement.steps ? 1 : -1);
+            //TODO sort by
+            _buildAchievementsList(_achievementsList);
+          });
         },
-        body: Container());
+        body: SingleChildScrollView(child: Center(
+            child: Container(
+                width: 1000, alignment: Alignment.center, child:
+            Table(
+                  border: TableBorder(
+                      horizontalInside: BorderSide(
+                          width: 1,
+                          color: CustomColors.darkThemeColor(),
+                          style: BorderStyle.solid),
+                      verticalInside: BorderSide(
+                          width: 1,
+                          color: CustomColors.darkThemeColor(),
+                          style: BorderStyle.solid)),
+                  columnWidths: const <int, TableColumnWidth>{
+                    0: FixedColumnWidth(200),
+                    1: FixedColumnWidth(100),
+                    2: FlexColumnWidth(),
+                    3: FixedColumnWidth(200),
+                  },
+                  defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                  children: _achievementsTable,
+                ))
+
+            )));
   }
+
+  TableRow _achievementRow(String _label, IconData _icon, Widget _value, Game _game) {
+    return TableRow(
+      children: <Widget>[
+        Container(
+          child: SizedBox(
+              height: 100,
+              child: Center(
+                  child: Text(
+                    _game.name,
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.fredokaOne(
+                        fontSize: 25,
+                        color: Colors.white,
+                        shadows: [
+                          const Shadow(
+                            offset: Offset(3, 3),
+                          )
+                        ]),
+                  ))),
+          decoration: BoxDecoration(
+            image: DecorationImage(
+                image: Image.network(_game.backgroundImage).image,
+                fit: BoxFit.cover),
+          ),
+        ),
+        SizedBox(
+            child: Icon(_icon, size: 40, color: CustomColors.darkThemeColor())),
+        TableCell(
+          child: Center(child: Text(_label, style: Style.descriptionStyle())),
+        ),
+        TableCell(
+          child: Center(child: _value),
+        ),
+      ],
+    );
+  }
+}
+
+class Pair<Achievement, Game> {
+  final Achievement achievement;
+  final Game game;
+
+  Pair(this.achievement, this.game);
 }

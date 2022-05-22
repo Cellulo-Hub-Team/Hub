@@ -110,7 +110,7 @@ class _MainMenuState extends State<MainMenu> {
             const Spacer(),
             CustomMenuButton(
               label: "Achievements",
-              icon: Octicons.graph,
+              icon: MaterialCommunityIcons.medal,
               color: CustomColors.redColor(),
               onPressed: () => Common.goToTarget(
                   context, const MyAchievements(), true, Activity.Progress),
