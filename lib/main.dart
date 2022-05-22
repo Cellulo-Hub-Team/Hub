@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:cellulo_hub/main/my_achievements.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
@@ -108,11 +109,11 @@ class _MainMenuState extends State<MainMenu> {
             ),
             const Spacer(),
             CustomMenuButton(
-              label: "Progress",
+              label: "Achievements",
               icon: Octicons.graph,
               color: CustomColors.redColor(),
               onPressed: () => Common.goToTarget(
-                  context, const Progress(), true, Activity.Progress),
+                  context, const MyAchievements(), true, Activity.Progress),
             ),
             const Spacer(),
             Container(

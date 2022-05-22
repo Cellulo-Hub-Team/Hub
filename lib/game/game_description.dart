@@ -38,43 +38,6 @@ class GameDescription extends StatefulWidget {
 class _GameDescriptionState extends State<GameDescription>
     with TickerProviderStateMixin {
   final List<TableRow> _achievementsTable = [];
-  int _minutes = 0;
-
-  _getAchievements() async {
-    String? _user = Platform.environment['USERPROFILE']?.replaceAll(r"\", "/");
-    var path = _user! +
-        "/AppData/LocalLow/" +
-        widget.game.unityCompanyName +
-        "/" +
-        widget.game.unityName +
-        "/achievements.json";
-    int _index = 0;
-    int _count = 0;
-    if (!await File(path).exists()) {
-      return;
-    }
-    await File(path)
-        .openRead()
-        .transform(utf8.decoder)
-        .transform(const LineSplitter())
-        .forEach((line) {
-      if (_index == 0) {
-        _count = int.parse(line);
-        _index++;
-        return;
-      }
-      if (_index == _count + 1) {
-        setState(() {
-          _minutes = int.parse(line);
-        });
-        print("Time played: $_minutes minutes");
-        return;
-      }
-      Map<String, dynamic> achievementMap = jsonDecode(line);
-      _buildAchievement(Achievement.fromJson(achievementMap));
-      _index++;
-    });
-  }
 
   _buildAchievement(Achievement _achievement) {
     if (_achievement.type == "one") {
@@ -111,7 +74,9 @@ class _GameDescriptionState extends State<GameDescription>
         AnimationController(duration: const Duration(seconds: 1), vsync: this);
     Common.percentageController.reset();
     Common.percentageController.forward();
-    _getAchievements();
+    for (var _achievement in Common.allAchievementsMap[widget.game] ?? []){
+      _buildAchievement(_achievement);
+    }
     super.initState();
   }
 
@@ -222,7 +187,7 @@ class _GameDescriptionState extends State<GameDescription>
           padding:
           const EdgeInsets.all(15), //apply padding to all four sides
           child: Text(
-              _minutes.toString() + " minutes played.",
+              widget.game.minutesPlayed.toString() + " minutes played.",
               style: Style.descriptionStyle())),
       Padding(
         padding: const EdgeInsets.all(20),
