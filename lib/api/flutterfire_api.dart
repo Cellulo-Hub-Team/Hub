@@ -12,6 +12,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../game/game.dart';
+import '../main/achievement.dart';
 import '../main/common.dart';
 
 class FlutterfireApi {
@@ -81,6 +82,7 @@ class FlutterfireApi {
           game[apk]);
       _toAdd.isInstalled = await gameIsInstalled(_toAdd);
       Common.allGamesList.add(_toAdd);
+      Achievement.getAchievements(_toAdd);
     }
   }
 

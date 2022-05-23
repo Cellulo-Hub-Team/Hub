@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../game/game.dart';
+import '../main/achievement.dart';
 import '../main/common.dart';
 
 
@@ -66,6 +67,7 @@ class FiredartApi {
           game[apk]);
       _toAdd.isInstalled = await ShellScripts.isInstalledWindows(_toAdd);
       Common.allGamesList.add(_toAdd);
+      Achievement.getAchievements(_toAdd);
     }
   }
 

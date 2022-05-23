@@ -16,6 +16,7 @@ import 'api/flutterfire_api.dart';
 import 'custom_widgets/custom_colors.dart';
 import 'custom_widgets/style.dart';
 import 'firebase_options.dart';
+import 'main/common.dart';
 
 //TODO add Unity plugin download link
 void main() async {
@@ -62,13 +63,14 @@ class MyCustomFormState extends State<MyCustomForm> {
   Uint8List _file4 = Uint8List(0);
   Uint8List _file5 = Uint8List(0);
   ImageProvider? _previewBackgroundImage;
+  bool _isUploading = false;
 
   static const String _pluginLink =
       "https://firebasestorage.googleapis.com/v0/b/cellulo-hub-games.appspot.com/o/"
       "Achievements.zip?alt=media&token=94b54d99-52ec-4cf8-81e8-3ecf7d822d31";
   static const String _tutorialLink =
       "https://firebasestorage.googleapis.com/v0/b/cellulo-hub-games.appspot.com/o/"
-      "Achievements.zip?alt=media&token=94b54d99-52ec-4cf8-81e8-3ecf7d822d31";
+      "Tutorial%20for%20developers.pdf?alt=media&token=a95b658f-eb07-4d40-8b28-00a7a02f1725";
 
   ///Check if there is at least one build for the game
   bool _checkAtLeastOne() {
@@ -87,6 +89,9 @@ class MyCustomFormState extends State<MyCustomForm> {
 
   ///Submit the form
   _submitFiles() async {
+    setState(() {
+      _isUploading = true;
+    });
     String gameName = gameNameController.text;
     fs.Reference? webBuildRef = _isNull(webBuildController)
         ? null
@@ -153,7 +158,11 @@ class MyCustomFormState extends State<MyCustomForm> {
         _cognitivePercentage.value,
         _socialPercentage.value,
         _celluloCount.value,
-        androidBuildController.text);
+        androidBuildController.text).whenComplete(() {
+          setState(() {
+            _isUploading = false;
+          });
+        });
   }
 
   //TODO Refaire la fonction ?
@@ -369,8 +378,8 @@ class MyCustomFormState extends State<MyCustomForm> {
                           8),
                       const SizedBox(height: 20),
                       CustomElevatedButton(
-                        label: 'Submit',
-                        onPressed: () {
+                        label: _isUploading ? 'Uploading...' : 'Submit',
+                        onPressed: _isUploading ? null : () {
                           // Validate returns true if the form is valid, or false otherwise.
                           if (_formKey.currentState!.validate()) {
                             _submitFiles();
@@ -472,14 +481,9 @@ class MyCustomFormState extends State<MyCustomForm> {
     return Stack(
       children: [
         Container(
-          child: SizedBox(
+          child: const SizedBox(
               height: 200,
-              width: 500,
-              child: Center(
-                  child: Text(
-                    gameNameController.value.text,
-                    style: Style.bannerStyle(),
-                  ))),
+              width: 500),
           decoration: BoxDecoration(
             image: DecorationImage(
                 image: Image.asset('graphics/unity_settings.png').image,

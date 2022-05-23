@@ -1,6 +1,7 @@
 import 'package:cellulo_hub/api/firedart_api.dart';
 import 'package:cellulo_hub/custom_widgets/custom_elevated_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 
 import '../api/flutterfire_api.dart';
@@ -21,6 +22,9 @@ class SignIn extends StatefulWidget {
 class _SignInState extends State<SignIn> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+
+  // The node used to request the keyboard focus.
+  final FocusNode _focusNode = FocusNode();
 
   ///Redirect to the reset password page
   _onPressedForgot() {
@@ -59,6 +63,7 @@ class _SignInState extends State<SignIn> {
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    _focusNode.dispose();
     super.dispose();
   }
 
@@ -71,7 +76,14 @@ class _SignInState extends State<SignIn> {
       leadingScreen: Activity.Profile,
       leadingTarget: const ProfileHome(),
       hasFloating: false,
-      body: Center(
+      body: RawKeyboardListener(
+      focusNode: _focusNode,
+      onKey: (RawKeyEvent event) {
+        if (event.data.logicalKey == LogicalKeyboardKey.enter && _passwordController.text != "") {
+          _onPressed();
+        }
+      },
+      child: Center(
           child: SizedBox(
               width: 800,
               child: Column(
@@ -84,6 +96,7 @@ class _SignInState extends State<SignIn> {
                     style: TextStyle(color: CustomColors.darkThemeColor()),
                     controller: _emailController,
                     keyboardType: TextInputType.emailAddress,
+                    textInputAction: TextInputAction.next,
                     decoration: InputDecoration(
                       hintText: "User Email",
                       prefixIcon: Icon(Icons.mail,
@@ -95,6 +108,7 @@ class _SignInState extends State<SignIn> {
                     cursorColor: CustomColors.darkThemeColor(),
                     style: TextStyle(color: CustomColors.darkThemeColor()),
                     controller: _passwordController,
+                    textInputAction: TextInputAction.done,
                     decoration: InputDecoration(
                       hintText: "User Password",
                       prefixIcon: Icon(Icons.lock,
@@ -112,7 +126,7 @@ class _SignInState extends State<SignIn> {
                   CustomElevatedButton(label: "Log In", onPressed: _onPressed),
                   const Spacer(flex: 5)
                 ],
-              ))),
+              )))),
     );
   }
 }

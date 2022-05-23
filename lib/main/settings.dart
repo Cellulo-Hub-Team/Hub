@@ -1,6 +1,9 @@
+import 'package:cellulo_hub/custom_widgets/custom_icon_button.dart';
+import 'package:cellulo_hub/main/progress.dart';
 import 'package:cellulo_hub/main_desktop.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 
 import '../account/profile_home.dart';
 import '../api/facebook_api.dart';
@@ -170,7 +173,10 @@ class _SettingsState extends State<Settings> {
             },
           ),
           const Spacer(),
-          CustomElevatedButton(label: "Log out", onPressed: _signOut),
+          CustomIconButton(icon: Octicons.graph, color: CustomColors.redColor(), label: "Progress",
+              onPressed: () => Common.goToTarget(context, Progress(), true, Activity.Progress)),
+          const Spacer(),
+          CustomIconButton(icon: Icons.logout, color: CustomColors.currentColor, label: "Log out", onPressed: _signOut),
           const Spacer(flex: 8),
         ])));
   }

@@ -7,8 +7,9 @@ import 'package:open_file/open_file.dart';
 
 import '../custom_widgets/custom_colors.dart';
 import '../game/game.dart';
+import 'achievement.dart';
 
-enum Activity { Menu, MyGames, Shop, Profile, Progress }
+enum Activity { Menu, MyGames, Shop, Profile, Progress, Achievements, Settings}
 
 class Common {
   //The variable storing the current screen we are in
@@ -26,7 +27,10 @@ class Common {
   //The list of all games on the shop
   static List<Game> allGamesList = [];
 
-  //Safe version of platform detection methods
+  //The list of all games achievements
+  static Map<Game, List<Achievement>> allAchievementsMap = {};
+
+  ///Safe version of platform detection methods
   static bool get isLinux => !kIsWeb && Platform.isLinux;
   static bool get isWindows => !kIsWeb && Platform.isWindows;
   static bool get isAndroid => !kIsWeb && Platform.isAndroid;

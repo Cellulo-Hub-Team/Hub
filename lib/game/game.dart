@@ -21,6 +21,7 @@ class Game {
   int socialPercentage = 0;
   int celluloCount = 0;
   int downloads = 0;
+  int minutesPlayed = 0;
   double downloading = 0;
   String apkName = "";
 
