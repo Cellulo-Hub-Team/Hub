@@ -2,6 +2,12 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:cellulo_hub/main/common.dart';
+import 'package:flutter_icons/flutter_icons.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:cellulo_hub/api/flutterfire_api.dart';
+import 'package:android_external_storage/android_external_storage.dart';
+import 'package:media_store/media_store.dart';
+
 
 import '../game/game.dart';
 
@@ -26,15 +32,24 @@ class Achievement {
   }
 
   static getAchievements(Game _game) async {
-    String? _user = Platform.environment['USERPROFILE']?.replaceAll(r"\", "/");
-    var path = _user! +
-        "/AppData/LocalLow/" +
-        _game.unityCompanyName +
-        "/" +
-        _game.unityName +
-        "/achievements.json";
+    String? _user;
+    var path;
     int _index = 0;
     int _count = 0;
+    if(Common.isDesktop){
+      if(Common.isWindows) {
+        _user = Platform.environment['USERPROFILE']?.replaceAll(r"\", "/");
+        path = _user! +
+            "/AppData/LocalLow/" +
+            _game.unityCompanyName +
+            "/" +
+            _game.unityName +
+            "/achievements.json";
+      }
+    }
+    else if(Common.isAndroid){
+      path = '${await AndroidExternalStorage.getExternalStoragePublicDirectory(DirType.documentsDirectory)}/Achievements/achievements.json';
+    }
     if (!await File(path).exists()) {
       return;
     }

@@ -60,7 +60,6 @@ class FlutterfireApi {
       String? windowsUrl =
           game["Windows Build"] == "" ? null : game["Windows Build"];
       String? webUrl = game["Web Link"] == "" ? null : game["Web Link"];
-
       Game _toAdd = Game(
           game.id,
           game[gameNameUnity],
@@ -141,7 +140,7 @@ class FlutterfireApi {
     }
   }
 
-  //Launches url corresponding to the web version of the game
+  ///Launches url corresponding to the web version of the game
   static void launchWebApp(Game game) async {
     String? url = game.webUrl;
     if (await canLaunch(url!)) {
@@ -244,7 +243,6 @@ class FlutterfireApi {
   ///Generate the name of the package according to the game company and an optional name
   static String createPackageName(Game game) {
     return ('com.${game.unityCompanyName}.${game.unityName}'
-        .toLowerCase()
         .replaceAll(' ', ''));
   }
 
