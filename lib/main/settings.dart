@@ -1,5 +1,5 @@
 import 'package:cellulo_hub/custom_widgets/custom_icon_button.dart';
-import 'package:cellulo_hub/main/progress.dart';
+import 'package:cellulo_hub/charts/progress.dart';
 import 'package:cellulo_hub/main_desktop.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

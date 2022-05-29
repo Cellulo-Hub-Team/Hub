@@ -1,12 +1,14 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:cellulo_hub/charts/time_played_data_builder.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:device_apps/device_apps.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart' as firebase_core;
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/cupertino.dart';
+import 'package:intl/intl.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -45,12 +47,13 @@ class FlutterfireApi {
       socialPercentage = 'Social Percentage',
       celluloCount = 'Cellulo Count',
       downloads = 'Downloads',
-      apk = 'apkName';
+      apk = 'apkName',
+      isConfirmed = 'isConfirmed';
 
   /// Build the list of all games stored on Firebase
   static Future<void> buildAllGamesList() async {
-    Common.allGamesList.clear(); //Test, I think it is useless
-    QuerySnapshot querySnapshot = await games.get();
+    Common.allGamesList.clear();
+    QuerySnapshot querySnapshot = await games.where(isConfirmed, isEqualTo: true).get();
     final allData = querySnapshot.docs.toList();
     for (var game in allData) {
       String? androidUrl =
@@ -300,7 +303,8 @@ class FlutterfireApi {
           socialPercentage: _socialPercentage,
           celluloCount: _celluloCount,
           downloads: 0,
-          apk: apkName
+          apk: apkName,
+          isConfirmed: false
         })
         .then((value) => print("Game added"))
         .catchError((error) => print("Failed to add game: $error"));
@@ -332,6 +336,24 @@ class FlutterfireApi {
   static incrementDownloads(Game game) async {
     await games.doc(game.name).update({downloads: game.downloads + 1});
     game.downloads++;
+  }
+
+  static Future<Map<String, int>> getUserTimePlayedThisWeek() async{
+    QuerySnapshot querySnapshot = await owns.where("User Uid", isEqualTo: auth.currentUser?.uid).get();
+    Map<String, int> week = {'Monday': 0, 'Tuesday': 0, 'Wednesday': 0, 'Thursday': 0, 'Friday': 0, 'Saturday': 0, 'Sunday': 0};
+    var data = querySnapshot.docs.toList();
+    for(var game in data){
+      Map<String, Object> map = game.data() as Map<String, Object>;
+      map..remove('Game Uid')..remove('User Uid');
+      for(var dates in map.keys){
+        DateTime date = DateTime.fromMillisecondsSinceEpoch(int.parse(dates) * 1000);
+        if(TimePlayedDataBuilder.isThisWeek(date)){
+          week.update(week.keys.toList()[date.weekday - 1], (value) => value += map[dates] as int) ;
+        }
+      }
+    }
+    print(week);
+    return week;
   }
 
 /*static void getGames() async {

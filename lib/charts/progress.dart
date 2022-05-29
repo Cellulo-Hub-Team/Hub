@@ -1,5 +1,9 @@
 import 'dart:math';
 
+import 'package:cellulo_hub/api/flutterfire_api.dart';
+import 'package:cellulo_hub/charts/time_played_chart.dart';
+import 'package:cellulo_hub/charts/time_played_data_builder.dart';
+import 'package:cellulo_hub/charts/time_played_series.dart';
 import 'package:cellulo_hub/main/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
@@ -9,7 +13,8 @@ import '../custom_widgets/custom_colors.dart';
 import '../custom_widgets/custom_scaffold.dart';
 import '../game/game.dart';
 import '../main.dart';
-import 'common.dart';
+import '../main/common.dart';
+import 'package:charts_flutter/flutter.dart' as charts;
 
 class Progress extends StatefulWidget {
   const Progress({Key? key}) : super(key: key);
@@ -31,6 +36,38 @@ class _ProgressState extends State<Progress> {
   @override
   Widget build(BuildContext context) {
     _width = min(MediaQuery.of(context).size.width, 1000) / 4;
+    //final List<TimePlayedSeries> data = TimePlayedDataBuilder.buildData(map) as List<TimePlayedSeries>;
+    /*final List<TimePlayedSeries> data = [
+      TimePlayedSeries(
+          timePlayed: 2,
+          dayOfTheWeek: 'Monday',
+          barColor: charts.ColorUtil.fromDartColor(Colors.blue)),
+      TimePlayedSeries(
+          timePlayed: 1,
+          dayOfTheWeek: 'Tuesday',
+          barColor: charts.ColorUtil.fromDartColor(Colors.blue)),
+      TimePlayedSeries(
+          timePlayed: 3,
+          dayOfTheWeek: 'Wednesday',
+          barColor: charts.ColorUtil.fromDartColor(Colors.blue)),
+      TimePlayedSeries(
+          timePlayed: 5,
+          dayOfTheWeek: 'Thursday',
+          barColor: charts.ColorUtil.fromDartColor(Colors.blue)),
+      TimePlayedSeries(
+          timePlayed: 6,
+          dayOfTheWeek: 'Friday',
+          barColor: charts.ColorUtil.fromDartColor(Colors.blue)),
+      TimePlayedSeries(
+          timePlayed: 2,
+          dayOfTheWeek: 'Saturday',
+          barColor: charts.ColorUtil.fromDartColor(Colors.blue)),
+      TimePlayedSeries(
+          timePlayed: 2,
+          dayOfTheWeek: 'Sunday',
+          barColor: charts.ColorUtil.fromDartColor(Colors.blue))
+    ];*/
+
     return CustomScaffold(
         name: "Progress",
         leadingIcon: Ionicons.ios_settings,
@@ -41,20 +78,21 @@ class _ProgressState extends State<Progress> {
         body: SingleChildScrollView(
             child: Center(
                 child: Container(
-          padding: const EdgeInsets.all(50),
-          width: MediaQuery.of(context).size.width,
-          height: 500,
-          child: Row(children: [
-            const Spacer(),
-            //2nd
-            _podiumStep(100, 0, Common.allGamesList[0]),
-            //1st
-            _podiumStep(0, 1, Common.allGamesList[1]),
-            //3rd
-            _podiumStep(200, 2, Common.allGamesList[2]),
-            const Spacer(),
-          ]),
-        ))));
+                    padding: const EdgeInsets.all(50),
+                    width: MediaQuery.of(context).size.width,
+                    height: 500,
+                    //child: Center(child: TimePlayedChart(data: data))))));
+                    child: FutureBuilder(
+                        future: TimePlayedDataBuilder.buildData(),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<Widget> snapshot) {
+                          if (snapshot.hasData) {
+                            print('snapshot: ${snapshot.data}');
+                            return snapshot.data!;
+                          } else {
+                            return const CircularProgressIndicator();
+                          }
+                        })))));
   }
 
   Widget _podiumStep(double _offset, int _index, Game _game) {
