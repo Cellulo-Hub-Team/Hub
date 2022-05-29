@@ -77,21 +77,34 @@ class _ProgressState extends State<Progress> {
         hasFloating: false,
         body: SingleChildScrollView(
             child: Center(
-                child: Container(
-                    padding: const EdgeInsets.all(50),
-                    width: MediaQuery.of(context).size.width,
-                    height: 500,
-                    //child: Center(child: TimePlayedChart(data: data))))));
-                    child: FutureBuilder(
-                        future: TimePlayedDataBuilder.buildData(),
-                        builder: (BuildContext context,
-                            AsyncSnapshot<Widget> snapshot) {
-                          if (snapshot.hasData) {
-                            return snapshot.data!;
-                          } else {
-                            return const CircularProgressIndicator();
-                          }
-                        })))));
+                child: Column(children: [
+          Container(
+              padding: const EdgeInsets.all(50),
+              width: MediaQuery.of(context).size.width,
+              height: 500,
+              child: FutureBuilder(
+                  future: TimePlayedDataBuilder.buildData(),
+                  builder:
+                      (BuildContext context, AsyncSnapshot<Widget> snapshot) {
+                    if (snapshot.hasData) {
+                      return snapshot.data!;
+                    } else {
+                      return const CircularProgressIndicator();
+                    }
+                  })),
+          Text('Total time played overall = ${Common.getTotalTimePlayed() / 60.0}h'),
+            FutureBuilder(
+                future: FlutterfireApi.timePlayedThisWeek(),
+                builder:
+                    (BuildContext context, snapshot) {
+                  if (snapshot.hasData) {
+                    return Text('Total time played this week = ${(snapshot.data as double).toStringAsFixed(2)}h');
+                  } else {
+                    return const CircularProgressIndicator();
+                  }
+                })
+
+        ]))));
   }
 
   Widget _podiumStep(double _offset, int _index, Game _game) {

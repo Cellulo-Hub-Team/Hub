@@ -341,10 +341,13 @@ class FlutterfireApi {
     game.downloads++;
   }
 
+  ///Get the number of hours per day of the week
+  ///@return a map where each day of the week is mapped to the number of hours played
+  /// e.g {'Monday': 1.2, 'Tuesday': 2.1,...}
   static Future<Map<String, double>> getUserTimePlayedThisWeek() async{
-    QuerySnapshot querySnapshot = await timePlayed.get();
+    QuerySnapshot querySnapshot = await timePlayed.where('User Uid', isEqualTo: auth.currentUser?.uid).get();
     Map<String, double> week = {'Monday': 0, 'Tuesday': 0, 'Wednesday': 0, 'Thursday': 0, 'Friday': 0, 'Saturday': 0, 'Sunday': 0};
-    var data = querySnapshot.docs.toList()..removeLast();
+    var data = querySnapshot.docs.toList();
     for(var game in data){
       Map<String, Object> map = game.data() as Map<String, Object>;
       map..remove('Time')..remove('User Uid');
@@ -358,10 +361,11 @@ class FlutterfireApi {
     return week;
   }
 
+  ///Check if the time played locally is different from the one stored in the database, and create a timestamp with the time played recently if needed
   static void checkTimePlayed() async{
     DocumentReference? reference = auth.currentUser?.uid != null ? timePlayed.doc(auth.currentUser?.uid) : null;
     if(reference != null){
-      DocumentSnapshot query = await timePlayed.doc(auth.currentUser?.uid).get();
+      DocumentSnapshot query = await reference.get();
       int timePlayedLocally = Common.getTotalTimePlayed();
       int timePlayedDatabase = query.get('Time');
       if(timePlayedLocally != timePlayedDatabase){
@@ -370,5 +374,15 @@ class FlutterfireApi {
         reference.update({'Time': timePlayedLocally});
       }
     }
+  }
+
+  ///Get the number of hours played this week
+  static Future<double> timePlayedThisWeek() async {
+    double timePlayed = 0;
+    var map = await getUserTimePlayedThisWeek();
+    for(var day in map.keys){
+      timePlayed += map[day]!;
+    }
+    return timePlayed;
   }
 }

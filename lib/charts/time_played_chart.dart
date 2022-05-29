@@ -15,7 +15,7 @@ class TimePlayedChart extends StatelessWidget {
         data: data,
         domainFn: (TimePlayedSeries series, _) => series.dayOfTheWeek,
         measureFn: (TimePlayedSeries series, _) => series.timePlayed,
-        colorFn: (TimePlayedSeries series, _) => series.barColor,
+        colorFn: (TimePlayedSeries series, _) => series.barColor
       )
     ];
     return Container(

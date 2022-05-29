@@ -1,6 +1,8 @@
 import 'package:cellulo_hub/api/flutterfire_api.dart';
 import 'package:cellulo_hub/charts/time_played_chart.dart';
 import 'package:flutter/material.dart';
+import '../api/firedart_api.dart';
+import '../main/common.dart';
 import 'time_played_series.dart';
 import 'package:intl/intl.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
@@ -51,7 +53,13 @@ class TimePlayedDataBuilder{
   static Future<Widget> buildData() async{
     List<TimePlayedSeries> output = List.empty(growable: true);
 
-    var week = await FlutterfireApi.getUserTimePlayedThisWeek();
+    var week;
+    if(Common.isDesktop){
+      //week = await FiredartApi.getUserTimePlayedThisWeek();
+    }
+    else {
+      week = await FlutterfireApi.getUserTimePlayedThisWeek();
+    }
     for(String day in week.keys){
       TimePlayedSeries toAdd = TimePlayedSeries(
           timePlayed: week[day]!,
