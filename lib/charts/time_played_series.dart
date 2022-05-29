@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
 class TimePlayedSeries {
-  final int timePlayed;
+  final double timePlayed;
   final String dayOfTheWeek;
   final charts.Color barColor;
 

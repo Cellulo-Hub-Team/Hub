@@ -87,7 +87,6 @@ class _ProgressState extends State<Progress> {
                         builder: (BuildContext context,
                             AsyncSnapshot<Widget> snapshot) {
                           if (snapshot.hasData) {
-                            print('snapshot: ${snapshot.data}');
                             return snapshot.data!;
                           } else {
                             return const CircularProgressIndicator();

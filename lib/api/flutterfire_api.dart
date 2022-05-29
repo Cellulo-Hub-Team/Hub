@@ -29,6 +29,8 @@ class FlutterfireApi {
       FirebaseFirestore.instance.collection('games');
   static CollectionReference owns =
       FirebaseFirestore.instance.collection('owns');
+  static CollectionReference timePlayed =
+      FirebaseFirestore.instance.collection('timePlayed');
   static const String gameName = 'Game Name',
       gameNameUnity = 'Game Name Unity',
       companyName = 'Company Name',
@@ -86,6 +88,7 @@ class FlutterfireApi {
       Common.allGamesList.add(_toAdd);
       Achievement.getAchievements(_toAdd);
     }
+    checkTimePlayed();
   }
 
   ///Creates the local list of games the player owns
@@ -338,31 +341,34 @@ class FlutterfireApi {
     game.downloads++;
   }
 
-  static Future<Map<String, int>> getUserTimePlayedThisWeek() async{
-    QuerySnapshot querySnapshot = await owns.where("User Uid", isEqualTo: auth.currentUser?.uid).get();
-    Map<String, int> week = {'Monday': 0, 'Tuesday': 0, 'Wednesday': 0, 'Thursday': 0, 'Friday': 0, 'Saturday': 0, 'Sunday': 0};
-    var data = querySnapshot.docs.toList();
+  static Future<Map<String, double>> getUserTimePlayedThisWeek() async{
+    QuerySnapshot querySnapshot = await timePlayed.get();
+    Map<String, double> week = {'Monday': 0, 'Tuesday': 0, 'Wednesday': 0, 'Thursday': 0, 'Friday': 0, 'Saturday': 0, 'Sunday': 0};
+    var data = querySnapshot.docs.toList()..removeLast();
     for(var game in data){
       Map<String, Object> map = game.data() as Map<String, Object>;
-      map..remove('Game Uid')..remove('User Uid');
+      map..remove('Time')..remove('User Uid');
       for(var dates in map.keys){
-        DateTime date = DateTime.fromMillisecondsSinceEpoch(int.parse(dates) * 1000);
+        DateTime date = DateTime.fromMillisecondsSinceEpoch(int.parse(dates));
         if(TimePlayedDataBuilder.isThisWeek(date)){
-          week.update(week.keys.toList()[date.weekday - 1], (value) => value += map[dates] as int) ;
+          week.update(week.keys.toList()[date.weekday - 1], (value) => value += ((map[dates]! as int) / 60.0 ));
         }
       }
     }
-    print(week);
     return week;
   }
 
-/*static void getGames() async {
-    QuerySnapshot<Object?> gameList = await games.get();
-    final allData = gameList.docs.map((doc) => doc.data()).toList();
-    gameList.docs.forEach((element) {
-      element
-      .
-    })
-    print(allData);
-  }*/
+  static void checkTimePlayed() async{
+    DocumentReference? reference = auth.currentUser?.uid != null ? timePlayed.doc(auth.currentUser?.uid) : null;
+    if(reference != null){
+      DocumentSnapshot query = await timePlayed.doc(auth.currentUser?.uid).get();
+      int timePlayedLocally = Common.getTotalTimePlayed();
+      int timePlayedDatabase = query.get('Time');
+      if(timePlayedLocally != timePlayedDatabase){
+        String timestamp = DateTime.now().millisecondsSinceEpoch.toString();
+        reference.update({timestamp : timePlayedLocally - timePlayedDatabase});
+        reference.update({'Time': timePlayedLocally});
+      }
+    }
+  }
 }
