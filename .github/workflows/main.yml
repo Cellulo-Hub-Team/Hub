@@ -16,7 +16,7 @@ jobs:
       - run: flutter upgrade
       - run: flutter pub get
       - run: flutter test --no-sound-null-safety
-      - run: flutter build apk --debug --split-per-abi
+      - run: flutter build apk --debug --split-per-abi --no-sound-null-safety
       - name: Push APK to Releases
         uses: ncipollo/release-action@v1
         with:
