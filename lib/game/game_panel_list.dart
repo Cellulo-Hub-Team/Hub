@@ -35,6 +35,12 @@ class _GamePanelListState extends State<GamePanelList>
   }
 
   @override
+  void dispose() {
+    Common.percentageController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     List<ExpansionPanel> result = [];
     for (int i = 0; i < widget.games.length; i++) {

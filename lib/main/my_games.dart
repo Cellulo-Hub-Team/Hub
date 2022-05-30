@@ -22,8 +22,7 @@ class MyGames extends StatefulWidget {
   _MyGamesState createState() => _MyGamesState();
 }
 
-class _MyGamesState extends State<MyGames>
-    with TickerProviderStateMixin, WidgetsBindingObserver {
+class _MyGamesState extends State<MyGames> with TickerProviderStateMixin, WidgetsBindingObserver {
   Game? _beingInstalledGame;
   List<Game> inLibraryGames =
       Common.allGamesList.where((game) => game.isInLibrary).toList();
@@ -106,10 +105,6 @@ class _MyGamesState extends State<MyGames>
     CustomColors.currentColor = CustomColors.greenColor();
     WidgetsBinding.instance?.addObserver(this);
 
-    Common.percentageController =
-        AnimationController(duration: const Duration(seconds: 1), vsync: this);
-    Common.percentageController.reset();
-    Common.percentageController.forward();
     super.initState();
   }
 

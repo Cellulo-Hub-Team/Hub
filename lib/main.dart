@@ -36,17 +36,17 @@ void main() async {
       version: "v13.0",
     );
   }
-  runApp(const MyApp(isTested: false));
+  runApp(const MyApp(skipWelcome: false));
 }
 
 class MyApp extends StatelessWidget {
-  final bool isTested;
+  final bool skipWelcome;
 
   static final ValueNotifier<ThemeMode> themeNotifier =
       ValueNotifier(ThemeMode.light);
 
   const MyApp({Key? key,
-    required this.isTested
+    required this.skipWelcome
   }) : super(key: key);
 
   @override
@@ -64,7 +64,7 @@ class MyApp extends StatelessWidget {
                   scaffoldBackgroundColor: CustomColors.blackColor,
                   brightness: Brightness.dark),
               themeMode: currentMode,
-              home: isTested ? const MainMenu() : const WelcomeScreen());
+              home: skipWelcome ? const MainMenu() : const WelcomeScreen());
         });
   }
 }
