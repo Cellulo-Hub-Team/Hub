@@ -15,7 +15,7 @@ jobs:
       - run: flutter channel master
       - run: flutter upgrade
       - run: flutter pub get
-      - run: flutter test
+      - run: flutter test --no-sound-null-safety
       - run: flutter build apk --debug --split-per-abi
       - name: Push APK to Releases
         uses: ncipollo/release-action@v1
