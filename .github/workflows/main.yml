@@ -15,7 +15,10 @@ jobs:
       - run: flutter channel master
       - run: flutter upgrade
       - run: flutter pub get
-      - run: flutter test --no-sound-null-safety
+      - run: flutter test --no-sound-null-safety --coverage
+      - run: apt-get install lcov
+      - run: genhtml coverage/lcov.info -o coverage/html
+      - run: xdg-open coverage/html/index.html
       # - run: flutter build apk --debug --split-per-abi --no-sound-null-safety
       #- name: Push APK to Releases
       #  uses: ncipollo/release-action@v1
