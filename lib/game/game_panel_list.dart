@@ -77,7 +77,6 @@ class _GamePanelListState extends State<GamePanelList>
           onPressedTertiary: () => widget.onPressedTertiary!(_game),
         ),
         isExpanded: _game.isExpanded,
-        canTapOnHeader: true,
-        hasIcon: false);
+        canTapOnHeader: true);
   }
 }
