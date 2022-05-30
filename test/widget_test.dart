@@ -7,6 +7,7 @@
 
 import 'dart:io';
 
+import 'package:cellulo_hub/custom_widgets/custom_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -16,14 +17,17 @@ import 'package:cellulo_hub/main.dart';
 void main() {
 
   testWidgets('My Games button goes to MyGames', (WidgetTester tester) async {
-    expect(1, 1);
-    /*await tester.pumpWidget(const MyApp(isTested: true));
+    await tester.pumpWidget(const MyApp(skipWelcome: true));
     await tester.pump();
 
     expect(find.byIcon(FontAwesome.gamepad), findsOneWidget);
+    expect(find.byIcon(Entypo.shop), findsOneWidget);
+    expect(find.byIcon(MaterialCommunityIcons.medal), findsOneWidget);
+    expect(find.byIcon(MaterialCommunityIcons.lightbulb_on), findsOneWidget);
+    expect(find.byIcon(Ionicons.ios_settings), findsOneWidget);
 
     await tester.tap(find.byIcon(FontAwesome.gamepad));
-    await tester.pump();*/
+    await tester.pump();
 
     //expect(find.byIcon(Icons.home), findsOneWidget);
   });
