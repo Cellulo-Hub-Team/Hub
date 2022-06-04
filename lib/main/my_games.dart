@@ -35,7 +35,7 @@ class _MyGamesState extends State<MyGames> with TickerProviderStateMixin, Widget
         setState(() {
           _game.downloading = 1;
         });
-        ShellScripts.uninstallGameWindows(_game)
+        ShellScripts.uninstallGame(_game)
             .whenComplete(() => setState(() {
                   _game.isInstalled = false;
                   _game.downloading = 0;
@@ -82,7 +82,7 @@ class _MyGamesState extends State<MyGames> with TickerProviderStateMixin, Widget
       if (Common.isDesktop) {
         await FiredartApi.removeFromUserLibrary(_game);
         if (_game.isInstalled) {
-          ShellScripts.uninstallGameWindows(_game)
+          ShellScripts.uninstallGame(_game)
               .whenComplete(() => setState(() {
                     _game.isInstalled = false;
                   }));

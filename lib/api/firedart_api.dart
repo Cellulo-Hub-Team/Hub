@@ -65,7 +65,7 @@ class FiredartApi {
           game[celluloCount],
           game[downloads],
           game[apk]);
-      _toAdd.isInstalled = await ShellScripts.isInstalledWindows(_toAdd);
+      _toAdd.isInstalled = await ShellScripts.isInstalled(_toAdd);
       Common.allGamesList.add(_toAdd);
       Achievement.getAchievements(_toAdd);
     }
@@ -144,10 +144,7 @@ class FiredartApi {
   ///Launches game (game)
   static void launchApp(Game game) async {
     if (game.isInstalled) {
-      if (Common.isWindows) {
-        ShellScripts.launchGameWindows(game);
-      } //TODO Linux and Mac
-
+      ShellScripts.launchGame(game);
     }
   }
 
