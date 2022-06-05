@@ -1,12 +1,14 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:cellulo_hub/charts/time_played_data_builder.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:device_apps/device_apps.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart' as firebase_core;
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/cupertino.dart';
+import 'package:intl/intl.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -27,6 +29,8 @@ class FlutterfireApi {
       FirebaseFirestore.instance.collection('games');
   static CollectionReference owns =
       FirebaseFirestore.instance.collection('owns');
+  static CollectionReference timePlayed =
+      FirebaseFirestore.instance.collection('timePlayed');
   static const String gameName = 'Game Name',
       gameNameUnity = 'Game Name Unity',
       companyName = 'Company Name',
@@ -45,12 +49,13 @@ class FlutterfireApi {
       socialPercentage = 'Social Percentage',
       celluloCount = 'Cellulo Count',
       downloads = 'Downloads',
-      apk = 'apkName';
+      apk = 'apkName',
+      isConfirmed = 'isConfirmed';
 
   /// Build the list of all games stored on Firebase
   static Future<void> buildAllGamesList() async {
-    Common.allGamesList.clear(); //Test, I think it is useless
-    QuerySnapshot querySnapshot = await games.get();
+    Common.allGamesList.clear();
+    QuerySnapshot querySnapshot = await games.where(isConfirmed, isEqualTo: true).get();
     final allData = querySnapshot.docs.toList();
     for (var game in allData) {
       String? androidUrl =
@@ -60,7 +65,6 @@ class FlutterfireApi {
       String? windowsUrl =
           game["Windows Build"] == "" ? null : game["Windows Build"];
       String? webUrl = game["Web Link"] == "" ? null : game["Web Link"];
-
       Game _toAdd = Game(
           game.id,
           game[gameNameUnity],
@@ -84,6 +88,7 @@ class FlutterfireApi {
       Common.allGamesList.add(_toAdd);
       Achievement.getAchievements(_toAdd);
     }
+    checkTimePlayed();
   }
 
   ///Creates the local list of games the player owns
@@ -141,7 +146,7 @@ class FlutterfireApi {
     }
   }
 
-  //Launches url corresponding to the web version of the game
+  ///Launches url corresponding to the web version of the game
   static void launchWebApp(Game game) async {
     String? url = game.webUrl;
     if (await canLaunch(url!)) {
@@ -244,7 +249,6 @@ class FlutterfireApi {
   ///Generate the name of the package according to the game company and an optional name
   static String createPackageName(Game game) {
     return ('com.${game.unityCompanyName}.${game.unityName}'
-        .toLowerCase()
         .replaceAll(' ', ''));
   }
 
@@ -302,7 +306,8 @@ class FlutterfireApi {
           socialPercentage: _socialPercentage,
           celluloCount: _celluloCount,
           downloads: 0,
-          apk: apkName
+          apk: apkName,
+          isConfirmed: false
         })
         .then((value) => print("Game added"))
         .catchError((error) => print("Failed to add game: $error"));
@@ -336,13 +341,48 @@ class FlutterfireApi {
     game.downloads++;
   }
 
-/*static void getGames() async {
-    QuerySnapshot<Object?> gameList = await games.get();
-    final allData = gameList.docs.map((doc) => doc.data()).toList();
-    gameList.docs.forEach((element) {
-      element
-      .
-    })
-    print(allData);
-  }*/
+  ///Get the number of hours per day of the week
+  ///@return a map where each day of the week is mapped to the number of hours played
+  /// e.g {'Monday': 1.2, 'Tuesday': 2.1,...}
+  static Future<Map<String, double>> getUserTimePlayedThisWeek() async{
+    QuerySnapshot querySnapshot = await timePlayed.where('User Uid', isEqualTo: auth.currentUser?.uid).get();
+    Map<String, double> week = {'Monday': 0, 'Tuesday': 0, 'Wednesday': 0, 'Thursday': 0, 'Friday': 0, 'Saturday': 0, 'Sunday': 0};
+    var data = querySnapshot.docs.toList();
+    for(var game in data){
+      Map<String, Object> map = game.data() as Map<String, Object>;
+      map..remove('Time')..remove('User Uid');
+      for(var dates in map.keys){
+        DateTime date = DateTime.fromMillisecondsSinceEpoch(int.parse(dates));
+        if(TimePlayedDataBuilder.isThisWeek(date)){
+          week.update(week.keys.toList()[date.weekday - 1], (value) => value += ((map[dates]! as int) / 60.0 ));
+        }
+      }
+    }
+    return week;
+  }
+
+  ///Check if the time played locally is different from the one stored in the database, and create a timestamp with the time played recently if needed
+  static void checkTimePlayed() async{
+    DocumentReference? reference = auth.currentUser?.uid != null ? timePlayed.doc(auth.currentUser?.uid) : null;
+    if(reference != null){
+      DocumentSnapshot query = await reference.get();
+      int timePlayedLocally = Common.getTotalTimePlayed();
+      int timePlayedDatabase = query.get('Time');
+      if(timePlayedLocally != timePlayedDatabase){
+        String timestamp = DateTime.now().millisecondsSinceEpoch.toString();
+        reference.update({timestamp : timePlayedLocally - timePlayedDatabase});
+        reference.update({'Time': timePlayedLocally});
+      }
+    }
+  }
+
+  ///Get the number of hours played this week
+  static Future<double> timePlayedThisWeek() async {
+    double timePlayed = 0;
+    var map = await getUserTimePlayedThisWeek();
+    for(var day in map.keys){
+      timePlayed += map[day]!;
+    }
+    return timePlayed;
+  }
 }

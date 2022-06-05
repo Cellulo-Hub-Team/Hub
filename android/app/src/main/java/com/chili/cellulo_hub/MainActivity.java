@@ -19,22 +19,7 @@ public class MainActivity extends FlutterActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         GeneratedPluginRegistrant.registerWith(getFlutterEngine());
-        new MethodChannel(getFlutterEngine().getDartExecutor(), CHANNEL).setMethodCallHandler(
-                new MethodChannel.MethodCallHandler() {
 
-                    @Override
-                    public void onMethodCall(MethodCall call, MethodChannel.Result result) {
-                        if (call.method.equals("isFocused")) {
-                            String greetings = isFocused(findViewById(android.R.id.content).getRootView());
-                            result.success(greetings);
-                        }
-                    }});
     }
-    private String isFocused(View view) {
-        return view.toString();
-    }
-
-
-
 }
 

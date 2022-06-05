@@ -16,7 +16,7 @@ import 'firebase_options.dart';
 import 'game/game.dart';
 import 'main/common.dart';
 import 'main/my_games.dart';
-import 'main/progress.dart';
+import 'charts/progress.dart';
 import 'main/settings.dart';
 import 'main/shop.dart';
 import 'main/welcome_screen.dart';

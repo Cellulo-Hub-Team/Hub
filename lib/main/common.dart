@@ -84,6 +84,7 @@ class Common {
     }
   }
 
+  ///Verify if the device has an internet connection
   static Future<bool> isConnected() async {
     try {
       final result = await InternetAddress.lookup('example.com');
@@ -94,5 +95,14 @@ class Common {
       return false;
     }
     return false;
+  }
+
+  ///Get the number of minute played in total among all games
+  static int getTotalTimePlayed(){
+    int output = 0;
+    for(Game game in allGamesList){
+      output += game.minutesPlayed;
+    }
+    return output;
   }
 }
