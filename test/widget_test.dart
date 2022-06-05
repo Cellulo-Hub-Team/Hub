@@ -5,26 +5,30 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
+import 'dart:io';
+
+import 'package:cellulo_hub/custom_widgets/custom_scaffold.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:cellulo_hub/main.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(MyApp());
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
-
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
+  testWidgets('My Games button goes to MyGames', (WidgetTester tester) async {
+    await tester.pumpWidget(const MyApp(skipWelcome: true));
     await tester.pump();
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    expect(find.byIcon(FontAwesome.gamepad), findsOneWidget);
+    expect(find.byIcon(Entypo.shop), findsOneWidget);
+    expect(find.byIcon(MaterialCommunityIcons.medal), findsOneWidget);
+    expect(find.byIcon(MaterialCommunityIcons.lightbulb_on), findsOneWidget);
+    expect(find.byIcon(Ionicons.ios_settings), findsOneWidget);
+
+    await tester.tap(find.byIcon(FontAwesome.gamepad));
+    await tester.pump();
+
+    //expect(find.byIcon(Icons.home), findsOneWidget);
   });
 }

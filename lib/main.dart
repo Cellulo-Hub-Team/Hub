@@ -36,15 +36,18 @@ void main() async {
       version: "v13.0",
     );
   }
-  runApp(const MyApp());
+  runApp(const MyApp(skipWelcome: false));
 }
 
 class MyApp extends StatelessWidget {
-  // Using "static" so that we can easily access it later
+  final bool skipWelcome;
+
   static final ValueNotifier<ThemeMode> themeNotifier =
       ValueNotifier(ThemeMode.light);
 
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({Key? key,
+    required this.skipWelcome
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +64,7 @@ class MyApp extends StatelessWidget {
                   scaffoldBackgroundColor: CustomColors.blackColor,
                   brightness: Brightness.dark),
               themeMode: currentMode,
-              home: const WelcomeScreen());
+              home: skipWelcome ? const MainMenu() : const WelcomeScreen());
         });
   }
 }
