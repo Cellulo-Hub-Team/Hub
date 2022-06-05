@@ -21,15 +21,5 @@ public class MainActivity extends FlutterActivity {
         GeneratedPluginRegistrant.registerWith(getFlutterEngine());
 
     }
-
-    @Override
-    public void configureFlutterEngine(FlutterEngine flutterEngine){
-        GeneratedPluginRegistrant.registerWith(flutterEngine);
-    }
-
-
-
-
-
 }
 
