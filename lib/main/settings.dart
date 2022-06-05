@@ -112,9 +112,9 @@ class _SettingsState extends State<Settings> {
           Text("Visual settings", style: Style.titleStyle()),
           const Spacer(flex: 4),
           Container(
-              width: 300,
+              width: 600,
               child: Row(children: [
-                SizedBox(width: 50),
+                Spacer(),
                 Transform.scale(
                     scale: 1.5,
                     child: Switch(
@@ -130,12 +130,13 @@ class _SettingsState extends State<Settings> {
                     )),
                 Text("  Day/night theme",
                     style: TextStyle(color: CustomColors.darkThemeColor())),
+                Spacer(),
               ])),
           const Spacer(),
           Container(
-              width: 300,
+              width: 600,
               child: Row(children: [
-                SizedBox(width: 50),
+                Spacer(),
                 Transform.scale(
                     scale: 1.5,
                     child: Switch(
@@ -151,6 +152,7 @@ class _SettingsState extends State<Settings> {
                     )),
                 Text("  High contrast theme",
                     style: TextStyle(color: CustomColors.darkThemeColor())),
+                Spacer(),
               ])),
           const Spacer(flex: 4),
           Text("Profile settings", style: Style.titleStyle()),

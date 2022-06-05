@@ -295,6 +295,9 @@ class _ShopState extends State<Shop>
 
   ///Trending games list
   Widget _trendingWidget() {
+    if (_trendingGames.isEmpty){
+      return Container();
+    }
     return SizedBox(
         height: 270,
         child: ScrollSnapList(
