@@ -60,6 +60,7 @@ dependencies:
   android_external_storage: ^0.1.0
   intl: ^0.17.0
   watcher: ^1.0.1
+  firebase_auth_mocks: ^0.8.4
 
 dev_dependencies:
   flutter_test:

@@ -123,7 +123,7 @@ class _SignInState extends State<SignIn> {
                     ),
                   ),
                   const Spacer(),
-                  CustomElevatedButton(label: "Log In", onPressed: _onPressed),
+                  CustomElevatedButton(label: "Login", onPressed: _onPressed),
                   const Spacer(flex: 5)
                 ],
               )))),
