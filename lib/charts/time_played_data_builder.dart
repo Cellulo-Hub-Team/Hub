@@ -1,5 +1,6 @@
 import 'package:cellulo_hub/api/flutterfire_api.dart';
 import 'package:cellulo_hub/charts/time_played_chart.dart';
+import 'package:cellulo_hub/custom_widgets/custom_colors.dart';
 import 'package:flutter/material.dart';
 import '../api/firedart_api.dart';
 import '../main/common.dart';
@@ -64,7 +65,7 @@ class TimePlayedDataBuilder{
       TimePlayedSeries toAdd = TimePlayedSeries(
           timePlayed: week[day]!,
           dayOfTheWeek: day,
-          barColor: charts.ColorUtil.fromDartColor(Colors.blue));
+          barColor: charts.ColorUtil.fromDartColor(CustomColors.redColor()));
       output.add(toAdd);
     }
     return TimePlayedChart(data: output);

@@ -29,7 +29,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      name: "Login",
+      name: "Reset password",
       leadingIcon: Ionicons.md_person,
       leadingName: "Profile",
       leadingScreen: Activity.Profile,
