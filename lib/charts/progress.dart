@@ -79,7 +79,6 @@ class _ProgressState extends State<Progress> {
             child: Center(
                 child: Column(children: [
           Container(
-              padding: const EdgeInsets.all(50),
               width: MediaQuery.of(context).size.width,
               height: 500,
               child: FutureBuilder(
@@ -92,17 +91,19 @@ class _ProgressState extends State<Progress> {
                       return const CircularProgressIndicator();
                     }
                   })),
-          Text('Total time played overall = ${Common.getTotalTimePlayed() / 60.0}h'),
+          SizedBox(height: 20,),
+          Text('Total hours played overall = ${Common.getTotalTimePlayed() / 60.0}h'),
             FutureBuilder(
                 future: FlutterfireApi.timePlayedThisWeek(),
                 builder:
                     (BuildContext context, snapshot) {
                   if (snapshot.hasData) {
-                    return Text('Total time played this week = ${(snapshot.data as double).toStringAsFixed(2)}h');
+                    return Text('Total hours played this week = ${(snapshot.data as double).toStringAsFixed(1)}h');
                   } else {
                     return const CircularProgressIndicator();
                   }
-                })
+                }),
+
 
         ]))));
   }

@@ -19,14 +19,15 @@ class TimePlayedChart extends StatelessWidget {
       )
     ];
     return Container(
-        height: 400,
-        padding: const EdgeInsets.all(1),
+        height: 450,
         child: Card(
           child: Column(
             children: [
-              Text("Time played this week",
+              Spacer(),
+              Text("Hours played this week",
                   style: Theme.of(context).textTheme.bodyText2),
-              Expanded(child: charts.BarChart(series, animate: true))
+              Expanded(flex: 10, child: charts.BarChart(series, animate: true)),
+              Spacer(),
             ],
           ),
         ));
