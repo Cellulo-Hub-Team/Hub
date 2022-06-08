@@ -59,7 +59,8 @@ public class CelluloAchievementDataManager : MonoBehaviour
     // Read achievements file and completes achievements list with its content
     public static void ReadFile()
     {
-        filePath = Application.persistentDataPath + "/achievements.json";
+        filePath = Application.persistentDataPath + "/achievements" + Application.productName + ".json";
+
         string[] fileContents;
 
         // Read developer file if game is played for the first time
@@ -118,7 +119,7 @@ public class CelluloAchievementDataManager : MonoBehaviour
     // Writes achievements list to file
     public static void WriteFile()
     {
-        filePath = Application.persistentDataPath + "/achievements.json";
+        filePath = Application.persistentDataPath + "/achievements" + Application.productName + ".json";
 
         File.WriteAllText(filePath, achievementsList.Count + "\n");
         foreach (var a in achievementsList)

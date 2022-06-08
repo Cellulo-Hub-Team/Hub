@@ -106,10 +106,11 @@ class _MyAchievementsState extends State<MyAchievements>
           _achievementsList = _achievementsList.where((a) => a.achievement.type == "high").toList();
           _achievementsList.sort((a, b) => a.achievement.value < b.achievement.value ? 1 : -1);
           break;
-        default: //Close to completion
+        case 5: //Close to completion
           _achievementsList = _achievementsList.where((a) => a.achievement.type == "high").toList();
           _achievementsList.sort((a, b) => a.achievement.value > b.achievement.value ? 1 : -1);
           break;
+        default: break;
       }
       _buildAchievementsList(_achievementsList);
   }
@@ -117,7 +118,7 @@ class _MyAchievementsState extends State<MyAchievements>
   @override
   void initState() {
     CustomColors.currentColor = CustomColors.redColor();
-    _onPressedSort(0);
+    _onPressedSort(6);
     super.initState();
   }
 

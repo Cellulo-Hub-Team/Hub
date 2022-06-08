@@ -2,10 +2,11 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:cellulo_hub/main/common.dart';
+import 'package:ext_storage/ext_storage.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:cellulo_hub/api/flutterfire_api.dart';
-import 'package:android_external_storage/android_external_storage.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 
 import '../game/game.dart';
@@ -32,13 +33,13 @@ class Achievement {
 
   ///Get achievements from local file
   static getAchievements(Game _game) async {
-    String? _user;
-    var path;
+    await Permission.storage.request();
+    String path = "";
     int _index = 0;
     int _count = 0;
     if(Common.isDesktop){
       if(Common.isWindows) {
-        _user = Platform.environment['USERPROFILE']?.replaceAll(r"\", "/");
+        String? _user = Platform.environment['USERPROFILE']?.replaceAll(r"\", "/");
         path = _user! +
             "/AppData/LocalLow/" +
             _game.unityCompanyName +
@@ -48,12 +49,20 @@ class Achievement {
       }
     }
     else if(Common.isAndroid){
-      //TODO faire un sous dossier dans Achievements avec le nom du jeu
-      path = '${await AndroidExternalStorage.getExternalStoragePublicDirectory(DirType.documentsDirectory)}/Achievements/achievements.json';
+      final _storage = await ExtStorage.getExternalStorageDirectory();
+      path = _storage +
+          "/Android/data/" + FlutterfireApi.createPackageName(_game) + "/files" +
+          "/achievements" +
+          _game.unityName +
+          ".json";
+    }
+    else {
+      return;
     }
     if (!await File(path).exists()) {
       return;
     }
+
     Common.allAchievementsMap[_game] = [];
     await File(path)
         .openRead()

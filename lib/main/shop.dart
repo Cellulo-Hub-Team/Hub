@@ -38,7 +38,7 @@ class _ShopState extends State<Shop>
     with TickerProviderStateMixin, WidgetsBindingObserver {
   bool _trendingDescriptionDisplayed = false;
   String _searchResult = "";
-  late Game? _beingInstalledGame;
+  Game? _beingInstalledGame;
 
   int _trendingDecriptionIndex = 0;
   final GlobalKey<ScrollSnapListState> _trendingKey = GlobalKey();
