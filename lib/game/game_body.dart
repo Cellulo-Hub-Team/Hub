@@ -139,7 +139,9 @@ class _GameBodyState extends State<GameBody> {
                               GameDescription(
                                 game: widget.game,
                                 index: widget.index,
-                                onPressedPrimary: widget.onPressedPrimary,
+                                onPressedPrimary: widget.game.downloading == 1
+                                    ? null
+                                    : widget.onPressedPrimary,
                                 onPressedSecondary: widget.onPressedSecondary,
                                 onPressedTertiary: widget.onPressedTertiary,
                               ),

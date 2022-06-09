@@ -42,37 +42,39 @@ class FiredartApi {
     var allGamesFuture = await games.get();
     final allGames = allGamesFuture.toList();
     for (var game in allGames) {
-      String? androidUrl =
-          game["Android Build"] == "" ? null : game["Android Build"];
-      String? linuxUrl = game["Linux Build"] == "" ? null : game["Linux Build"];
-      String? companyUrl = game["Company Link"] == "" ? null : game["Company Link"];
-      String? windowsUrl =
-          game["Windows Build"] == "" ? null : game["Windows Build"];
-      String? webUrl = game["Web Link"] == "" ? null : game["Web Link"];
+      if (game[isConfirmed]){
+        String? androidUrl =
+        game["Android Build"] == "" ? null : game["Android Build"];
+        String? linuxUrl = game["Linux Build"] == "" ? null : game["Linux Build"];
+        String? companyUrl = game["Company Link"] == "" ? null : game["Company Link"];
+        String? windowsUrl =
+        game["Windows Build"] == "" ? null : game["Windows Build"];
+        String? webUrl = game["Web Link"] == "" ? null : game["Web Link"];
 
-      Game _toAdd = Game(
-          game.id,
-          game[nameUnity],
-          game[companyName],
-          game[companyNameUnity],
-          companyUrl,
-          game[gameDescription],
-          game[gameInstructions],
-          game[backgroundImage],
-          androidUrl,
-          linuxUrl,
-          windowsUrl,
-          webUrl,
-          game[physicalPercentage],
-          game[cognitivePercentage],
-          game[socialPercentage],
-          game[celluloCount],
-          game[downloads],
-          game[apk]);
-      _toAdd.isInstalled = await ShellScripts.isInstalled(_toAdd);
-      Common.allGamesList.add(_toAdd);
-      Achievement.getAchievements(_toAdd);
-      checkTimePlayed();
+        Game _toAdd = Game(
+            game.id,
+            game[nameUnity],
+            game[companyName],
+            game[companyNameUnity],
+            companyUrl,
+            game[gameDescription],
+            game[gameInstructions],
+            game[backgroundImage],
+            androidUrl,
+            linuxUrl,
+            windowsUrl,
+            webUrl,
+            game[physicalPercentage],
+            game[cognitivePercentage],
+            game[socialPercentage],
+            game[celluloCount],
+            game[downloads],
+            game[apk]);
+        _toAdd.isInstalled = await ShellScripts.isInstalled(_toAdd);
+        Common.allGamesList.add(_toAdd);
+        Achievement.getAchievements(_toAdd);
+        checkTimePlayed();
+      }
     }
   }
 

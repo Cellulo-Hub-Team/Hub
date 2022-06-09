@@ -164,7 +164,7 @@ class _GameHeaderState extends State<GameHeader> {
       label: Text(
         'Unavailable on your device',
         style:
-            GoogleFonts.comfortaa(fontSize: 14, color: Colors.white), //TODO fix
+            GoogleFonts.comfortaa(fontSize: 14, color: Colors.white),
         textAlign: TextAlign.center,
       ),
       style: ElevatedButton.styleFrom(
