@@ -45,7 +45,9 @@ class Achievement {
             _game.unityCompanyName +
             "/" +
             _game.unityName +
-            "/achievements.json";
+            "/achievements" +
+            _game.unityName +
+            ".json";
       }
     }
     else if(Common.isAndroid){

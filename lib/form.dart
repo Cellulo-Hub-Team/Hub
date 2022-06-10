@@ -18,7 +18,6 @@ import 'custom_widgets/style.dart';
 import 'firebase_options.dart';
 import 'main/common.dart';
 
-//TODO add Unity plugin download link
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(

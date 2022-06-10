@@ -71,7 +71,7 @@ class ShellScripts {
   }
 
   ///Checks whether the game is on the hard drive on Linux
-  static Future<bool> isInstalledLinux(Game _game) async { //TODO
+  static Future<bool> isInstalledLinux(Game _game) async {
     var shell = Shell();
     shell.cd('');
     await shell.run('mkdir -p CelluloGames');

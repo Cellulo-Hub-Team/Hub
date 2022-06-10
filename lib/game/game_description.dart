@@ -182,7 +182,7 @@ class _GameDescriptionState extends State<GameDescription> with TickerProviderSt
   }
 
   Widget _achievementsPanel() {
-    return Column(children: [
+    return SizedBox(height: _achievementsTable.length * 130,child: SingleChildScrollView(child: Column(children: [
       Padding(
           padding:
           const EdgeInsets.all(15), //apply padding to all four sides
@@ -206,7 +206,7 @@ class _GameDescriptionState extends State<GameDescription> with TickerProviderSt
           },
           defaultVerticalAlignment: TableCellVerticalAlignment.middle,
           children: _achievementsTable,
-        )]);
+        )])));
   }
 
   TableRow _achievementRow(String _label, IconData _icon, Widget _value) {

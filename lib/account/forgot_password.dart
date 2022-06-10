@@ -35,8 +35,10 @@ class _ForgotPasswordState extends State<ForgotPassword> {
       leadingScreen: Activity.Profile,
       leadingTarget: const ProfileHome(),
       hasFloating: false,
-      body: Column(
-        //TODO max width of 1000
+      body: Center(
+      child: SizedBox(
+      width: 800,
+      child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -60,7 +62,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
               }),
           const Spacer(flex: 5),
         ],
-      ),
+      ))),
     );
   }
 }
