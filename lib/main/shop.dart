@@ -361,7 +361,7 @@ class _ShopState extends State<Shop>
         },
         child: GameBody(
           game: _game,
-          index: 0, //TODO actual index
+          index: Common.allGamesList.length + _trendingDecriptionIndex,
           isDescription: false,
           onPressedPrimary: () => _onPressedPrimary(_game),
         ));
@@ -403,7 +403,7 @@ class _ShopState extends State<Shop>
                               context,
                               GameDescription(
                                 game: _game,
-                                index: 0, //TODO actual index
+                                index: Common.allGamesList.length + _trendingDecriptionIndex,
                                 onPressedPrimary: () =>
                                     _onPressedPrimary(_game),
                               ),
