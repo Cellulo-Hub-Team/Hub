@@ -38,7 +38,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   void initState() {
     super.initState();
     Future.delayed(
-        const Duration(seconds: 1), //TODO use 3 for final release
+        const Duration(seconds: 3),
         () => {
               Navigator.push(
                 context,
