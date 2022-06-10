@@ -124,9 +124,6 @@ class _ShopState extends State<Shop>
       if (_trendingDescriptionDisplayed && _index == _trendingDecriptionIndex) {
         _trendingController.reverse();
         _trendingDescriptionDisplayed = !_trendingDescriptionDisplayed;
-        /*Future.delayed(
-            const Duration(milliseconds: 300),
-                () => _trendingDescriptionDisplayed = !_trendingDescriptionDisplayed);*/ //TODO find fix to restore
       } else if (!_trendingDescriptionDisplayed) {
         Common.percentageController.reset();
         Common.percentageController.forward();
@@ -361,7 +358,7 @@ class _ShopState extends State<Shop>
         },
         child: GameBody(
           game: _game,
-          index: 0, //TODO actual index
+          index: Common.allGamesList.length + _trendingDecriptionIndex,
           isDescription: false,
           onPressedPrimary: () => _onPressedPrimary(_game),
         ));
@@ -403,7 +400,7 @@ class _ShopState extends State<Shop>
                               context,
                               GameDescription(
                                 game: _game,
-                                index: 0, //TODO actual index
+                                index: Common.allGamesList.length + _trendingDecriptionIndex,
                                 onPressedPrimary: () =>
                                     _onPressedPrimary(_game),
                               ),
