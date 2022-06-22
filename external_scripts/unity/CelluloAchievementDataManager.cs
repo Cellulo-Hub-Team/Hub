@@ -26,6 +26,18 @@ public class CelluloAchievementDataManager : MonoBehaviour
         WriteFile();
     }
 
+    // Gets value of achievement
+    public static int GetAchievementValue(String label)
+    {
+        foreach (var achievement in achievementsList)
+        {
+            if (achievement.GetAchievementLabel().Equals(label))
+            {
+                return achievement.GetValue();
+            }
+        }
+    }
+
     // Changes value of achievement
     public static void UpdateAchievementValue(String label, int value)
     {

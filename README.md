@@ -14,5 +14,9 @@ Cellulo Hub is a multiplatform application for Cellulo users to manage their Cel
 
 ![alt text](https://firebasestorage.googleapis.com/v0/b/cellulo-hub-games.appspot.com/o/Cellulo%20Screens%2FScreenshot_20220605-200306.jpg?alt=media&token=5c87e17e-795a-44e4-afa3-cd551f456bb8)
 
+• Run the *main* file with arguments **--no-sound-null-safety** and **--web-renderer html** for Android, iOS and Web. <br>
+• Run the *main_desktop* file with arguments **--no-sound-null-safety** and **--web-renderer html** for Windows, Linux and MacOS. <br>
 
-
+Android apk file can be found in the external_scripts folder. <br>
+Web version can be accessed using  <br>
+Website to upload a new game can be accessed using https://cellulo-hub-games.web.app/#/
